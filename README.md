@@ -1,0 +1,2 @@
+# FreezerManagement
+System zur Kühlschrankverwaltung

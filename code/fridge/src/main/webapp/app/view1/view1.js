@@ -16,15 +16,15 @@
 
 	function View1Ctrl($http) {
 		var vm = this;
-		vm.blubbiblub = "testiii2";
-		/*
+		vm.blubbiblub = "lädt";
+		
 		$http.get('http://localhost:8080/freezers/api/freezer').then(function(resp) {
 			vm.blubbiblub = resp.data.test;
 		}, function(error) {
 			console.dir(error);
 			alert("err");
 		});
-		*/
+		
 	}
 
 })();

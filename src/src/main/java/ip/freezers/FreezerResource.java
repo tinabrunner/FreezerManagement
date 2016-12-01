@@ -20,6 +20,8 @@ import com.mongodb.client.MongoDatabase;
 @Singleton
 public class FreezerResource extends Application {
 	
+	private int testvariable;
+	
 	@EJB
 	MongoProvider mongoProvider;
 	

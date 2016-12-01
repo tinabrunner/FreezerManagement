@@ -16,7 +16,7 @@
 
 	function View1Ctrl($http) {
 		var vm = this;
-		vm.blubbiblub = "test";
+		vm.blubbiblub = "testiii2";
 		/*
 		$http.get('http://localhost:8080/freezers/api/freezer').then(function(resp) {
 			vm.blubbiblub = resp.data.test;

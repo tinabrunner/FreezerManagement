@@ -22,7 +22,7 @@
 			vm.blubbiblub = resp.data.test;
 		}, function(error) {
 			console.dir(error);
-			alert("err");
+			//alert("err");
 		});
 		
 	}

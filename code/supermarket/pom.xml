@@ -6,6 +6,10 @@
   <packaging>war</packaging>
   <name>Supermarket</name>
   <description>ich bin eine beschreibung</description>
+
+  <build>
+    <finalName>supermarket</finalName>
+  </build>
   
  <dependencies>
   <dependency>

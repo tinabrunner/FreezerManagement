@@ -13,6 +13,16 @@
 
 	<build>
 		<finalName>fridge</finalName>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${project.build.java.version}</source>
+					<target>${project.build.java.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 	<dependencies>
@@ -53,16 +63,4 @@
 	</dependency>
 		
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>${project.build.java.version}</source>
-					<target>${project.build.java.version}</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

@@ -1,2 +1,26 @@
 <div ng-controller="ShoppingCartCtrl as shoppingCart">
+	<table class="table">
+		<tr>
+			<th>Product</th>
+			<th>Minimum Stock</th>
+			<th>Maximum Stock</th>
+			<th>regularly</th>
+			<th> </th>
+		</tr>
+		<tr ng-repeat="prod in shoppingCart.products">
+			<td>{{ prod.name }}</td>
+			<td>{{ prod.min}}</td>
+			<td>{{prod.max}}</td>
+			<td>
+				<input type="checkbox" ng-checked="prod.regularly">
+			</td>
+			<td>
+				<button ng-click="shoppingCart.deleteProduct(prod)">Delete</button>
+			</td>
+		</tr>
+	</table>
+
+	<div ng-show="shoppingCart.empty(shoppingCart.products)">
+		Create an order in your shopping list!
+	</div>
 </div>

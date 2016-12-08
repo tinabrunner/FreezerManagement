@@ -13,20 +13,18 @@ public class FridgeUser implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static int count_id = 1;
-	@Id
-	private final int id;
 	private String name;
 	private String surname;
 	private String username;
 	private String password;
 	private String email;
-	private enum Roles { ADMIN, USER; };
+	public enum Roles { ADMIN, USER; };
 	private String role;
 	
+	// default constructor
+	public FridgeUser () {}
+	
 	public FridgeUser (String name, String surname, String username, String password, String email,String userrole) {
-		this.id = count_id;
-		count_id ++;
 		this.name = name;
 		this.surname = surname;
 		this.username = username;
@@ -86,17 +84,13 @@ public class FridgeUser implements Serializable {
 		this.email = email;
 	}
 
-	public int getId() {
-		return id;
-	}
-
 	public String getRole() {
 		return role;
 	}
 	
 	@Override
     public String toString() {
-        return "User [ID=" + this.getId() + ", firstName=" + this.getSurname()
+        return "User [FirstName=" + this.getSurname()
                 + ", lastName=" + this.getName() + ", username=" + this.getUsername()
                 + ", email=" + this.getEmail() + ", role=" + this.getRole() + "]";
     }

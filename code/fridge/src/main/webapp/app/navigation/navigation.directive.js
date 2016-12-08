@@ -2,7 +2,7 @@
  * 
  */
 
-angular.module('myApp.navigation', [])
+angular.module('fridge.navigation', [])
 
 .directive ("navBar", function() {
 	var ret = {

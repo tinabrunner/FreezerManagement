@@ -1,16 +1,18 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('myApp', [
+angular.module('fridge', [
 	'ngRoute',
-	'myApp.view1',
-	'myApp.view2',
-	'myApp.navigation',
-	'myApp.view_login',
-	'myApp.shopping_cart'
+	'fridge.view1',
+	'fridge.view2',
+	'fridge.navigation',
+	'fridge.view_login',
+	'fridge.shopping_cart'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
 $locationProvider.hashPrefix('!');
 
 $routeProvider.otherwise({redirectTo: '/view1'});
 }]);
+
+var URL_API = 123;

@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('myApp.shopping_cart', ['ngRoute'])
+	angular.module('fridge.shopping_cart', ['ngRoute'])
 
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/shoppingcart', {
@@ -11,11 +11,12 @@
 	}])
 	.controller('ShoppingCartCtrl', ShoppingCartCtrl);
 
-	ShoppingCartCtrl.$inject = [];
+	ShoppingCartCtrl.$inject = ['$http'];
 
-	function ShoppingCartCtrl() {
+	function ShoppingCartCtrl($http) {
 		var vm = this;
 
+		//$http.get('')
 	}
 
 })();

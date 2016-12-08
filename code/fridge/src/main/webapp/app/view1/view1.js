@@ -21,7 +21,8 @@
 		$http.get('http://localhost:8080/freezers/api/freezer').then(function(resp) {
 			vm.blubbiblub = resp.data.test;
 		}, function(error) {
-			console.dir(error);
+			//console.dir(error);
+			console.log("dings ging nicht, db down?");
 			//alert("err");
 		});
 		

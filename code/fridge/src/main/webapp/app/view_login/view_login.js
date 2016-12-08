@@ -5,7 +5,7 @@
 (function() {
 	'use strict';
 
-	angular.module('myApp.view_login', ['ngRoute'])
+	angular.module('fridge.view_login', ['ngRoute'])
 
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/view_login', {

@@ -1,4 +1,4 @@
-package ip.freezers;
+package freezers;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.GET;

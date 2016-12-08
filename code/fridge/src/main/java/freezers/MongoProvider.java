@@ -1,4 +1,4 @@
-package ip.freezers;
+package freezers;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;

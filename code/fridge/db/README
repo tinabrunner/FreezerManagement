@@ -1,0 +1,12 @@
+startet Mongo DB:
+	mongod
+Mongo Konsole:
+	mongo
+	z.B. "use fridge", "db.createCollection('user')", "db.user.drop()", "db.dropDatabase()"
+
+Eigene Datenbank "fridge" exportieren (zb. um auf git zu sharen)
+	mongodump --db fridge -o [ProjDir]/code/fridge/db
+Datenbank importieren:
+	mongorestore --db fridge_copy [ProjDir]/code/fridge/db/fridge
+
+	username, password, name, surname, email, role

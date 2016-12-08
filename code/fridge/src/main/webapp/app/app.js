@@ -15,4 +15,4 @@ $locationProvider.hashPrefix('!');
 $routeProvider.otherwise({redirectTo: '/view1'});
 }]);
 
-var URL_API = 123;
+var URL_API = 'http://localhost:8080/fridge/api/';

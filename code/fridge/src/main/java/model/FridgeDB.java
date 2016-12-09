@@ -5,6 +5,8 @@ import java.util.Collection;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -26,6 +28,8 @@ public class FridgeDB {
 	@EJB
 	MongoProvider mongoProvider;
 	
+
+	// Method to Insert an User
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	public void InsertUserToDB (FridgeUser fridgeUser) {
@@ -44,6 +48,8 @@ public class FridgeDB {
 		users.insertOne(doc);
 	}
 	
+
+	// Method to Search for an User
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public FridgeUser GetUserFromDB (String username) {
@@ -61,12 +67,11 @@ public class FridgeDB {
 		DBCursor cursor = users.find(whereQuery);
 		
 		// get the attributes for FridgeUser
-		BasicDBObject doc;
 		if (cursor.count() != 1) {
 			System.out.print("Something went wrong! More than one user was found for the given username.");
 		}
-		else if (cursor.count()==1) {
-			doc = (BasicDBObject) cursor.curr();
+		else {
+			BasicDBObject doc = (BasicDBObject) cursor.curr();
 			String name = doc.getString("name");
 			String surname = doc.getString("surname");
 			String password = doc.getString("password");
@@ -80,8 +85,37 @@ public class FridgeDB {
 	}
 
 	
-	// TODO: UpdateUser
+	// Method to Update an User
+	@POST
+	public void UpdateUserFromDB (FridgeUser user) {
+		// create a client and get the database and usersCollection
+		MongoClient mongoClient = this.mongoProvider.getMongoClient();
+		MongoDatabase db = mongoClient.getDatabase("fridge");
+		DBCollection users = (DBCollection) db.getCollection("users");
+		
+		// create a query to search for the FrigdeUser that should be updated
+		BasicDBObject updateUser = new BasicDBObject("username", user.getUsername())
+			.append("password", user.getPassword())
+			.append("name", user.getName())
+			.append("surname", user.getSurname())
+			.append("email", user.getEmail())
+			.append("role", user.getRole());
+		BasicDBObject searchQuery = new BasicDBObject().append("username", user.getUsername());
+		users.update(searchQuery, updateUser);
+	}
 	
-	// TODO: DeleteUser
+	// Method to Delete an User
+	@DELETE
+	public void DeleteUserFromDB (String username) {
+		// create a client and get the database and usersCollection
+		MongoClient mongoClient = this.mongoProvider.getMongoClient();
+		MongoDatabase db = mongoClient.getDatabase("fridge");
+		DBCollection users = (DBCollection) db.getCollection("users");
+		
+		// create a query to get the user and delete it
+		BasicDBObject deleteUser = new BasicDBObject();
+		deleteUser.put("username", username);
+		users.remove(deleteUser);
+	}
 	
 }

@@ -1,6 +1,9 @@
 package model;
 
+import java.util.Date;
+
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
@@ -19,11 +22,11 @@ import com.mongodb.client.MongoDatabase;
 
 import freezers.MongoProvider;
 
+@Stateless
 public class FridgeDB {
 	
-	@EJB
-	MongoProvider mongoProvider;
-	
+	//	@EJB
+	MongoProvider mongoProvider;	
 
 	// Method to Insert an User
 	@PUT

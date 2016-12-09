@@ -24,9 +24,7 @@ public class FreezerResource extends Application {
 	DIES IST EINE TEST KLASSE
 	NICHT WEITERPROGRAMIMIEREN HIER
 	 */
-	
-	private int testvariable;
-	
+		
 	@EJB
 	MongoProvider mongoProvider;
 	

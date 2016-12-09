@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Collection;
-
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -12,11 +10,9 @@ import javax.ws.rs.core.MediaType;
 
 import org.bson.Document;
 
-import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;

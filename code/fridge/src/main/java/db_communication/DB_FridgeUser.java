@@ -42,6 +42,7 @@ public class DB_FridgeUser {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	public void insertUserToDB (FridgeUser fridgeUser) {
+		// create a client and get the database and usersCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
 		MongoCollection<Document> users = db.getCollection("users");

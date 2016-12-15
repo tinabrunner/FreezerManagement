@@ -14,28 +14,16 @@ import javax.servlet.http.HttpSession;
 @SessionScoped
 public class SessionStore {
 
-	private Map<String, String> userlist;
+	private FridgeUser fridgeUser;
 	private HttpSession httpSession;
+
 	
-	public SessionStore () {
-		this.userlist = new HashMap<String, String> ();
+	public FridgeUser getFridgeUser() {
+		return fridgeUser;
 	}
-	
-	public Map<String, String> findAll () {
-		return this.userlist;
-	}
-	
-	public void saveUser (String username, String password) { 
-		// TODO: nur begrenzte Anzahl an User zulassen ??? 
-		userlist.put(username, password);
-	}
-	
-	public void removeUser (String username) {
-		userlist.remove(username);
-	}
-	
-	public void removeAll () {
-		userlist.clear();
+
+	public void setFridgeUser(FridgeUser fridgeUser) {
+		this.fridgeUser = fridgeUser;
 	}
 	
 	/*public static Context getCurrentContext(final Class<? extends Annotation> scopeType) {

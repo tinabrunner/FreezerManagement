@@ -1,4 +1,4 @@
-package model;
+package db_communication;
 
 import java.util.Date;
 
@@ -11,6 +11,8 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import model.FridgeUser;
+
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
@@ -22,36 +24,44 @@ import com.mongodb.client.MongoDatabase;
 
 import freezers.MongoProvider;
 
+/* 
+ * Die Klasse DB_FridgeUser schreibt User inkl. aller Attribute (Name, Adresse,...) in die Datenbank,
+ * kann sie auch wieder auslesen, sowie editieren und löschen.
+ * 
+ */
+
 @Stateless
-public class FridgeDB {
+public class DB_FridgeUser {
 	
-	//	@EJB
+	@EJB
 	MongoProvider mongoProvider;	
 
 	// Method to Insert an User
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public void InsertUserToDB (FridgeUser fridgeUser) {
+	public void insertUserToDB (FridgeUser fridgeUser) {
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
 		MongoCollection<Document> users = db.getCollection("users");
 		
-		// TODO: Abfrage, ob User schon existiert
-		
-		Document doc = new Document ("username", fridgeUser.getUsername())
-			.append("password", fridgeUser.getPassword())
-			.append("name", fridgeUser.getName())
-			.append("surname", fridgeUser.getSurname())
-			.append("email", fridgeUser.getEmail())
-			.append("role", fridgeUser.getRole());
-		users.insertOne(doc);
+		if (!userExists(fridgeUser.getUsername())) {		
+			Document doc = new Document ("username", fridgeUser.getUsername())
+				.append("password", fridgeUser.getPassword())
+				.append("name", fridgeUser.getName())
+				.append("surname", fridgeUser.getSurname())
+				.append("email", fridgeUser.getEmail())
+				.append("role", fridgeUser.getRole());
+			users.insertOne(doc);
+		}
+		else
+			System.out.print("Username already exists!");
 	}
 	
 
 	// Method to Search for an User
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public FridgeUser GetUserFromDB (String username) {
+	public FridgeUser getUserFromDB (String username) {
 		// create FrigdUser variable for the return-statement
 		FridgeUser fridgeUser = null;
 		
@@ -86,7 +96,7 @@ public class FridgeDB {
 	
 	// Method to Update an User
 	@POST
-	public void UpdateUserFromDB (FridgeUser user) {
+	public void updateUserFromDB (FridgeUser user) {
 		// create a client and get the database and usersCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
@@ -105,7 +115,7 @@ public class FridgeDB {
 	
 	// Method to Delete an User
 	@DELETE
-	public void DeleteUserFromDB (String username) {
+	public void deleteUserFromDB (String username) {
 		// create a client and get the database and usersCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
@@ -115,6 +125,23 @@ public class FridgeDB {
 		BasicDBObject deleteUser = new BasicDBObject();
 		deleteUser.put("username", username);
 		users.remove(deleteUser);
+	}
+	
+	// Method to Check if a User exists
+	public boolean userExists (String username) {
+		boolean ret = false;
+		
+		// create a client and get the database and usersCollection
+		MongoClient mongoClient = this.mongoProvider.getMongoClient();
+		MongoDatabase db = mongoClient.getDatabase("fridge");
+		DBCollection users = (DBCollection) db.getCollection("users");
+				
+		// create a query and check if there are more than 0 elements in the db
+		BasicDBObject checkUser = new BasicDBObject();
+		checkUser.put("username", username);
+		if (users.getCount(checkUser) > 0)
+			ret = true;
+		return ret;
 	}
 	
 }

@@ -5,7 +5,7 @@ import javax.ejb.embeddable.EJBContainer;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-import model.FridgeDB;
+import db_communication.DB_FridgeUser;
 import model.FridgeUser;
 
 //@Stateless

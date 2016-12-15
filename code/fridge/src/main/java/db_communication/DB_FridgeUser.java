@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
@@ -22,6 +23,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import controller.LoginController;
 import freezers.MongoProvider;
 
 /* 
@@ -34,8 +36,8 @@ import freezers.MongoProvider;
 public class DB_FridgeUser {
 	
 	@EJB
-	MongoProvider mongoProvider;	
-
+	private MongoProvider mongoProvider;
+	
 	// Method to Insert an User
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
@@ -141,6 +143,28 @@ public class DB_FridgeUser {
 		checkUser.put("username", username);
 		if (users.getCount(checkUser) > 0)
 			ret = true;
+		return ret;
+	}
+	
+	// Method to Check if username and password fits
+	public boolean check_UsernameAndPassword (String username, String password) {
+		boolean ret = false;
+		FridgeUser user;
+		
+		// create a client and get the database and usersCollection
+		MongoClient mongoClient = this.mongoProvider.getMongoClient();
+		MongoDatabase db = mongoClient.getDatabase("fridge");
+		DBCollection users = (DBCollection) db.getCollection("users");
+				
+		// create a query and check if the password matches
+		BasicDBObject checkUser = new BasicDBObject();
+		checkUser.put("username", username);
+		if (users.getCount(checkUser) == 1) {
+			user = getUserFromDB(username);
+			String userPassword = user.getPassword();
+			if (userPassword.equals(password))
+				ret = true;
+		}
 		return ret;
 	}
 	

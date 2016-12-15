@@ -1,0 +1,98 @@
+package controller;
+
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.servlet.annotation.WebServlet;
+import db_communication.DB_FridgeUser;
+import model.SessionStore;
+
+
+@Stateless
+@WebServlet(name = "FrontController", urlPatterns = {"/FrontController/*"})   // ???
+public class LoginController {
+
+	@Inject
+	private SessionStore sessionStore;
+	
+	private DB_FridgeUser dbFridgeUser;
+	
+	public boolean Login (String username, String password) {
+		boolean ret = false;
+		
+		if (dbFridgeUser.userExists(username)) {
+			if (dbFridgeUser.check_UsernameAndPassword(username, password)) {
+				sessionStore.saveUser(username, password);
+				ret = true;
+			}
+			else {
+				System.out.print("Username and Password does not fit!");
+			}
+		}
+		else {
+			System.out.print("User does not exists. Please register!");
+		}
+		
+		return ret;
+	}
+	
+	
+	
+	/*
+	 * BEISPIEL:
+	 * 
+	 * @Inject
+    SessionStore store;
+   
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+            String payload = store.getPayload();
+            final PrintWriter out = response.getWriter();
+            Enumeration headerNames = request.getHeaderNames();
+            while (headerNames.hasMoreElements()) {
+                String name = headerNames.nextElement();
+                String value = request.getHeader(name);
+                out.println(name + " : " + value);
+            }
+
+            String uri = request.getRequestURI();
+            out.println("Payload: " + payload);
+            out.println("# of sessions : " + SessionStore.INSTANCE_COUNT.get());
+            store.setPayload(uri);
+        }
+        
+    }
+	 * 
+	 * 
+	 * @SessionScoped
+	public class SessionStore implements Serializable{
+    
+	    public static AtomicLong INSTANCE_COUNT = new AtomicLong(0);
+	    
+	    private String payload;
+	    
+	    @PostConstruct
+	    public void onNewSession(){
+	        INSTANCE_COUNT.incrementAndGet();
+	    }
+	
+	    public String getPayload() {
+	        return payload;
+	    }
+	
+	    public void setPayload(String payload) {
+	        this.payload = payload;
+	    }
+	
+	    @PreDestroy
+	    public void onSessionDestruction(){
+	        INSTANCE_COUNT.decrementAndGet();
+	    }
+    
+	}
+	 * 
+	 */
+        
+
+	
+}

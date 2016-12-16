@@ -14,6 +14,8 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 
+import com.google.gson.Gson;
+
 import model.Invoice;
 
 public class InvoiceController {
@@ -27,21 +29,22 @@ public class InvoiceController {
 			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("myQueueConnectionFactory");
 			QueueConnection con = f.createQueueConnection();
 			con.start();
+			
 			// 2) create Queue session
 			QueueSession ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+			
 			// 3) get the Queue object
 			Queue t = (Queue) ctx.lookup("myQueue");
+			
 			// 4)create QueueReceiver
 			QueueReceiver receiver = ses.createReceiver(t);
 
 			// 5) create listener object
-			MyListener listener = new MyListener();
+			InvoiceListener listener = new InvoiceListener();
 
 			// 6) register the listener object with receiver
 			receiver.setMessageListener(listener);
 
-			System.out.println("Receiver1 is ready, waiting for messages...");
-			System.out.println("press Ctrl+c to shutdown...");
 			while (true) {
 				Thread.sleep(1000);
 			}
@@ -58,13 +61,21 @@ public class InvoiceController {
 		return invoices;
 	}
 
-	private class MyListener implements MessageListener {
+	private class InvoiceListener implements MessageListener {
+		
 
 		public void onMessage(Message m) {
 			try {
 				TextMessage msg = (TextMessage) m;
 
-				System.out.println("following message is received:" + msg.getText());
+				Gson gson = new Gson();
+
+				// 2. JSON to Java object, read it from a Json String.
+				String jsonInString = msg.getText();
+				Invoice invoice = gson.fromJson(jsonInString, Invoice.class);
+				addInvoice(invoice);
+				
+
 			} catch (JMSException e) {
 				System.out.println(e);
 			}

@@ -1,7 +1,7 @@
-package com.freezer.repository;
+package repository;
 
-import com.freezer.domain.Product;
-import com.freezer.utils.ProductHelperTest;
+import domain.Product;
+import utils.ProductHelperTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

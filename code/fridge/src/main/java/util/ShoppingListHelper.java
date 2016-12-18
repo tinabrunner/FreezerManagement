@@ -1,7 +1,7 @@
-package com.freezer.util;
+package util;
 
-import com.freezer.domain.Product;
-import com.freezer.domain.ShoppingListItem;
+import domain.Product;
+import domain.ShoppingListItem;
 import org.bson.Document;
 
 /**

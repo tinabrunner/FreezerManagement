@@ -1,4 +1,4 @@
-package com.freezer.domain;
+package domain;
 
 import java.util.Date;
 

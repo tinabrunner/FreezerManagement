@@ -1,7 +1,7 @@
-package com.freezer.service;
+package service;
 
-import com.freezer.domain.Product;
-import com.freezer.repository.ShoppingListRepository;
+import domain.Product;
+import repository.ShoppingListRepository;
 
 import java.util.Map;
 

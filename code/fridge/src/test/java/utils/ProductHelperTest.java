@@ -1,6 +1,6 @@
-package com.freezer.utils;
+package utils;
 
-import com.freezer.domain.Product;
+import domain.Product;
 
 /**
  * Created by JD on 16.12.2016.

@@ -1,12 +1,12 @@
-package com.freezer.repository.integration;
+package repository.integration;
 
-import com.freezer.FreezerManagementApplication;
-import com.freezer.domain.Product;
-import com.freezer.domain.MongoProvider;
-import com.freezer.repository.ShoppingListRepository;
-import com.freezer.repository.ShoppingListRepositoryMongoImpl;
-import com.freezer.util.ShoppingListHelper;
-import com.freezer.utils.ProductHelperTest;
+import FreezerManagementApplication;
+import domain.Product;
+import domain.MongoProvider;
+import repository.ShoppingListRepository;
+import repository.ShoppingListRepositoryMongoImpl;
+import util.ShoppingListHelper;
+import utils.ProductHelperTest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

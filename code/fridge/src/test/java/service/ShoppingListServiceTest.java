@@ -1,8 +1,8 @@
-package com.freezer.service;
+package service;
 
-import com.freezer.domain.Product;
-import com.freezer.repository.ShoppingListRepositoryStub;
-import com.freezer.utils.ProductHelperTest;
+import domain.Product;
+import repository.ShoppingListRepositoryStub;
+import utils.ProductHelperTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

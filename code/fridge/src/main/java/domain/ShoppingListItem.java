@@ -1,4 +1,4 @@
-package com.freezer.domain;
+package domain;
 
 /**
  * Created by JD on 08.12.2016.

@@ -1,9 +1,9 @@
-package com.freezer.repository;
+package repository;
 
-import com.freezer.domain.Product;
-import com.freezer.domain.MongoProvider;
-import com.freezer.domain.ShoppingListItem;
-import com.freezer.util.ShoppingListHelper;
+import domain.Product;
+import domain.MongoProvider;
+import domain.ShoppingListItem;
+import util.ShoppingListHelper;
 import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;

@@ -1,4 +1,4 @@
-package com.freezer.domain;
+package domain;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;

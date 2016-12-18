@@ -1,6 +1,6 @@
-package com.freezer.service;
+package service;
 
-import com.freezer.domain.Product;
+import domain.Product;
 
 import java.util.Map;
 

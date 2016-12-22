@@ -41,6 +41,7 @@ public class InvoiceController {
 			invoice.addItem(i);
 
 		}
+
 	}
 
 	public void sendInvoice(Invoice invoice) {

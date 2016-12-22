@@ -18,13 +18,20 @@
 
 	LoginCtrl.$inject = ['$http'];
 
+	
 	function LoginCtrl($http) {
 		var vm = this;
-		vm.login_submit = function() {
-			alert("click");
-		};
+		var btn_login = vm.getElementById("btn_login");
 		
+		btn_login.addEventListener("click", GetLoginParams);
 		
-	}
+	};
+	
+	function GetLoginParams () {
+		var vm = this;
+		var username = vm.getElementById("lg_username");
+		var password = vm.getElementById("lg_password");
+		LoginController.Login(username, password);
+	};
 
 })();

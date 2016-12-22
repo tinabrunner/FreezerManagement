@@ -2,7 +2,8 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-import freezers.Product;
+
+import domain.Product;
 
 public class Fridge {
 	

@@ -17,8 +17,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import domain.Product;
 import freezers.MongoProvider;
-import freezers.Product;
 
 /* 
  * Die Klasse DB_FridgeInventory schreibt alle Produkte inkl. aller Attribute (Anzahl, ID, Name) in die Datenbank,
@@ -77,7 +77,7 @@ public class DB_FridgeInventory {
 			BasicDBObject doc = (BasicDBObject) cursor.curr();
 			String name = doc.getString("name");
 			int id = doc.getInt("id");
-			product = new Product (id, name);
+//			product = new Product (id, name);
 		}
 		return product;
 	}
@@ -126,7 +126,7 @@ public class DB_FridgeInventory {
 		// check if the product exists
 		if (productExistsInInventory(product)) {
 			// get the amount and add the new amount
-			actualAmount = getAmountForProduct(product.getId());
+	//		actualAmount = getAmountForProduct(product.getId());
 		}
 		
 		// if the amount is MORE or EQUAL 1 --> update the product
@@ -141,7 +141,7 @@ public class DB_FridgeInventory {
 		}
 		// if the amount is EQUAL 0  --> delete the product from the inventory
 		else if ((actualAmount + amount) == 0) {
-			deleteProductFromDBInventory(product.getId());
+	//		deleteProductFromDBInventory(product.getId());
 		}
 		// if the amount is LESS than 0 --> something went wrong! you cannot remove more than the actual amount
 		else if ((actualAmount + amount) < 0) {

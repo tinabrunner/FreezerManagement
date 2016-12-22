@@ -1,6 +1,5 @@
 package repository.integration;
 
-import FreezerManagementApplication;
 import domain.Product;
 import domain.MongoProvider;
 import repository.ShoppingListRepository;

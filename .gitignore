@@ -3,3 +3,5 @@ code/fridge/target/m2e-wtp/web-resources/META-INF/maven/ip.freezers/freezers/pom
 code/supermarket/target/m2e-wtp/web-resources/META-INF/maven/ip.freezers/supermarket/pom.properties
 code/supermarket/target/
 code/fridge/target/
+code/fridge/.idea/
+code/supermarket/.idea/

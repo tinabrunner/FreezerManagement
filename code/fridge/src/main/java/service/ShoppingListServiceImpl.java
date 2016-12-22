@@ -1,9 +1,9 @@
 package service;
 
+import java.util.Map;
+
 import domain.Product;
 import repository.ShoppingListRepository;
-
-import java.util.Map;
 
 /**
  * Created by JD on 12.12.2016.

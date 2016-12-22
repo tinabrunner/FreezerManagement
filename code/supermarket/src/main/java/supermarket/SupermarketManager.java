@@ -1,4 +1,6 @@
-package pdfcreator;
+package supermarket;
+
+import pdfcreator.Order;
 
 public class SupermarketManager {
 

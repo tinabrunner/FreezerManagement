@@ -8,17 +8,45 @@ import java.util.Date;
 public class Product extends BaseProduct {
 
     private String id;
+    private static int counter_id = 1;
     private int mindestBestand;
     private int hoechstBestand;
     private int aktuellerBestand;
     private boolean regelmaessig;
     private Date ablaufDatum;
-    private boolean mindesetBestandUnterschritten;
 
-    public Product() {
-        this.mindesetBestandUnterschritten = false;
+    // id wird automatisch erstellt, falls es ein neues Produkt ist
+    public Product (double preis, String name, int verpackungsGroesse,
+    		int mindestbestand, int hoechstbestand, int aktuellerbestand,
+    		boolean regelmaessig, Date ablaufdatum) {
+    	
+        super(preis, name, verpackungsGroesse);
+        
+        this.id = "p" + counter_id;
+        counter_id ++;
+        
+        this.mindestBestand = mindestbestand;
+        this.hoechstBestand = hoechstbestand;
+        this.aktuellerBestand = aktuellerbestand;
+        this.regelmaessig = regelmaessig;
+        this.ablaufDatum = ablaufdatum;
     }
 
+    // id wird mitgegeben, falls ein Produkt aus der DB geholt wird
+    public Product (double preis, String name, int verpackungsGroesse,
+    		int mindestbestand, int hoechstbestand, int aktuellerbestand,
+    		boolean regelmaessig, Date ablaufdatum, String id) {
+    	
+        super(preis, name, verpackungsGroesse);
+        
+        this.mindestBestand = mindestbestand;
+        this.hoechstBestand = hoechstbestand;
+        this.aktuellerBestand = aktuellerbestand;
+        this.regelmaessig = regelmaessig;
+        this.ablaufDatum = ablaufdatum;
+        this.id = id;
+    }
+    
     public String getId() {
         return id;
     }
@@ -27,7 +55,7 @@ public class Product extends BaseProduct {
         this.id = id;
     }
 
-    private int getMindestBestand() {
+    public int getMindestBestand() {
         return mindestBestand;
     }
 
@@ -68,12 +96,14 @@ public class Product extends BaseProduct {
     }
 
     public boolean isMindesetBestandUnterschritten() {
-        return mindesetBestandUnterschritten;
+        if (this.getAktuellerBestand() < this.getMindestBestand())
+        	return true;
+        else
+        	return false;
     }
 
     public int reduceStock(int reduceBy) {
         this.setAktuellerBestand(this.getAktuellerBestand() - reduceBy);
-        this.mindesetBestandUnterschritten = this.getAktuellerBestand() < this.getMindestBestand();
         return this.getAktuellerBestand();
     }
 

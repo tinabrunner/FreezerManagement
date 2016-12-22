@@ -27,6 +27,9 @@ import freezers.Product;
  */
 public class DB_FridgeInventory {
 	
+	// TODO : Klasse und auch DB-Collection-Struktur nochmal überarbeiten !!!! 
+	// 			--> abgleichen mit Janas Product-Klasse
+	
 	@EJB
 	private MongoProvider mongoProvider;
 	
@@ -37,7 +40,7 @@ public class DB_FridgeInventory {
 		// create a client and get the database and productsCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
-		MongoCollection<Document> products = db.getCollection("products");
+		MongoCollection<Document> products = db.getCollection("inventoryProducts");
 		
 		if (!productExistsInInventory(product)) {	
 			Document doc = new Document ("id", product.getId())
@@ -59,7 +62,7 @@ public class DB_FridgeInventory {
 		// create a client and get the database and productsCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection products = (DBCollection) db.getCollection("products");
+		DBCollection products = (DBCollection) db.getCollection("inventoryProducts");
 		
 		// create a query to search for the Product with the passed 'productd'
 		BasicDBObject whereQuery = new BasicDBObject();
@@ -89,7 +92,7 @@ public class DB_FridgeInventory {
 		// create a client and get the database and productsCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection products = (DBCollection) db.getCollection("products");
+		DBCollection products = (DBCollection) db.getCollection("inventoryProducts");
 			
 		// create a query to search for the Product with the passed 'productd'
 		BasicDBObject whereQuery = new BasicDBObject();
@@ -118,7 +121,7 @@ public class DB_FridgeInventory {
 		// create a client and get the database and productsCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection products = (DBCollection) db.getCollection("products");
+		DBCollection products = (DBCollection) db.getCollection("inventoryProducts");
 		
 		// check if the product exists
 		if (productExistsInInventory(product)) {
@@ -154,7 +157,7 @@ public class DB_FridgeInventory {
 		// create a client and get the database and productsCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection products = (DBCollection) db.getCollection("products");
+		DBCollection products = (DBCollection) db.getCollection("inventoryProducts");
 		
 		// create a query to get the user and delete it
 		BasicDBObject deleteProduct= new BasicDBObject();
@@ -169,7 +172,7 @@ public class DB_FridgeInventory {
 		// create a client and get the database and productsCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection products = (DBCollection) db.getCollection("products");
+		DBCollection products = (DBCollection) db.getCollection("inventoryProducts");
 				
 		// create a query and check if there are more than 0 elements in the db
 		BasicDBObject checkProduct= new BasicDBObject();

@@ -21,17 +21,15 @@
 	
 	function LoginCtrl($http) {
 		var vm = this;
-		var btn_login = vm.getElementById("btn_login");
 		
-		btn_login.addEventListener("click", GetLoginParams);
+		vm.username;
+		vm.password;
 		
+		function OnLogin () {
+			alert("login");
+		}
 	};
 	
-	function GetLoginParams () {
-		var vm = this;
-		var username = vm.getElementById("lg_username");
-		var password = vm.getElementById("lg_password");
-		LoginController.Login(username, password);
-	};
+
 
 })();

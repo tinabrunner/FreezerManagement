@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Login</title>
-</head>
-<body>
-
-
 <!-- All the files that are required -->
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
@@ -15,7 +6,7 @@
 
 <!-- Where all the magic happens -->
 <!-- LOGIN FORM -->
-<div class="text-center" style="padding:30px 0; width:50%; margin: 0 auto">
+<div class="text-center" style="padding:30px 0; width:50%; margin: 0 auto" ng-controller="view_login1Ctrl">
 	<div class="logo" style="padding-bottom:40px"><img src="navigation/Logo_FreezerManagement-01.png" width=150px height=auto></div>
 	<!-- Main Form -->
 	<div class="login-form-1">
@@ -25,25 +16,22 @@
 				<div class="login-group">
 					<div class="form-group">
 						<label for="lg_username" class="sr-only">Username</label>
-						<input type="text" class="form-control" id="lg_username" name="lg_username" placeholder="username">
+						<input type="text" class="form-control" id="lg_username" name="lg_username" ng-model="username" placeholder="username">
 					</div>
 					<div class="form-group">
 						<label for="lg_password" class="sr-only">Password</label>
-						<input type="password" class="form-control" id="lg_password" name="lg_password" placeholder="password">
+						<input type="password" class="form-control" id="lg_password" name="lg_password" ng-model="password" placeholder="password">
 					</div>
 					
 				</div>
-				<button type="submit" class="login-button" id="btn_login">Login</button>
+				<button type="submit" class="login-button" id="btn_login" ng-click="OnLogin()">Login</button>
 			</div>
 			<div class="etc-login-form">
-				<p><a href="#!/view_forgotPassword.html">Forgot Your Password?</a></p>
-				<p>You are a new User? <a href="#!/view_register.html"> Create a new Account</a></p>
+				<p><a href="#!/view_forgotPassword">Forgot Your Password?</a></p>
+				<p>You are a new User? <a href="#!/view_register"> Create a new Account</a></p>
 			</div>
 		</form>
 	</div>
 	<!-- end:Main Form -->
 </div>
 
-
-</body>
-</html>

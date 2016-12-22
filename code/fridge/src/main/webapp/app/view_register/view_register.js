@@ -5,26 +5,25 @@
 (function() {
 	'use strict';
 
-	angular.module('fridge.view_login', ['ngRoute'])
+	angular.module('fridge.view_register', ['ngRoute'])
 
 	.config(['$routeProvider', function($routeProvider) {
-		$routeProvider.when('/view_login', {
-			templateUrl: 'view_login/view_login.html',
-			controller: 'view_login1Ctrl'
+		$routeProvider.when('/view_register', {
+			templateUrl: 'view_register/view_register.html',
+			controller: 'view_register1Ctrl'
 		});
 	}])
 
-	.controller('view_login1Ctrl', LoginCtrl);
+	.controller('view_register1Ctrl', RegisterCtrl);
 
-	LoginCtrl.$inject = ['$http'];
+	RegisterCtrl.$inject = ['$http'];
 
-	function LoginCtrl($http) {
+	
+	function RegisterCtrl($http) {
 		var vm = this;
-		vm.login_submit = function() {
-			alert("click");
-		};
-		
-		
-	}
+
+	};
+	
+
 
 })();

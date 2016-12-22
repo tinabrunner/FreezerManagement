@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.Map;
+
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
@@ -12,8 +14,18 @@ import javax.naming.InitialContext;
 import com.google.gson.Gson;
 
 import Model.Invoice;
+import pdfcreator.Order;
+import pdfcreator.Product;
 
 public class InvoiceController {
+
+	public void createInvoice(Order order) {
+		Map<Product, Integer> orders = order.getOrder();
+
+		for (Map.Entry<Product, Integer> entry : orders.entrySet()) {
+			System.out.println(entry.getKey() + "/" + entry.getValue());
+		}
+	}
 
 	public void sendInvoice(Invoice invoice) {
 		String message = invoiceToString(invoice);

@@ -10,9 +10,9 @@ public class Order {
 	private Date recieveDate;
 	private double totalPrice;
 	private String customerId;
-	private Map<String, Integer> order = new HashMap<String, Integer>();
+	private Map<Product, Integer> order = new HashMap<Product, Integer>();
 
-	public Order(Map<String, Integer> order, double totalPrice, String customerId) {
+	public Order(Map<Product, Integer> order, double totalPrice, String customerId) {
 		this.customerId = customerId;
 		this.order = order;
 		this.totalPrice = totalPrice;
@@ -36,7 +36,7 @@ public class Order {
 		return customerId;
 	}
 
-	public Map<String, Integer> getOrder() {
+	public Map<Product, Integer> getOrder() {
 		return order;
 	}
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.jms.Queue;
@@ -14,16 +15,31 @@ import javax.naming.InitialContext;
 import com.google.gson.Gson;
 
 import Model.Invoice;
+import Model.InvoiceItem;
 import pdfcreator.Order;
 import pdfcreator.Product;
 
 public class InvoiceController {
 
 	public void createInvoice(Order order) {
+		String customerId = order.getCustomerId();
+		Date orderDate = order.getRecieveDate();
+		double totalPrice = order.getTotalPrice();
+		Date billingDate = null;
+
+		Invoice invoice = new Invoice(null, customerId, billingDate, orderDate, totalPrice, "");
 		Map<Product, Integer> orders = order.getOrder();
 
 		for (Map.Entry<Product, Integer> entry : orders.entrySet()) {
 			System.out.println(entry.getKey() + "/" + entry.getValue());
+			Product p = entry.getKey();
+			String id = p.getId();
+			String name = p.getName();
+			double price = p.getPrice();
+			int amount = entry.getValue();
+			InvoiceItem i = new InvoiceItem(id, name, price, amount);
+			invoice.addItem(i);
+
 		}
 	}
 

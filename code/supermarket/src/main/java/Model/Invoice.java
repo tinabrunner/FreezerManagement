@@ -2,6 +2,7 @@ package Model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class Invoice implements Serializable {
 	private String id;
@@ -10,6 +11,7 @@ public class Invoice implements Serializable {
 	private Date orderDate;
 	private double totalPrice;
 	private String invoiceURL;
+	List<InvoiceItem> items;
 
 	public Invoice(String id, String name, Date billingDate, Date orderDate, double totalPrice, String invoiceURL) {
 		this.id = id;

@@ -13,7 +13,6 @@ import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
-
 import com.google.gson.Gson;
 
 import model.Invoice;

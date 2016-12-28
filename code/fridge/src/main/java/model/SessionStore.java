@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,8 +13,12 @@ import javax.servlet.http.HttpSession;
 
 
 @SessionScoped
-public class SessionStore {
+public class SessionStore implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private FridgeUser fridgeUser;
 	private HttpSession httpSession;
 

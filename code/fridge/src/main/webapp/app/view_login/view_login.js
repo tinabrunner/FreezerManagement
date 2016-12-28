@@ -22,12 +22,10 @@
 	function LoginCtrl($http) {
 		var vm = this;
 		
-		vm.username;
-		vm.password;
+		var username = parseString(vm.username);
+		var password = parseString(vm.password);
 		
-		function OnLogin () {
-			alert("login");
-		}
+		alert("login: "+username+", "+password);
 	};
 	
 

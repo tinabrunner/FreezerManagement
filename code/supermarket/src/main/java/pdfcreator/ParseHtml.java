@@ -5,30 +5,22 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import javax.ejb.Stateless;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Application;
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 
-@Stateless
-@ApplicationPath("/supermarkt")
-@Path("/")
-public class ParseHtml extends Application {
+public class ParseHtml {
 	public static final String DEST = "results/xmlworker/invoice.pdf";
 	public static final String HTML = "src/main/webapp/app/invoice/invoice.html";
 
-	@GET
-	@Path("/createInvoice")
-	public void init() throws IOException, DocumentException {
+	public ParseHtml() {
+		this.init();
+	}
+
+	public void init() {
 		File file = new File(DEST);
 		file.getParentFile().mkdirs();
-		new ParseHtml().createPdf(DEST);
 	}
 
 	/**

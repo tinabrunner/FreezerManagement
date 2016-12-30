@@ -50,4 +50,12 @@ public class Invoice implements Serializable {
 		items.add(item);
 	}
 
+	public List<InvoiceItem> getItems() {
+		return items;
+	}
+
+	public void setItems(List<InvoiceItem> items) {
+		this.items = items;
+	}
+
 }

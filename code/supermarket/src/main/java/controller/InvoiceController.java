@@ -1,5 +1,7 @@
 package controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -12,14 +14,19 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 
+import org.apache.commons.io.FileUtils;
+
 import com.google.gson.Gson;
 
 import Model.Invoice;
 import Model.InvoiceItem;
 import pdfcreator.Order;
+import pdfcreator.ParseHtml;
 import pdfcreator.Product;
 
 public class InvoiceController {
+
+	ParseHtml htmlParser = new ParseHtml();
 
 	public void createInvoice(Order order) {
 		String customerId = order.getCustomerId();
@@ -42,6 +49,38 @@ public class InvoiceController {
 
 		}
 
+	}
+
+	public void InvoiceToHTML(Invoice invoice) throws IOException {
+		File htmlTemplateFile = new File("src/main/webapp/app/invoice/invoice.html");
+		String htmlString = FileUtils.readFileToString(htmlTemplateFile);
+
+		String[] splitfile = htmlString.split("<!--splitpoint-->");
+		String firstString = splitfile[0];
+		String secondString = splitfile[1];
+
+		for (InvoiceItem i : invoice.getItems()) {
+			String productName = i.getName();
+			String price = Double.toString(i.getPrice());
+			String amount = Integer.toString(i.getAmount());
+			String totalItemPrice = Double.toString(i.getTotalPrice());
+
+			String newItem = "<tr><td>" + productName + "</td><td class=\"text-center\">" + price
+					+ "</td><td class=\"text-center\">" + amount + "</td><td class=\"text-right\">" + totalItemPrice
+					+ "</td></tr>";
+			firstString.concat(newItem);
+		}
+
+		htmlString.concat(firstString).concat(secondString);
+
+		File newHtmlFile = new File("src/main/webapp/app/invoice/new.html");
+		FileUtils.writeStringToFile(newHtmlFile, htmlString);
+
+		try {
+			htmlParser.createPdf(htmlString);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 	public void sendInvoice(Invoice invoice) {

@@ -9,19 +9,19 @@
     			<div class="col-xs-6">
     				<address>
     				<strong>Billed To:</strong><br>
-    					John Smith<br>
-    					1234 Main<br>
-    					Apt. 4B<br>
-    					Springfield, ST 54321
+    					$name<br>
+    					$street<br>
+    					$plz $city<br>
+    					
     				</address>
     			</div>
     			<div class="col-xs-6 text-right">
     				<address>
         			<strong>Shipped To:</strong><br>
-    					Jane Smith<br>
-    					1234 Main<br>
-    					Apt. 4B<br>
-    					Springfield, ST 54321
+    					$name<br>
+    					$street<br>
+    					$plz $city<br>
+    					
     				</address>
     			</div>
     		</div>
@@ -36,7 +36,7 @@
     			<div class="col-xs-6 text-right">
     				<address>
     					<strong>Order Date:</strong><br>
-    					March 7, 2014<br><br>
+    					$orderDate<br><br>
     				</address>
     			</div>
     		</div>
@@ -61,30 +61,18 @@
                                 </tr>
     						</thead>
     						<tbody>
-    							<!-- foreach ($order->lineItems as $line) or some such thing here -->
+    							<!--splitpoint-->
     							<tr>
-    								<td>BS-200</td>
-    								<td class="text-center">$10.99</td>
-    								<td class="text-center">1</td>
-    								<td class="text-right">$10.99</td>
-    							</tr>
-                                <tr>
-        							<td>BS-400</td>
-    								<td class="text-center">$20.00</td>
-    								<td class="text-center">3</td>
-    								<td class="text-right">$60.00</td>
-    							</tr>
-                                <tr>
-            						<td>BS-1000</td>
-    								<td class="text-center">$600.00</td>
-    								<td class="text-center">1</td>
-    								<td class="text-right">$600.00</td>
+    								<td>$productName</td>
+    								<td class="text-center">$price</td>
+    								<td class="text-center">$amount</td>
+    								<td class="text-right">$totalItemPrice</td>
     							</tr>
     							<tr>
     								<td class="thick-line"></td>
     								<td class="thick-line"></td>
     								<td class="thick-line text-center"><strong>Subtotal</strong></td>
-    								<td class="thick-line text-right">$670.99</td>
+    								<td class="thick-line text-right">$totalPrice</td>
     							</tr>
     							<tr>
     								<td class="no-line"></td>

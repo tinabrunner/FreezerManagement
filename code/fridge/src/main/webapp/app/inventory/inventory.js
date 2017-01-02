@@ -14,14 +14,14 @@
 		});
 	}])
 
-	.controller('view_inventory1Ctrl', InventoryCtrl);
+	.controller('view_inventory1Ctrl', DeleteInvProduct);
 
-	InventoryCtrl.$inject = ['$http'];
+	DeleteInvProduct.$inject = ['$http'];
 
 	
-	function InventoryCtrl($http) {
+	function DeleteInvProduct($http) {
 		var vm = this;
-
+		altert("delete this product");
 	};
 	
 

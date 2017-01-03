@@ -27,11 +27,17 @@ import freezers.MongoProvider;
  * kann sie auch wieder auslesen, sowie editieren und lÃ¶schen.
  * 
  */
+
+/*
+ * 
+ * Kleiner Tipp: NIEMALS, N I E M A L S auf "getippte" Zeichenketten gehen. Dafür bitte eine Übersetzungstabelle anlegen.
+ * siehe util.ShoppingListHelper (e.g. documentShoppingListProductId = "id", klar?)
+ */
 public class DB_FridgeInventory {
 		
 	@EJB
 	private MongoProvider mongoProvider;
-	
+		
 	// Method to Insert a Product
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
@@ -122,8 +128,7 @@ public class DB_FridgeInventory {
 			amount = doc.getInt("amount");
 		}
 		
-		return amount;	
-			
+		return amount;			
 	}
 
 	

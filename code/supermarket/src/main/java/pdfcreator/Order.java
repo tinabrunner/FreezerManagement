@@ -5,8 +5,15 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * Frage: Warum wird die Summe vom "Besteller" übermittelt? Im Supermarkt läuft man auch nicht an die Kasse und sagt:
+ * Hier, was im Einkaufswagen ist kostet 5 Euro.
+ * 
+ * Die Map muss durchiteriert  und mit den Produkten im Supermarkt abgeglichen werden. Was passiert, wenn ein Produkt gar 
+ * nicht (mehr) im Supermakt vorhanden ist, weil es aus dem Sortiment gelöscht wurde
+ */
 public class Order {
-	private static String id;
+	private static String id; // wo gesetzt?
 	private Date recieveDate;
 	private double totalPrice;
 	private String customerId;
@@ -17,7 +24,7 @@ public class Order {
 		this.order = order;
 		this.totalPrice = totalPrice;
 		GregorianCalendar now = new GregorianCalendar();
-		recieveDate = now.getTime();
+		recieveDate = now.getTime(); // new Date(); ist einfacher
 	}
 
 	public static String getId() {

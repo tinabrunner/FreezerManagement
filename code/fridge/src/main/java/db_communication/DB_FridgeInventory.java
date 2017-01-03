@@ -179,8 +179,11 @@ public class DB_FridgeInventory {
 		MongoDatabase db = mongoClient.getDatabase("fridge");
 		DBCollection products = (DBCollection) db.getCollection("inventoryProducts");
 		
-		// create a query to get the user and delete it
+		// create a query to get the product and delete it
 		BasicDBObject deleteProduct= new BasicDBObject();
+		
+		// TODO check userid and if the product exists!
+		
 		deleteProduct.put("id", productId);
 		products.remove(deleteProduct);
 	}

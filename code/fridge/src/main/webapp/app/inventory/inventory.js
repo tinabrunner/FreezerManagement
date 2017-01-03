@@ -14,7 +14,7 @@
 		});
 	}])
 
-	.controller('view_inventory1Ctrl', DeleteInvProduct);
+	/*.controller('view_inventory1Ctrl', DeleteInvProduct);
 
 	DeleteInvProduct.$inject = ['$http'];
 
@@ -22,7 +22,18 @@
 	function DeleteInvProduct($http) {
 		var vm = this;
 		altert("delete this product");
-	};
+	};*/
+	
+	.controller('view_inventory1Ctrl', function($scope) {
+		
+		// OnPageLoad-Method um tabelle zu füllen
+		
+		$scope.DeleteInvProduct = function() {
+			// delete the selected product
+			redirectTo: '/view1';
+	    }
+		
+	});
 	
 
 

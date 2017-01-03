@@ -21,11 +21,13 @@
 				var username = $scope.username;
 				var password = $scope.password;
 				
-				var loginController = new java.controller.LoginController();
+				// kommunikation mit java controller !!
+				// --> wenn Login-Methode TRUE zurück gibt: redirectTo: '/view1';
+				// --> wenn FALSE zur erneuten Eingabe auffordern
 				
-				//alert("login now"+username+", "+password);
-				if (loginController.Login (username,password))
-					redirectTo: '/view1';
+				// var loginController = new java.controller.LoginController();
+				
+				
 			}
 	    }
 	});

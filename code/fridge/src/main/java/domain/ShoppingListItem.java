@@ -9,10 +9,9 @@ public class ShoppingListItem extends Product {
 
     public ShoppingListItem(double preis, String name, int verpackungsGroesse, int mindestbestand, int hoechstbestand,
 			int aktuellerbestand, boolean regelmaessig, Date ablaufdatum) {
-		super(preis, name, verpackungsGroesse, mindestbestand, hoechstbestand, aktuellerbestand, regelmaessig, ablaufdatum);
-		// TODO Auto-generated constructor stub
+		super(preis, name, verpackungsGroesse, mindestbestand, hoechstbestand, aktuellerbestand, regelmaessig, ablaufdatum);		// 
 	}
-
+		
 	private int amount;
 
     public int getAmount() {

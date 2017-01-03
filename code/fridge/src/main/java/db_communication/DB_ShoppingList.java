@@ -29,6 +29,5 @@ public class DB_ShoppingList {
 		ShoppingListRepositoryMongoImpl shoppingListRepositoryMongo = new ShoppingListRepositoryMongoImpl(this.mongoProvider);
 		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);
 		return shoppingListService.getAllProducts();
-	}
-	
+	}	
 }

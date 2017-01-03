@@ -80,6 +80,8 @@ public class InvoiceController {
 			htmlParser.createPdf(htmlString);
 		} catch (Exception e) {
 			// TODO: handle exception
+			// SO?
+			// System.out.println(e.getMessage());
 		}
 	}
 

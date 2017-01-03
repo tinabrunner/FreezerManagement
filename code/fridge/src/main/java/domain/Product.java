@@ -95,11 +95,8 @@ public class Product extends BaseProduct {
         this.ablaufDatum = ablaufDatum;
     }
 
-    public boolean isMindesetBestandUnterschritten() {
-        if (this.getAktuellerBestand() < this.getMindestBestand())
-        	return true;
-        else
-        	return false;
+    public boolean isMindesetBestandUnterschritten() {    	
+    	return this.getAktuellerBestand() < this.getMindestBestand();
     }
 
     public int reduceStock(int reduceBy) {

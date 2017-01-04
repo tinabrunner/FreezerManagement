@@ -20,7 +20,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import freezers.MongoProvider;
+import domain.MongoProvider;
 
 /* 
  * Die Klasse DB_Invoices schreibt Rechnungen inkl. aller Attribute (ID, Name, Datum,...) in die Datenbank

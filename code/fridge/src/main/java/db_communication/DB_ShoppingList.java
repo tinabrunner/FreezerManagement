@@ -7,7 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import domain.MongoProvider;
+import domain.MongoProvider2;
 import domain.Product;
 import repository.ShoppingListRepositoryMongoImpl;
 //import repository.ShoppingListRepositoryMongoImpl;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class DB_ShoppingList {
 
 	@EJB
-	MongoProvider mongoProvider;
+	MongoProvider2 mongoProvider;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

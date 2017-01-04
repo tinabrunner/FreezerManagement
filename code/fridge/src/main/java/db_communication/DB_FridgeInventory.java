@@ -20,7 +20,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import domain.Product;
-import freezers.MongoProvider;
+import domain.MongoProvider;
 
 /* 
  * Die Klasse DB_FridgeInventory schreibt alle Produkte inkl. aller Attribute (Anzahl, ID, Name) in die Datenbank,
@@ -30,7 +30,7 @@ import freezers.MongoProvider;
 
 /*
  * 
- * Kleiner Tipp: NIEMALS, N I E M A L S auf "getippte" Zeichenketten gehen. Dafür bitte eine Übersetzungstabelle anlegen.
+ * Kleiner Tipp: NIEMALS, N I E M A L S auf "getippte" Zeichenketten gehen. Dafï¿½r bitte eine ï¿½bersetzungstabelle anlegen.
  * siehe util.ShoppingListHelper (e.g. documentShoppingListProductId = "id", klar?)
  */
 public class DB_FridgeInventory {

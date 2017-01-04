@@ -1,7 +1,7 @@
 package repository;
 
+import domain.MongoProvider2;
 import domain.Product;
-import domain.MongoProvider;
 import domain.ShoppingListItem;
 import util.ShoppingListHelper;
 import com.mongodb.Block;
@@ -20,7 +20,7 @@ public class ShoppingListRepositoryMongoImpl implements ShoppingListRepository {
     /**
      * Internal usage of database provider
      */
-    private final MongoProvider mongoProvider;
+    private final MongoProvider2 mongoProvider;
 
     /**
      * Naming for "table" equivalent holding the data
@@ -31,7 +31,7 @@ public class ShoppingListRepositoryMongoImpl implements ShoppingListRepository {
      * Constructor to set database for this implementation using MongoDB
      * @param provider
      */
-    public ShoppingListRepositoryMongoImpl(MongoProvider provider) {
+    public ShoppingListRepositoryMongoImpl(MongoProvider2 provider) {
         this.mongoProvider = provider;
     }
 

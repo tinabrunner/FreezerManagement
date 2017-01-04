@@ -3,7 +3,7 @@ package repository;
 /*
 import application.FreezerManagementApplication;
 import domain.Product;
-import domain.MongoProvider;
+import domain.MongoProvider2;
 import repository.ShoppingListRepository;
 import repository.ShoppingListRepositoryMongoImpl;
 import util.ShoppingListHelper;
@@ -33,12 +33,12 @@ public class ShoppingListRepositoryIT {
 	
 
     private static final String databaseName = "freezer";
-    private MongoProvider mongo;
+    private MongoProvider2 mongo;
     private ShoppingListRepository shoppingListRepository;
 
     @Before
     public void setUp(){
-        mongo = new MongoProvider("localhost", 27017);
+        mongo = new MongoProvider2("localhost", 27017);
         mongo.setDatabaseName(databaseName);
         mongo.connect();
 

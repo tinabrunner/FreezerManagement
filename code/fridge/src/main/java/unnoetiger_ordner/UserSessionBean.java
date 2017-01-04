@@ -1,12 +1,4 @@
-package freezers;
-
-import javax.ejb.Stateless;
-import javax.ejb.embeddable.EJBContainer;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-
-import db_communication.DB_FridgeUser;
-import model.FridgeUser;
+package unnoetiger_ordner;
 
 //@Stateless
 //@Path("SessionBean/UserServiceBean")

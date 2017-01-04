@@ -15,20 +15,28 @@
 	ShoppingCartCtrl.$inject = ['$http'];
 
 	function ShoppingCartCtrl($http) {
+		/* --- SCOPE --- (worauf .html zugreifen kann) */
 		var vm = this;
 		vm.products = {};
 		vm.empty = empty;
 		vm.deleteProduct = deleteProduct;
+		vm.init = init;
 
-		$http.get(URL_API+'shopping_cart').then(function(resp) {
-			vm.products = resp.data.products;
-		}, function(error) {
-			console.dir(error);
-		});
+		init();
+
+		function init() {
+			$http.get(URL_API+'shopping_cart').then(function(resp) {
+				vm.products = resp.data.products;
+			}, function(error) {
+				console.dir(error);
+			});
+		}
 
 		function deleteProduct(prod) {
 			alert('delete '+prod.name);
 		}
+
+		/* --- --- */
 	}
 
 })();

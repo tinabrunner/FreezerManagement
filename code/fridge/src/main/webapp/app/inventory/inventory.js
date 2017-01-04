@@ -30,7 +30,7 @@
 		
 		$scope.DeleteInvProduct = function() {
 			// delete the selected product
-			redirectTo: '/view1';
+			redirectTo: '/home';
 	    }
 		
 	});

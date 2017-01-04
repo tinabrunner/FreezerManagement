@@ -1,25 +1,23 @@
 package controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
-import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-import javax.naming.InitialContext;
+import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
 
 import Model.Invoice;
 import Model.InvoiceItem;
 import pdfcreator.Order;
+import pdfcreator.ParseHtml;
 import pdfcreator.Product;
 
 public class InvoiceController {
+
+	ParseHtml htmlParser = new ParseHtml();
 
 	public void createInvoice(Order order) {
 		String customerId = order.getCustomerId();
@@ -41,42 +39,45 @@ public class InvoiceController {
 			invoice.addItem(i);
 
 		}
+
 	}
 
-	public void sendInvoice(Invoice invoice) {
-		String message = invoiceToString(invoice);
+	public String InvoiceToHTML(Invoice invoice) throws IOException {
+		String destination;
+		File htmlTemplateFile = new File("src/main/webapp/app/invoice/invoice.html");
+		String htmlString = FileUtils.readFileToString(htmlTemplateFile);
+
+		String[] splitfile = htmlString.split("<!--splitpoint-->");
+		String firstString = splitfile[0];
+		String secondString = splitfile[1];
+
+		for (InvoiceItem i : invoice.getItems()) {
+			String productName = i.getName();
+			String price = Double.toString(i.getPrice());
+			String amount = Integer.toString(i.getAmount());
+			String totalItemPrice = Double.toString(i.getTotalPrice());
+
+			String newItem = "<tr><td>" + productName + "</td><td class=\"text-center\">" + price
+					+ "</td><td class=\"text-center\">" + amount + "</td><td class=\"text-right\">" + totalItemPrice
+					+ "</td></tr>";
+			firstString.concat(newItem);
+		}
+
+		htmlString.concat(firstString).concat(secondString);
+
+		File newHtmlFile = new File("src/main/webapp/app/invoice/new.html");
+		FileUtils.writeStringToFile(newHtmlFile, htmlString);
 
 		try {
-			// 1) Create and start connection
-			InitialContext ctx = new InitialContext();
-			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("myQueueConnectionFactory");
-			QueueConnection con = f.createQueueConnection();
-			con.start();
-
-			// 2) create queue session
-			QueueSession ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
-
-			// 3) get the Queue object
-			Queue t = (Queue) ctx.lookup("myQueue");
-
-			// 4)create QueueSender object
-			QueueSender sender = ses.createSender(t);
-
-			// 5) create TextMessage object
-			TextMessage msg = ses.createTextMessage();
-
-			// 6) write message
-			msg.setText(message);
-
-			// 7) send message
-			sender.send(msg);
-			System.out.println("Message successfully sent.");
-
-			// 8) connection close
-			con.close();
+			destination = htmlParser.createPdf(htmlString);
+			return destination;
 		} catch (Exception e) {
-			System.out.println(e);
+			// TODO: handle exception
+			// SO?
+			// System.out.println(e.getMessage());
+			return null;
 		}
+
 	}
 
 	public String invoiceToString(Invoice invoice) {

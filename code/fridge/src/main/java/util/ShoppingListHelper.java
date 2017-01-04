@@ -47,7 +47,8 @@ public class ShoppingListHelper {
      * @return
      */
     public static ShoppingListItem convertDatabaseItemToProduct(Document document){
-        ShoppingListItem freezerProduct = new ShoppingListItem();
+    	
+        ShoppingListItem freezerProduct = new ShoppingListItem(0, null, 0, 0, 0, 0, false, null);
         freezerProduct.setId(document.getString(documentShoppingListProductId));
         freezerProduct.setName(document.getString(documentShoppingListProductName));
         freezerProduct.setAmount(document.getInteger(documentShoppingListProductAmount));

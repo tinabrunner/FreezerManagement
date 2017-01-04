@@ -2,7 +2,6 @@ package controller;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.servlet.annotation.WebServlet;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

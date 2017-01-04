@@ -25,6 +25,7 @@
 				<version>3.6.0</version>
 			</plugin>
 		</plugins>
+		
 	</build>
 
 	<dependencies>

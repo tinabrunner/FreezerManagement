@@ -1,5 +1,7 @@
 package db_communication;
 
+import java.util.Date;
+
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,14 +27,17 @@ import freezers.MongoProvider;
  * kann sie auch wieder auslesen, sowie editieren und lÃ¶schen.
  * 
  */
+
+/*
+ * 
+ * Kleiner Tipp: NIEMALS, N I E M A L S auf "getippte" Zeichenketten gehen. Dafür bitte eine Übersetzungstabelle anlegen.
+ * siehe util.ShoppingListHelper (e.g. documentShoppingListProductId = "id", klar?)
+ */
 public class DB_FridgeInventory {
-	
-	// TODO : Klasse und auch DB-Collection-Struktur nochmal Ã¼berarbeiten !!!! 
-	// 			--> abgleichen mit Janas Product-Klasse
-	
+		
 	@EJB
 	private MongoProvider mongoProvider;
-	
+		
 	// Method to Insert a Product
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
@@ -44,12 +49,19 @@ public class DB_FridgeInventory {
 		
 		if (!productExistsInInventory(product)) {	
 			Document doc = new Document ("id", product.getId())
-					.append("amount", amount)
-					.append("name", product.getName());
+					.append("price", product.getPreis())
+					.append("name", product.getName())
+					.append("packagingsize", product.getVerpackungsGroesse())
+					.append("minimumstock", product.getMindestBestand())
+					.append("maximumstock", product.getHoechstBestand())
+					.append("actualamount", amount)
+					.append("regularly", product.isRegelmaessig())
+					.append("expirydate", product.getAblaufDatum());
 			products.insertOne(doc);
 		}
-		else {}
-			// TODO update amount
+		else {
+			updateProductFromDBInventory (product, amount);
+		}
 	}
 
 	// Method to Search for a Product
@@ -75,9 +87,17 @@ public class DB_FridgeInventory {
 		}
 		else {
 			BasicDBObject doc = (BasicDBObject) cursor.curr();
+			String id = doc.getString("id");
+			double preis = doc.getDouble("price");
 			String name = doc.getString("name");
-			int id = doc.getInt("id");
-//			product = new Product (id, name);
+			int verpgroesse = doc.getInt("packagingsize");
+			int mindbestand = doc.getInt("minimumstock");
+			int hoechstbestand = doc.getInt("maximumstock");
+			int aktuellerbestand = doc.getInt("actualamount");
+			boolean regelmaessig = doc.getBoolean("regularly");
+			Date ablaufdatum = doc.getDate("expirydate");
+			product = new Product (preis, name, verpgroesse, mindbestand, hoechstbestand, 
+					aktuellerbestand, regelmaessig, ablaufdatum, id);
 		}
 		return product;
 	}
@@ -85,7 +105,7 @@ public class DB_FridgeInventory {
 	// Method to get the actual amount for a Product
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public int getAmountForProduct (int productId) {
+	public int getAmountForProduct (String productId) {
 		// create Product variable for the return-statement
 		int amount = -1;
 			
@@ -108,8 +128,7 @@ public class DB_FridgeInventory {
 			amount = doc.getInt("amount");
 		}
 		
-		return amount;	
-			
+		return amount;			
 	}
 
 	
@@ -126,22 +145,28 @@ public class DB_FridgeInventory {
 		// check if the product exists
 		if (productExistsInInventory(product)) {
 			// get the amount and add the new amount
-	//		actualAmount = getAmountForProduct(product.getId());
+			actualAmount = getAmountForProduct(product.getId());
 		}
 		
 		// if the amount is MORE or EQUAL 1 --> update the product
 		if ((actualAmount + amount) >= 1) {
 			int newAmount = actualAmount + amount;
 			BasicDBObject updateProduct = new BasicDBObject("id", product.getId())
-					.append("amount", newAmount)
-					.append("name", product.getName());
+					.append("price", product.getPreis())
+					.append("name", product.getName())
+					.append("packagingsize", product.getVerpackungsGroesse())
+					.append("minimumstock", product.getMindestBestand())
+					.append("maximumstock", product.getHoechstBestand())
+					.append("actualamount", amount)
+					.append("regularly", product.isRegelmaessig())
+					.append("expirydate", product.getAblaufDatum());
 		
 			BasicDBObject searchQuery = new BasicDBObject().append("id", product.getId());
 			products.update(searchQuery, updateProduct);
 		}
 		// if the amount is EQUAL 0  --> delete the product from the inventory
 		else if ((actualAmount + amount) == 0) {
-	//		deleteProductFromDBInventory(product.getId());
+			deleteProductFromDBInventory(product.getId());
 		}
 		// if the amount is LESS than 0 --> something went wrong! you cannot remove more than the actual amount
 		else if ((actualAmount + amount) < 0) {
@@ -153,14 +178,17 @@ public class DB_FridgeInventory {
 	
 	// Method to Delete a Product
 	@DELETE
-	public void deleteProductFromDBInventory (int productId) {
+	public void deleteProductFromDBInventory (String productId) {
 		// create a client and get the database and productsCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
 		DBCollection products = (DBCollection) db.getCollection("inventoryProducts");
 		
-		// create a query to get the user and delete it
+		// create a query to get the product and delete it
 		BasicDBObject deleteProduct= new BasicDBObject();
+		
+		// TODO check userid and if the product exists!
+		
 		deleteProduct.put("id", productId);
 		products.remove(deleteProduct);
 	}

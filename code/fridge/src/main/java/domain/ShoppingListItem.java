@@ -1,11 +1,18 @@
 package domain;
 
+import java.util.Date;
+
 /**
  * Created by JD on 08.12.2016.
  */
 public class ShoppingListItem extends Product {
 
-    private int amount;
+    public ShoppingListItem(double preis, String name, int verpackungsGroesse, int mindestbestand, int hoechstbestand,
+			int aktuellerbestand, boolean regelmaessig, Date ablaufdatum) {
+		super(preis, name, verpackungsGroesse, mindestbestand, hoechstbestand, aktuellerbestand, regelmaessig, ablaufdatum);		// 
+	}
+		
+	private int amount;
 
     public int getAmount() {
         return amount;

@@ -13,7 +13,31 @@
 			controller: 'view_login1Ctrl'
 		});
 	}])
+	.controller('view_login1Ctrl', function($scope) {
+		$scope.Login = function() {
+			if (!$scope.username || !$scope.password)
+				alert("Please enter username and password!");
+			else {
+				var username = $scope.username;
+				var password = $scope.password;
+				
+				// kommunikation mit java controller !!
+				// --> wenn Login-Methode TRUE zurück gibt: redirectTo: '/view1';
+				// --> wenn FALSE zur erneuten Eingabe auffordern
+				
+				// var loginController = new java.controller.LoginController();
+				
+				
+			}
+	    }
+	});
+	
+	
 
+
+})();
+	
+	/*
 	.controller('view_login1Ctrl', LoginCtrl);
 
 	LoginCtrl.$inject = ['$http'];
@@ -21,17 +45,23 @@
 	
 	function LoginCtrl($http) {
 		var vm = this;
-		var btn_login = vm.getElementById("btn_login");
 		
-		btn_login.addEventListener("click", GetLoginParams);
+		vm.btn_login = function() {
+			alert("test12");
+			
+			if ((vm.username=="") || (vm.password==""))
+				alert("please enter username and password!");
+			else {
+				var username = vm.username;
+				var password = vm.password;
+				
+				alert("login now"+username+", "+password); // +username+", "+password
+			}
+		};
 		
 	};
 	
-	function GetLoginParams () {
-		var vm = this;
-		var username = vm.getElementById("lg_username");
-		var password = vm.getElementById("lg_password");
-		LoginController.Login(username, password);
-	};
+	
 
-})();
+
+})();  */

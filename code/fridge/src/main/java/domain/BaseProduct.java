@@ -8,6 +8,12 @@ public class BaseProduct {
     private String name;
     private int verpackungsGroesse;
 
+    protected BaseProduct (double preis, String name, int verpackungsGroesse) {
+    	this.preis = preis;
+    	this.name = name;
+    	this.verpackungsGroesse = verpackungsGroesse;
+    }
+    
     public double getPreis() {
         return preis;
     }

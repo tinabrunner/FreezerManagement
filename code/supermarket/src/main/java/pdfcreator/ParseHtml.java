@@ -30,7 +30,7 @@ public class ParseHtml {
 	 * @throws IOException
 	 * @throws DocumentException
 	 */
-	public void createPdf(String file) throws IOException, DocumentException {
+	public String createPdf(String file) throws IOException, DocumentException {
 		// step 1
 		Document document = new Document();
 		// step 2
@@ -41,5 +41,7 @@ public class ParseHtml {
 		XMLWorkerHelper.getInstance().parseXHtml(writer, document, new FileInputStream(HTML));
 		// step 5
 		document.close();
+
+		return DEST;
 	}
 }

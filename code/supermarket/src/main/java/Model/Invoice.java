@@ -22,6 +22,12 @@ public class Invoice implements Serializable {
 		this.invoiceURL = invoiceURL;
 	}
 
+	public Invoice(String id, String name, Date billingDate, Date orderDate, double totalPrice, String invoiceURL,
+			List<InvoiceItem> items) {
+		this(id, name, billingDate, orderDate, totalPrice, invoiceURL);
+		this.items = items;
+	}
+
 	public String getId() {
 		return id;
 	}

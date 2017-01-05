@@ -11,9 +11,9 @@ import com.google.gson.Gson;
 
 import Model.Invoice;
 import Model.InvoiceItem;
-import pdfcreator.Order;
+import Model.Order;
+import Model.Product;
 import pdfcreator.ParseHtml;
-import pdfcreator.Product;
 
 public class InvoiceController {
 

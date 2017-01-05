@@ -1,4 +1,4 @@
-package pdfcreator;
+package Model;
 
 public class Product {
 

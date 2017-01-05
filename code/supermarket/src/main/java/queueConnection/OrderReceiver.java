@@ -14,8 +14,8 @@ import javax.naming.InitialContext;
 
 import com.google.gson.Gson;
 
+import Model.Order;
 import controller.OrderController;
-import pdfcreator.Order;
 
 public class OrderReceiver implements MessageListener {
 

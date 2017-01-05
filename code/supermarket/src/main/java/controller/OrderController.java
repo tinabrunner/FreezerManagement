@@ -2,7 +2,7 @@ package controller;
 
 import java.util.List;
 
-import pdfcreator.Order;
+import Model.Order;
 
 public class OrderController {
 

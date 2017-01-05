@@ -2,6 +2,8 @@ package pdfcreator;
 
 import java.util.Date;
 
+import Model.Product;
+
 public class ExpiryProduct extends Product {
 
 	Date dateOfExpiry;

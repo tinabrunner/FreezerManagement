@@ -1,7 +1,5 @@
 package Model;
 
-import pdfcreator.Product;
-
 public class InvoiceItem extends Product {
 	int amount;
 	double totalPrice;

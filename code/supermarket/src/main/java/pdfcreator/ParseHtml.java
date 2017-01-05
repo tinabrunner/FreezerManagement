@@ -24,7 +24,7 @@ public class ParseHtml {
 	}
 
 	/**
-	 * Creates a PDF with the words "Hello World"
+	 * Creates a PDF
 	 * 
 	 * @param file
 	 * @throws IOException

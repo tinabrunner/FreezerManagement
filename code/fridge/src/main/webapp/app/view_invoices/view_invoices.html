@@ -1,22 +1,25 @@
-<div class="container">
-  <h2>Hover Rows</h2>
-  <p>The .table-hover class enables a hover state on table rows:</p>            
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Invoice Number</th>
-        <th>Order Date</th>
-        <th>Total Price</th>
-        <th>Invoice (Download as .pdf)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>12348905</td>
-        <td>21.12.2016</td>
-        <td>27,99 €</td>
-        <td>12348905.pdf</td>
-      </tr>
-    </tbody>
-  </table>
+<div class="container"  ng-controller="InvoiceCtrl as invoiceCtrl">
+	<h2>Invoice-Overview</h2>
+	<p></p>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Invoice Number</th>
+				<th>Order Date</th>
+				<th>Total Price</th>
+				<th>Invoice (Download as .pdf)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="invoice in invoiceCtrl.invoices">
+				<td>{{ invoice.id }}</td>
+				<td>{{ invoice.orderDate }}</td>
+				<td>{{ invoice.totalPrice }}</td>
+				<td>
+					<button ng-click="invoiceCtrl.saveInvoiceAsPDF(invoice.getInvoiceURL, invoice.id )">Download Invoice</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	{{ invoiceCtrl.invoices }}
 </div>

@@ -6,31 +6,33 @@
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/invoices', {
 			templateUrl: 'view_invoices/view_invoices.html',
-			controller: 'view_invoices1Ctrl'
+			controller: 'InvoiceCtrl'
 		});
 	}])
 
-	/*.controller('view_inventory1Ctrl', DeleteInvProduct);
+	.controller('InvoiceCtrl', InvoiceCtrl);
 
-	DeleteInvProduct.$inject = ['$http'];
+	InvoiceCtrl.$inject = ['$http'];
 
-	
-	function DeleteInvProduct($http) {
+	function InvoiceCtrl($http) {
+		/* --- SCOPE --- (worauf .html zugreifen kann) */
 		var vm = this;
-		altert("delete this product");
-	};*/
-	
-//	.controller('view_invoices1Ctrl', function($scope) {
-		
-		// OnPageLoad-Method um tabelle zu füllen
-		
-		//$scope.DeleteInvProduct = function() {
-			// delete the selected product
-//			redirectTo: '/view1';
-//	    }
-//		
-//	});
-	
+		vm.invoices = {};
+		vm.init = init;
+
+		init();
+
+		function init() {
+			$http.get(URL_API+'invoices').then(function(resp) {
+				vm.invoices = resp.data.list;
+			}, function(error) {
+				console.dir(error);
+			});
+		}
+
+
+		/* --- --- */
+	}
 
 
 })();

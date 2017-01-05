@@ -22,7 +22,7 @@
 				var password = $scope.password;
 				
 				// kommunikation mit java controller !!
-				// --> wenn Login-Methode TRUE zurück gibt: redirectTo: '/view1';
+				// --> wenn Login-Methode TRUE zurück gibt: redirectTo: '/home';
 				// --> wenn FALSE zur erneuten Eingabe auffordern
 				
 				// var loginController = new java.controller.LoginController();

@@ -9,20 +9,20 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="#">					<!-- hier dann auch der Link zu "Home" -->
-	  	<img src="navigation/Logo_FreezerManagement-01.png" width=50 height=auto>
-	  </a>   
+        <img src="navigation/Logo_FreezerManagement-01.png" width=50 height=auto>
+      </a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="#!/inventory">Inventory</a></li>
-        <li><a href="#">Product List</a></li>
-        <li><a href="#">Shopping List</a></li>
-        <li><a href="#!/shoppingcart">Shopping Cart</a></li>
-        <li><a href="#!/invoices">Invoices</a></li>
-        
+        <li ng-class="navigation.getClass('/home')"><a href="#!/home">Home</a></li>
+        <li ng-class="navigation.getClass('/inventory')"><a href="#!/inventory">Inventory</a></li>
+        <li ng-class="navigation.getClass('/??')"><a href="#">Product List</a></li>
+        <li ng-class="navigation.getClass('/??')"><a href="#">Shopping List</a></li>
+        <li ng-class="navigation.getClass('/shoppingcart')"><a href="#!/shoppingcart">Shopping Cart</a></li>
+        <li ng-class="navigation.getClass('/invoices')"><a href="#!/invoices">Invoices</a></li>
+
       </ul>
 
       <ul class="nav navbar-nav navbar-right">

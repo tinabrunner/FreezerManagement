@@ -10,7 +10,8 @@ angular.module('fridge', [
 	'fridge.shopping_cart', 
 	'fridge.inventory',
 	'fridge.invoices',
-	'fridge.myaccount'
+	'fridge.myaccount',
+	'fridge.shoppingList'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
 $locationProvider.hashPrefix('!');

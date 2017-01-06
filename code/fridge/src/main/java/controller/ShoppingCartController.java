@@ -3,13 +3,12 @@ package controller;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import domain.MongoProvider;
+import model.FridgeUser;
 
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Stateless;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -24,12 +23,11 @@ public class ShoppingCartController {
 	MongoProvider mongoProvider;
 	
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getShoopingCart() {
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("fridge"); //?
-		// ...
-		return "blubbeti blub";
+	@Produces(MediaType.TEXT_PLAIN)
+	public String postShoopingCart() {
+		//MongoClient mongoClient = this.mongoProvider.getMongoClient();
+		//MongoDatabase db = mongoClient.getDatabase("fridge"); //?
+		return "";
 	}
 }
 

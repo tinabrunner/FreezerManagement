@@ -3,7 +3,9 @@ package model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 @Entity
 public class FridgeUser implements Serializable {
 	
@@ -93,6 +95,8 @@ public class FridgeUser implements Serializable {
                 + ", lastName=" + this.getName() + ", username=" + this.getUsername()
                 + ", email=" + this.getEmail() + ", role=" + this.getRole() + "]";
     }
-
-
+	
+	public void setRole(String role) {
+		this.role = role;
+	}
 }

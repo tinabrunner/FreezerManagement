@@ -1,0 +1,57 @@
+
+<!-- All the files that are required -->
+<!-- (includes in index.html) -->
+
+<!-- Where all the magic happens -->
+
+<!-- REGISTRATION FORM -->
+<div class="text-center" style="padding:30px 0; width:50%; margin: 0 auto">
+	<div class="logo" style="padding-bottom:40px"><img src="navigation/Logo_FreezerManagement-01.png" width=150px height=auto></div>
+	<!-- Main Form -->
+	<div class="login-form-1">
+		<form id="register-form" class="text-left">
+			<div class="login-form-main-message"></div>
+			<div class="main-login-form">
+				<div class="login-group">
+					<div class="form-group">
+						<label for="reg_username" class="sr-only">Username</label>
+						<input type="text" class="form-control" id="reg_username" name="reg_username" ng-model="username" placeholder="username">
+					</div>
+					<div class="form-group">
+						<label for="reg_password" class="sr-only">Password</label>
+						<input type="password" class="form-control" id="reg_password" name="reg_password" ng-model="password" placeholder="password">
+					</div>
+					<div class="form-group">
+						<label for="reg_password_confirm" class="sr-only">Password Confirm</label>
+						<input type="password" class="form-control" id="reg_password_confirm" name="reg_password_confirm" ng-model="password_confirm" placeholder="if you want to change your password, please confirm it here">
+					</div>
+					<div class="form-group">
+						<label for="reg_firstname" class="sr-only">First Name</label>
+						<input type="text" class="form-control" id="reg_firstname" name="reg_firstname" ng-model="firstname" placeholder="first name">
+					</div>
+					<div class="form-group">
+						<label for="reg_lastname" class="sr-only">Last Name</label>
+						<input type="text" class="form-control" id="reg_lastname" name="reg_lastname" ng-model="lastname" placeholder="last name">
+					</div>
+					<div class="form-group">
+						<label for="reg_email" class="sr-only">Email</label>
+						<input type="text" class="form-control" id="reg_email" name="reg_email" ng-model="email" placeholder="email">
+					</div>
+					
+					
+					<div class="form-group login-group-checkbox">
+						<input type="radio" class="" name="reg_usertype" id="admin" ng-model="usertype_admin" placeholder="admin">
+						<label for="admin">admin</label>
+						
+						<input type="radio" class="" name="reg_usertype" id="user" ng-model="usertype_user" placeholder="user">
+						<label for="user">user</label>
+					</div>
+					
+					
+				</div>
+				<button type="submit" class="login-button" id="btn_edit" ng-click="EditAccoutn()">Edit Account</button>
+			</div>
+		</form>
+	</div>
+	<!-- end:Main Form -->
+</div>

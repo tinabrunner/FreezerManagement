@@ -15,6 +15,11 @@ import java.util.Map;
  * 
  * A: In der Bestellliste dürfen nur Produkte sein, die im Supermarkt noch vorhanden sind. Muss beim hinzufügen zum Warenkorb schon überprüft werden
  */
+
+/**
+ * @author Marius Koch
+ *
+ */
 public class Order {
 	private static String id; // wo gesetzt? -> noch garnicht
 	private Date recieveDate;

@@ -4,6 +4,10 @@ import java.util.Date;
 
 import Model.Product;
 
+/**
+ * @author Marius Koch
+ *
+ */
 public class ExpiryProduct extends Product {
 
 	Date dateOfExpiry;

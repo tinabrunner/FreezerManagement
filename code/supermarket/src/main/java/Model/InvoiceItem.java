@@ -1,5 +1,9 @@
 package Model;
 
+/**
+ * @author Marius Koch
+ *
+ */
 public class InvoiceItem extends Product {
 	int amount;
 	double totalPrice;

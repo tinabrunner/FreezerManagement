@@ -17,6 +17,10 @@ import com.google.gson.Gson;
 import Model.Order;
 import controller.OrderController;
 
+/**
+ * @author Marius Koch
+ *
+ */
 public class OrderReceiver implements MessageListener {
 
 	public OrderReceiver() throws JMSException {

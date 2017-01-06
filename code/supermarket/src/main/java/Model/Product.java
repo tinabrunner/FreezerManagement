@@ -1,5 +1,9 @@
 package Model;
 
+/**
+ * @author Marius Koch
+ *
+ */
 public class Product {
 
 	private String id;

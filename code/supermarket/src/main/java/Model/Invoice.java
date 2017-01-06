@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Marius Koch
+ *
+ */
 public class Invoice implements Serializable {
 	private String id;
 	private String name;

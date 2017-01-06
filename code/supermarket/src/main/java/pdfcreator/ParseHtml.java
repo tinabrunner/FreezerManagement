@@ -10,6 +10,10 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 
+/**
+ * @author Marius Koch
+ *
+ */
 public class ParseHtml {
 	public static final String DEST = "results/xmlworker/invoice.pdf";
 	public static final String HTML = "src/main/webapp/app/invoice/invoice.html";

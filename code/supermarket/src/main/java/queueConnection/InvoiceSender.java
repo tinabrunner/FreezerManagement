@@ -9,6 +9,10 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 
+/**
+ * @author Marius Koch
+ *
+ */
 public class InvoiceSender {
 
 	public void sendInvoice(String invoice) {

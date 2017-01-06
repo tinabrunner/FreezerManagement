@@ -4,6 +4,10 @@ import java.util.List;
 
 import Model.Order;
 
+/**
+ * @author Marius Koch
+ *
+ */
 public class OrderController {
 
 	private List<Order> orders;

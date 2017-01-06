@@ -5,3 +5,4 @@ code/supermarket/target/
 code/fridge/target/
 code/fridge/.idea/
 code/supermarket/.idea/
+*.iml

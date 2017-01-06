@@ -3,13 +3,10 @@ package db_communication;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import org.bson.Document;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import domain.MongoProvider;
@@ -34,14 +31,21 @@ public class DB_FridgeUser {
 		// create a client and get the database and usersCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
-		MongoCollection<Document> users = db.getCollection("users");
+		DBCollection users = (DBCollection) db.getCollection("users");
 
 		if (!userExists(fridgeUser.getUsername())) {
-			Document doc = new Document("username", fridgeUser.getUsername())
+			/*
+			 * Document doc = new Document("username", fridgeUser.getUsername())
+			 * .append("password", fridgeUser.getPassword()).append("firstName",
+			 * fridgeUser.getName()) .append("lastName",
+			 * fridgeUser.getSurname()).append("email", fridgeUser.getEmail())
+			 * .append("role", fridgeUser.getRole());
+			 */
+			BasicDBObject doc = new BasicDBObject("username", fridgeUser.getUsername())
 					.append("password", fridgeUser.getPassword()).append("firstName", fridgeUser.getName())
 					.append("lastName", fridgeUser.getSurname()).append("email", fridgeUser.getEmail())
 					.append("role", fridgeUser.getRole());
-			users.insertOne(doc);
+			users.save(doc);
 			ret = true;
 		}
 		return ret;

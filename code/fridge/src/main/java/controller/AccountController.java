@@ -19,6 +19,7 @@ import model.FridgeUser;
 @Path("/account")
 public class AccountController {
 
+	// @EJB
 	private DB_FridgeUser db_fridgeUser = new DB_FridgeUser();
 
 	@POST
@@ -27,7 +28,8 @@ public class AccountController {
 	// Method to create an account and write the user to DB
 	public String createAccount(FridgeUser user) {
 		// DB_FridgeUser checks, if the username already exists
-		if (db_fridgeUser.insertUserToDB(user))
+		boolean insertionTrue = db_fridgeUser.insertUserToDB(user);
+		if (insertionTrue)
 			return "true";
 		else {
 			System.out.print("Username already exists! Please enter another username!");

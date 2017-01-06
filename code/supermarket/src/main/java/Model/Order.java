@@ -21,7 +21,7 @@ import java.util.Map;
  *
  */
 public class Order {
-	private static String id; // wo gesetzt? -> noch garnicht
+	private String id; // wo gesetzt? -> noch garnicht
 	private Date recieveDate;
 	private double totalPrice;
 	private String customerId;
@@ -34,7 +34,13 @@ public class Order {
 		recieveDate = new Date();
 	}
 
-	public static String getId() {
+	public Order(String id, Date recieveDate, double totalPrice, String customerId, Map<Product, Integer> order) {
+		this(order, totalPrice, customerId);
+		this.id = id;
+		this.recieveDate = recieveDate;
+	}
+
+	public String getId() {
 		return id;
 	}
 

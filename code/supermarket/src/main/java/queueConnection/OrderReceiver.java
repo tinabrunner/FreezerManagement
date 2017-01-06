@@ -65,7 +65,6 @@ public class OrderReceiver implements MessageListener {
 			String jsonInString = msg.getText();
 			Order order = gson.fromJson(jsonInString, Order.class);
 			OrderController.addOrder(order);
-
 		} catch (JMSException e) {
 			System.out.println(e);
 		}

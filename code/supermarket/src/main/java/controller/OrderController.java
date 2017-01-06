@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.List;
-
 import Model.Order;
 
 /**
@@ -10,10 +8,12 @@ import Model.Order;
  */
 public class OrderController {
 
-	private List<Order> orders;
+	public void createOrder() {
+		// TODO
+	}
 
 	public static void addOrder(Order order) {
-		// orders.add(order);
+		// TODO
 	}
 
 }

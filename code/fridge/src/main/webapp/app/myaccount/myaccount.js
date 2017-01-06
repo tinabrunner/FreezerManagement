@@ -14,11 +14,22 @@
 		});
 	}])
 	.controller('myaccountCtrl', function($scope, $http) {
+		$scope.MyText = "Edit Account";
+		$scope.checked =true;
+		
 		$scope.EditAccount = function() {
-			if (this.getElementById("btn_edit ").value=="Edit Account")
-				this.getElementById("btn_edit ").value=="Save Changes"
-			else if (this.getElementById("btn_edit ").value=="Safe Changes")
-				this.getElementById("btn_edit ").value=="Edit Account";
+			if ($scope.MyText == "Edit Account") {
+				$scope.checked =false;
+				$scope.MyText = "Save Changes";
+			}
+			else if ($scope.MyText == "Save Changes") {
+				$scope.checked =true;
+				$scope.MyText = "Edit Account";
+			}
+			else {
+				alert ("Value = "+$scope.MyText);
+			}
+			
 			/*else {
 				var dada = {
 						name : $scope.firstname, 

@@ -19,7 +19,7 @@ import model.FridgeUser;
 @Path("/account")
 public class AccountController {
 
-	private DB_FridgeUser db_fridgeUser;
+	private DB_FridgeUser db_fridgeUser = new DB_FridgeUser();
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

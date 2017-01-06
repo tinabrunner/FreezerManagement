@@ -26,7 +26,7 @@
 						username : $scope.username,
 						password : $scope.password,
 						email : $scope.email,
-						userrole : $('input:checkbox[name="reg_usertype"]:checked')
+						userrole : $scope.usertype //('input:checkbox[name="reg_usertype"]:checked')
 				}
 				$http.post(URL_API+"account", dada).then((function(response){
 					if (response.data)

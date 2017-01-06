@@ -9,6 +9,7 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import db_communication.DB_FridgeUser;
@@ -22,14 +23,15 @@ public class AccountController {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	// Method to create an account and write the user to DB
-	public boolean createAccount(FridgeUser user) {
+	public String createAccount(FridgeUser user) {
 		// DB_FridgeUser checks, if the username already exists
 		if (db_fridgeUser.insertUserToDB(user))
-			return true;
+			return "true";
 		else {
 			System.out.print("Username already exists! Please enter another username!");
-			return false;
+			return "false";
 		}
 	}
 

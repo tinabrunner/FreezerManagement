@@ -29,7 +29,7 @@
 				name: 'a',
 				surname: 'b'
 			};
-			$http.post(URL_API+'shopping_cart', data).then(function(resp) {
+			$http.get(URL_API+'shopping_cart').then(function(resp) {
 				vm.products = resp.data.products;
 			}, function(error) {
 				console.dir(error);

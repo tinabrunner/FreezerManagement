@@ -21,7 +21,7 @@ public class AccountController {
 	private DB_FridgeUser db_fridgeUser;
 
 	@POST
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	// Method to create an account and write the user to DB
 	public boolean createAccount(FridgeUser user) {
 		// DB_FridgeUser checks, if the username already exists

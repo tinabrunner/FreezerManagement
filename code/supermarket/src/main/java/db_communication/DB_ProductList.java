@@ -36,8 +36,9 @@ public class DB_ProductList {
 			BasicDBObject doc = (BasicDBObject) cursor.curr();
 			String id = doc.getString("id");
 			String name = doc.getString("name");
+			int verpackungsgroesse = doc.getInt("verpackungsgroesse");
 			double price = doc.getDouble("price");
-			allProducts.add(new Product(id, name, price));
+			allProducts.add(new Product(id, name, verpackungsgroesse, price));
 		}
 		return allProducts;
 	}

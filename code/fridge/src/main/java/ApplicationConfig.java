@@ -28,4 +28,5 @@ public class ApplicationConfig extends Application {
 
 		return classes;
 	}
+
 }

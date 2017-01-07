@@ -9,7 +9,7 @@ public class InvoiceItem extends Product {
 	double totalPrice;
 
 	public InvoiceItem(String id, String name, double price, int amount) {
-		super(id, name, price);
+		super(id, name, 0, price);
 		this.amount = amount;
 		totalPrice = amount * price;
 	}

@@ -1,17 +1,18 @@
 package service;
 
-import model.Product;
+import model.ShoppingListItem;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by JD on 11.12.2016.
  */
 interface ShoppingListService {
 
-    boolean existsProduct(Product product);
-    boolean addProduct(Product product, int amount);
-    boolean deleteProduct(Product product);
-    Map<Product, Integer> getAllProducts();
-    Product getProduct(Product product);
+    boolean existsProduct(ShoppingListItem product);
+    boolean addProduct(ShoppingListItem product);
+    boolean deleteProduct(ShoppingListItem product);
+    Set<ShoppingListItem> getAllProducts();
+    ShoppingListItem getProduct(ShoppingListItem product);
 }

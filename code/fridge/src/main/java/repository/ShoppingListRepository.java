@@ -1,8 +1,9 @@
 package repository;
 
-import model.Product;
+import model.ShoppingListItem;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by JD on 10.12.2016.
@@ -17,16 +18,15 @@ public interface ShoppingListRepository {
      * @param product to check
      * @return boolean if the product exists
      */
-    boolean existsProduct(Product product);
+    boolean existsProduct(ShoppingListItem product);
 
     /**
      * Adds a product an it's amount to the shoppinglist
      *
      * @param product to add
-     * @param amount of product to add
      * @return true if it was added
      */
-    boolean addProduct(Product product, int amount);
+    boolean addProduct(ShoppingListItem product);
 
     /**
      * Deletes the given product from the shoppinglist
@@ -34,14 +34,14 @@ public interface ShoppingListRepository {
      * @param product to delete
      * @return true only if the product was (really) deleted (acknowledged AND deletionCount)
      */
-    boolean deleteProduct(Product product);
+    boolean deleteProduct(ShoppingListItem product);
 
     /**
      * Returns a map with all products and its amount of the shoppinglist
      *
      * @return Map
      */
-    Map<Product, Integer> getAllProducts();
+    Set<ShoppingListItem> getAllProducts();
 
     /**
      * Returns a given product out of the shoppinglist
@@ -50,7 +50,7 @@ public interface ShoppingListRepository {
      * @param product to find with further information
      * @return the selected product
      */
-    Product getProduct(Product product);
+    ShoppingListItem getProduct(ShoppingListItem product);
 
     /**
      * Count all products in the shoppinglist (NOT amount!)

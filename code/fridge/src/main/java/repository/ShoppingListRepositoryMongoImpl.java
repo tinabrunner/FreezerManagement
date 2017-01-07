@@ -1,7 +1,6 @@
 package repository;
 
 import domain.MongoProvider2;
-import model.Product;
 import model.ShoppingListItem;
 import util.ShoppingListHelper;
 import com.mongodb.Block;
@@ -10,7 +9,9 @@ import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by JD on 11.12.2016.
@@ -50,7 +51,7 @@ public class ShoppingListRepositoryMongoImpl implements ShoppingListRepository {
      * @return true if the product is in the data
      */
     @Override
-    public boolean existsProduct(Product product) {
+    public boolean existsProduct(ShoppingListItem product) {
         try {
             return getShoppingListCollection().count(new Document(ShoppingListHelper.documentShoppingListProductId, product.getId())) == 1;
         } catch (Exception e) {
@@ -63,13 +64,12 @@ public class ShoppingListRepositoryMongoImpl implements ShoppingListRepository {
      * Saves a product in the data
      *
      * @param product to add
-     * @param amount  of product to add
      * @return
      */
     @Override
-    public boolean addProduct(Product product, int amount) {
+    public boolean addProduct(ShoppingListItem product) {
         try {
-            getShoppingListCollection().insertOne(ShoppingListHelper.convertProductToDatabaseItem(product, amount));
+            getShoppingListCollection().insertOne(ShoppingListHelper.convertProductToDatabaseItem(product));
             return true;
         } catch (Exception e) {
             System.out.println("MongoConnection(insert): " + e.getMessage());
@@ -85,7 +85,7 @@ public class ShoppingListRepositoryMongoImpl implements ShoppingListRepository {
      * @return true if the product was deleted
      */
     @Override
-    public boolean deleteProduct(Product product) {
+    public boolean deleteProduct(ShoppingListItem product) {
         try {
             DeleteResult dr = getShoppingListCollection().deleteOne(new Document(ShoppingListHelper.documentShoppingListProductId, product.getId()));
             return dr.wasAcknowledged() && dr.getDeletedCount() == 1;
@@ -101,12 +101,12 @@ public class ShoppingListRepositoryMongoImpl implements ShoppingListRepository {
      * @return a map
      */
     @Override
-    public Map<Product, Integer> getAllProducts() {
-        Map<Product, Integer> freezerProducts = new HashMap<>();
+    public Set<ShoppingListItem> getAllProducts() {
+        Set<ShoppingListItem> freezerProducts = new HashSet<>();
         getShoppingListCollection().find()
                 .forEach((Block<Document>) document -> {
                     ShoppingListItem s = ShoppingListHelper.convertDatabaseItemToProduct(document);
-                    freezerProducts.put(s, s.getAmount());
+                    freezerProducts.add(s);
                 });
 
         return freezerProducts;
@@ -127,12 +127,12 @@ public class ShoppingListRepositoryMongoImpl implements ShoppingListRepository {
      * @return
      */
     @Override
-    public Product getProduct(Product product) {
-        final Product[] findProduct = new Product[1];
+    public ShoppingListItem getProduct(ShoppingListItem product) {
+        final ShoppingListItem[] findProduct = new ShoppingListItem[1];
         getShoppingListCollection().find(new Document(ShoppingListHelper.documentShoppingListProductId, product.getId()))
                 .forEach((Block<Document>) document -> {
                     ShoppingListItem s = ShoppingListHelper.convertDatabaseItemToProduct(document);
-                    final Product f = (Product) s;
+                    final ShoppingListItem f = (ShoppingListItem) s;
                     findProduct[0] = f;
                 });
         return findProduct[0];

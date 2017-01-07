@@ -1,9 +1,9 @@
 package service;
 
-import java.util.Map;
-
-import model.Product;
+import model.ShoppingListItem;
 import repository.ShoppingListRepository;
+
+import java.util.Set;
 
 /**
  * Created by JD on 12.12.2016.
@@ -26,7 +26,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
      * @return
      */
     @Override
-    public boolean existsProduct(Product product) {
+    public boolean existsProduct(ShoppingListItem product) {
         return this.shoppingListRepository.existsProduct(product);
     }
 
@@ -34,13 +34,12 @@ public class ShoppingListServiceImpl implements ShoppingListService {
      * Add product only, if it's not existing in data
      *
      * @param product
-     * @param amount
      * @return
      */
     @Override
-    public boolean addProduct(Product product, int amount) {
+    public boolean addProduct(ShoppingListItem product) {
         return !this.shoppingListRepository.existsProduct(product) &&
-                this.shoppingListRepository.addProduct(product, amount);
+                this.shoppingListRepository.addProduct(product);
     }
 
     /**
@@ -50,7 +49,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
      * @return
      */
     @Override
-    public boolean deleteProduct(Product product) {
+    public boolean deleteProduct(ShoppingListItem product) {
         return this.shoppingListRepository.existsProduct(product) &&
                 this.shoppingListRepository.deleteProduct(product);
     }
@@ -59,7 +58,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
      * @return
      */
     @Override
-    public Map<Product, Integer> getAllProducts() {
+    public Set<ShoppingListItem> getAllProducts() {
         return this.shoppingListRepository.getAllProducts();
     }
 
@@ -68,7 +67,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
      * @return
      */
     @Override
-    public Product getProduct(Product product) {
+    public ShoppingListItem getProduct(ShoppingListItem product) {
         return this.shoppingListRepository.getProduct(product);
     }
 }

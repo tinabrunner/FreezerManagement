@@ -8,12 +8,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import domain.MongoProvider2;
-import model.Product;
+import model.ShoppingListItem;
 import repository.ShoppingListRepositoryMongoImpl;
 //import repository.ShoppingListRepositoryMongoImpl;
 import service.ShoppingListServiceImpl;
 
 import java.util.Map;
+import java.util.Set;
 
 @Stateless
 public class DB_ShoppingList {
@@ -24,7 +25,7 @@ public class DB_ShoppingList {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/shoppinglist")
-	public Map<Product, Integer> getAllProductsFromShoppingList () {
+	public Set<ShoppingListItem> getAllProductsFromShoppingList () {
 
 		ShoppingListRepositoryMongoImpl shoppingListRepositoryMongo = new ShoppingListRepositoryMongoImpl(this.mongoProvider);
 		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);

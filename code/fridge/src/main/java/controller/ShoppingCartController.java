@@ -13,7 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import domain.MongoProvider;
-import model.Product;
+import model.ShoppingListItem;
 
 /**
  * Created by phi on 08.12.16. .___. {o,o} /)___) --"-"--
@@ -28,19 +28,20 @@ public class ShoppingCartController {
 	MongoProvider mongoProvider;
 
 	@GET
+
 	/** Shopping carts (Warenkörbe): non-persistent */
-	public Set<Product> createShoopingCart() throws ParseException {
+	public Set<ShoppingListItem> createShoopingCart() throws ParseException {
 
 		// DB_ShoppingList db_shoppingList = new DB_ShoppingList();
 		// Map<Product, Integer> shoppingListProducts =
 		// db_shoppingList.getAllProductsFromShoppingList(); // miau
 
-		Set<Product> shoppingListProducts = new HashSet<>();
-		shoppingListProducts.add(new Product(1.99d, "Belegte Banane", 1, 1, 2, 9999, true, null, "1"));
-		shoppingListProducts.add(new Product(2.99d, "Abenteurlicher Apfel", 1, 5, 10, 9999, true, null, "2"));
-		shoppingListProducts.add(new Product(458.99d, "Emmentaler", 1, -1, 1, 9999, false, null, "3"));
-		shoppingListProducts.add(new Product(0.45d, "Gouda", 1, -1, 2, 9999, false, null, "4"));
-		shoppingListProducts.add(new Product(2.99d, "Eier", 6, 6, 10, 9999, true, null, "5"));
+		Set<ShoppingListItem> shoppingListProducts = new HashSet<>();
+		shoppingListProducts.add(new ShoppingListItem("i1", 1.99d, "Belegte Banane", 1, 1, 2, true));
+		shoppingListProducts.add(new ShoppingListItem("i2", 2.99d, "Abenteurlicher Apfel", 1, 5, 10, true));
+		shoppingListProducts.add(new ShoppingListItem("i3", 458.99d, "Emmentaler", 1, -1, 1, false));
+		shoppingListProducts.add(new ShoppingListItem("i4", 0.45d, "Gouda", 1, -1, 2, false));
+		shoppingListProducts.add(new ShoppingListItem("i4", 2.99d, "Eier", 6, 6, 10, true));
 
 		return shoppingListProducts;
 	}

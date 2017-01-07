@@ -4,16 +4,16 @@ import java.util.Date;
 
 public class InventoryProduct {
 
-	private String prodCategoryId;
-	private String name;
+	private String prodCategoryId; // todo beziehung productCategory & int
+	private String name; // todo name gehört zu category
 	private Date expiryDate;
 
 	public InventoryProduct() {
 	} // keep
-
-	public InventoryProduct(String prodCategoryId, String name, Date expiryDate) {
-		this.prodCategoryId = prodCategoryId;
+	
+	public InventoryProduct( String prodCategoryId, String name, Date expiryDate) {
 		this.name = name;
+		this.prodCategoryId = prodCategoryId;
 		this.expiryDate = expiryDate;
 	}
 
@@ -24,15 +24,7 @@ public class InventoryProduct {
 	public void setProdCategoryId(String prodCategoryId) {
 		this.prodCategoryId = prodCategoryId;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	
 	public Date getExpiryDate() {
 		return expiryDate;
 	}
@@ -40,5 +32,12 @@ public class InventoryProduct {
 	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
-
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 }

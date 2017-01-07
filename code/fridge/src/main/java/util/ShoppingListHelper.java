@@ -1,6 +1,5 @@
 package util;
 
-import model.Product;
 import model.ShoppingListItem;
 import org.bson.Document;
 
@@ -20,23 +19,33 @@ public class ShoppingListHelper {
      * Identifier for database column holding the name
      */
     private static final String documentShoppingListProductName = "name";
-
+    
     /**
      * Identifiert for database column holding the amount
      */
-    private static final String documentShoppingListProductAmount = "amount";
+    private static final String documentShoppingListProductHoechstBestand = "hoechstBestand";
+    /**
+     * Identifiert for database column holding the amount
+     */
+    private static final String documentShoppingListProductMindestBestand = "mindestBestand";
+    /**
+     * Identifiert for database column holding the amount
+     */
+    private static final String documentShoppingListProductRegelmaessig = "regelmaessig";
 
     /**
      * Converts a Product to a Document for saving in the database
      *
      * @param product
-     * @param amount
      * @return Document
      */
-    public static Document convertProductToDatabaseItem(Product product, int amount){
+    public static Document convertProductToDatabaseItem(ShoppingListItem product){
         return new Document(documentShoppingListProductId, product.getId())
                 .append(documentShoppingListProductName, product.getName())
-                .append(documentShoppingListProductAmount, amount);
+                
+                .append(documentShoppingListProductMindestBestand, product.getMindestBestand())
+                .append(documentShoppingListProductHoechstBestand, product.getHoechstBestand())
+                .append(documentShoppingListProductRegelmaessig, product.isRegelmaessig());
     }
 
 
@@ -47,11 +56,13 @@ public class ShoppingListHelper {
      * @return
      */
     public static ShoppingListItem convertDatabaseItemToProduct(Document document){
-    	
-        ShoppingListItem freezerProduct = new ShoppingListItem(0, null, 0, 0, 0, 0, false, null);
+        ShoppingListItem freezerProduct = new ShoppingListItem();
         freezerProduct.setId(document.getString(documentShoppingListProductId));
         freezerProduct.setName(document.getString(documentShoppingListProductName));
-        freezerProduct.setAmount(document.getInteger(documentShoppingListProductAmount));
+        
+        freezerProduct.setHoechstBestand(document.getInteger(documentShoppingListProductHoechstBestand));
+        freezerProduct.setMindestBestand(document.getInteger(documentShoppingListProductMindestBestand));
+        freezerProduct.setRegelmaessig(document.getBoolean(documentShoppingListProductRegelmaessig));
 
         return freezerProduct;
     }

@@ -31,14 +31,14 @@
 			});
 
 		}
-		function savePDF(invoiceId) {
-			$http.get(URL_API + 'invoices/' + invoiceId).then(function(resp) {
-				
-		
-			});
-
-			/* --- --- */
-		}
+//		function savePDF(invoiceId) {
+//			$http.get(URL_API + 'invoices/' + invoiceId).then(function(resp) {
+//				
+//		
+//			});
+//
+//			/* --- --- */
+//		}
 	}
 
 })();

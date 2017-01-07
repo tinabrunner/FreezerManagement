@@ -8,12 +8,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import db_communication.DB_Invoices;
 import model.Invoice;
 import model.InvoiceList;
 
 @Stateless
 @Path("/invoices")
 public class InvoiceController {
+
+	DB_Invoices db_invoices = new DB_Invoices();
 
 	// private static List<Invoice> invoices;
 	private static String filePath = new String("src/invoices/");
@@ -26,11 +29,13 @@ public class InvoiceController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public InvoiceList getInvoices() {
-		ArrayList<Invoice> in = new ArrayList<Invoice>();
+		ArrayList<Invoice> list = new ArrayList<>();
 		InvoiceList invoiceList = new InvoiceList();
-		Invoice invoice = new Invoice("123", "hallo", null, null, 12.99, "http://www.wurstbrot.de");
-		in.add(invoice);
-		invoiceList.setList(in);
+		list = (ArrayList<Invoice>) db_invoices.getAllInvoices();
+		for (Invoice in : list) {
+			System.out.println(in.getName());
+		}
+		invoiceList.setList(list);
 		return invoiceList;
 	}
 

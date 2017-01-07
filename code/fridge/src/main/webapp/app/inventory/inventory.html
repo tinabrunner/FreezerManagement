@@ -11,12 +11,12 @@
             <th></th>
         </tr>
         <tr ng-repeat="product in inventory.products">
-	        <td>{{ product.Object }}</td>
+	        <td>{{ product.ObjectID }}</td>
 	        <td>{{ product.prodCategoryID }}</td>
 	        <td>{{ product.name }}</td>
 	        <td>{{ product.expiryDate }}</td>
 	        <td>
-				<button type="submit" class="delete-button" ng-click="inventory.deleteInventoryProduct(product.id)">Delete</button>
+				<button type="submit" class="delete-button" ng-click="inventory.deleteInventoryProduct(product.name, product.ObjectID)">Delete</button>
 	        </td>
         </tr>
 </table>

@@ -1,6 +1,7 @@
-<div class="container"  ng-controller="InvoiceCtrl as invoiceCtrl">
-	<h2>Invoice-Overview</h2>
+
+<h2>Invoice-Overview</h2>
 	<p></p>
+<div ng-controller="InvoiceCtrl as invoiceCtrl">
 	<table class="table table-hover">
 		<thead>
 			<tr>
@@ -16,10 +17,9 @@
 				<td>{{ invoice.orderDate }}</td>
 				<td>{{ invoice.totalPrice }}</td>
 				<td>
-					<button ng-click="invoiceCtrl.savePDF( invoice.id )">Download Invoice</button>
+					<button type="submit" ng-click="invoiceCtrl.savePDF(invoice.id)">Download Invoice</button>
 				</td>
 			</tr>
 		</tbody>
 	</table>
-	{{ invoiceCtrl.invoices }}
 </div>

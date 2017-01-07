@@ -5,17 +5,19 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.Block;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import domain.MongoProvider;
+import domain.MongoProvider2;
 import model.Invoice;
 
 /* 
@@ -24,15 +26,19 @@ import model.Invoice;
  * 
  */
 
+@Stateless
 public class DB_Invoices {
 
 	@EJB
-	private MongoProvider mongoProvider;
+	private MongoProvider2 mongoProvider;
 
 	// Method to Insert an Invoice
 	public void insertInvoiceToDB(Invoice invoice) {
+		mongoProvider = new MongoProvider2("localhost", 27017);
+		mongoProvider.setDatabaseName("fridge");
+		mongoProvider.connect();
 		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
+		MongoClient mongoClient = this.mongoProvider.getClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
@@ -48,7 +54,7 @@ public class DB_Invoices {
 	// Method to Get one Invoice
 	public Invoice getInvoice(String id) {
 		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
+		MongoClient mongoClient = this.mongoProvider.getClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
 		DBCollection invoices = (DBCollection) db.getCollection("invoices");
 
@@ -77,27 +83,29 @@ public class DB_Invoices {
 
 	// Method to Get all Invoices
 	public List<Invoice> getAllInvoices() {
+
+		mongoProvider = new MongoProvider2("localhost", 27017);
+		mongoProvider.setDatabaseName("fridge");
+		mongoProvider.connect();
 		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
+		MongoClient mongoClient = this.mongoProvider.getClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection invoices = (DBCollection) db.getCollection("invoices");
+		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		// Create a list for all invoices and get a cursor to go through the
 		// DBCollection
-		List<Invoice> allInvoices = new ArrayList<Invoice>();
-		DBCursor cursor = invoices.find();
 
-		while (cursor.hasNext()) {
-			BasicDBObject doc = (BasicDBObject) cursor.curr();
-			String id = doc.getString("id");
-			String name = doc.getString("name");
-			Date billingDate = doc.getDate("billingDate");
-			Date orderDate = doc.getDate("orderDate");
-			double totalPrice = doc.getDouble("totalPrice");
-			String invoiceURL = doc.getString("invoiceURL");
-			allInvoices.add(new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL));
-		}
-		return allInvoices;
+		List<Invoice> invoicesResult = new ArrayList<>();
+		invoices.find().forEach((Block<Document>) document -> {
+			String id = document.getString("id");
+			String name = document.getString("name");
+			Date billingDate = document.getDate("billingDate");
+			Date orderDate = document.getDate("orderDate");
+			double totalPrice = document.getDouble("totalPrice");
+			String invoiceURL = document.getString("invoiceURL");
+			invoicesResult.add(new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL));
+		});
+		return invoicesResult;
 	}
 
 	// Method to Check if a User exists
@@ -105,7 +113,7 @@ public class DB_Invoices {
 		boolean ret = false;
 
 		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
+		MongoClient mongoClient = this.mongoProvider.getClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
 		DBCollection invoices = (DBCollection) db.getCollection("invoices");
 

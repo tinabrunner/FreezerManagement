@@ -11,6 +11,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import db_communication.DB_FridgeInventory;
 import model.InventoryProduct;
 
@@ -40,9 +43,30 @@ public class InventoryController {
 	}
 
 	@GET
-	public Map<String, InventoryProduct> getAllProducts() {
+	public JSONArray getAllProducts() { // Map<String, InventoryProduct>
+
 		Map<String, InventoryProduct> inventory = dbFridgeInventory.getAllProducts();
-		return inventory;
+
+		JSONArray arr = new JSONArray();
+
+		for (Map.Entry<String, InventoryProduct> entry : inventory.entrySet()) {
+			String key = entry.getKey();
+			InventoryProduct value = entry.getValue();
+
+			JSONObject json = new JSONObject();
+
+			json.put("ObjectID", key);
+			json.put("name", value.getName().toString());
+			json.put("prodCategoryID", value.getProdCategoryId().toString());
+
+			String date = value.getExpiryDate().getYear() + "-" + value.getExpiryDate().getMonth() + "-"
+					+ value.getExpiryDate().getDay();
+			json.put("expiryDate", date);
+
+			arr.add(json);
+		}
+
+		return arr;
 	}
 
 	@PUT

@@ -7,6 +7,8 @@ public class BaseProduct {
     private double preis;
     private String name;
     private int verpackungsGroesse;
+    
+    public BaseProduct() {}; // für JaxRS Serialisierung
 
     protected BaseProduct (double preis, String name, int verpackungsGroesse) {
     	this.preis = preis;

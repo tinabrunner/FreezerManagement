@@ -7,6 +7,8 @@ public class InventoryProduct {
 	private String prodCategoryId;
 	private String name;
 	private Date expiryDate;
+	
+	public InventoryProduct() {} // keep
 
 	public InventoryProduct(String prodCategoryId, String name, Date expiryDate) {
 		this.prodCategoryId = prodCategoryId;

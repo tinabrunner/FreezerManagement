@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 
 public class InvoiceList {
+	
+	public InvoiceList() {} // keep
 
 	private ArrayList<Invoice> list;
 

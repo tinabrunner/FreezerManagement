@@ -11,7 +11,7 @@ public class Fridge {
 	private int id;
 	private List<Product> bestandsliste;
 	
-	public Fridge () {
+	public Fridge () { // keep
 		this.id = count_id;
 		count_id ++;
 		this.bestandsliste = new ArrayList<Product>();

@@ -10,6 +10,7 @@ public class Invoice {
 	private double totalPrice;
 	private String invoiceURL;
 	
+	public Invoice() {} // keep
 	
 	public Invoice(String id, String name, Date billingDate, Date orderDate, double totalPrice, String invoiceURL) {
 		this.id = id;

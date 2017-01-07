@@ -22,6 +22,7 @@ public class SessionStore implements Serializable {
 	private FridgeUser fridgeUser;
 	private HttpSession httpSession;
 
+	public SessionStore() {} // keep
 	
 	public FridgeUser getFridgeUser() {
 		return fridgeUser;

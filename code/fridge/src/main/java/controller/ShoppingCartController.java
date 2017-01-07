@@ -30,7 +30,7 @@ public class ShoppingCartController {
 	
 	@GET
 	/** Shopping carts (Warenkörbe):  non-persistent */
-	public Product createShoopingCart() throws ParseException {
+	public Set<Product> createShoopingCart() throws ParseException {
 		
 		//DB_ShoppingList db_shoppingList = new DB_ShoppingList();
 		//Map<Product, Integer> shoppingListProducts = db_shoppingList.getAllProductsFromShoppingList(); // miau
@@ -52,10 +52,7 @@ public class ShoppingCartController {
 				6, 10, 9999,
 				true, null, "5"));
 		
-		//return shoppingListProducts.toArray(new Product[]{})[0];
-		return new Product(458.99d,"Emmentaler", 1,
-				-1, 1, 9999,
-				false, null, "3");
+		return shoppingListProducts;
 	}
 }
 

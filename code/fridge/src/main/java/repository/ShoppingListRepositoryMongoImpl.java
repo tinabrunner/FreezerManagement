@@ -1,8 +1,8 @@
 package repository;
 
 import domain.MongoProvider2;
-import domain.Product;
-import domain.ShoppingListItem;
+import model.Product;
+import model.ShoppingListItem;
 import util.ShoppingListHelper;
 import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;

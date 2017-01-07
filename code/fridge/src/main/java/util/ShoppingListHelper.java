@@ -1,7 +1,7 @@
 package util;
 
-import domain.Product;
-import domain.ShoppingListItem;
+import model.Product;
+import model.ShoppingListItem;
 import org.bson.Document;
 
 /**

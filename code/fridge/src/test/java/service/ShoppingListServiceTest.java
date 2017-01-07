@@ -1,6 +1,6 @@
 package service;
 
-import domain.Product;
+import model.Product;
 import repository.ShoppingListRepositoryStub;
 import utils.ProductHelperTest;
 import org.junit.Assert;

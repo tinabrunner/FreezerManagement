@@ -2,7 +2,7 @@ package service;
 
 import java.util.Map;
 
-import domain.Product;
+import model.Product;
 import repository.ShoppingListRepository;
 
 /**

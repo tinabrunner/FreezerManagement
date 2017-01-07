@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import domain.MongoProvider2;
-import domain.Product;
+import model.Product;
 import repository.ShoppingListRepositoryMongoImpl;
 //import repository.ShoppingListRepositoryMongoImpl;
 import service.ShoppingListServiceImpl;

@@ -1,4 +1,6 @@
-package domain;
+package model;
+
+import model.Product;
 
 import java.util.Date;
 

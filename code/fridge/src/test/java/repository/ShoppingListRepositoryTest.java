@@ -1,6 +1,6 @@
 package repository;
 
-import domain.Product;
+import model.Product;
 import utils.ProductHelperTest;
 import org.junit.Assert;
 import org.junit.Before;

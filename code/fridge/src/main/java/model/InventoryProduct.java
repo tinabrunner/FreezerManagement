@@ -4,21 +4,21 @@ import java.util.Date;
 
 public class InventoryProduct {
 
-	private int prodCategoryId;
+	private String prodCategoryId;
 	private String name;
 	private Date expiryDate;
 
-	public InventoryProduct(int prodCategoryId, String name, Date expiryDate) {
+	public InventoryProduct(String prodCategoryId, String name, Date expiryDate) {
 		this.prodCategoryId = prodCategoryId;
 		this.name = name;
 		this.expiryDate = expiryDate;
 	}
 
-	public int getProdCategoryId() {
+	public String getProdCategoryId() {
 		return prodCategoryId;
 	}
 
-	public void setProdCategoryId(int prodCategoryId) {
+	public void setProdCategoryId(String prodCategoryId) {
 		this.prodCategoryId = prodCategoryId;
 	}
 

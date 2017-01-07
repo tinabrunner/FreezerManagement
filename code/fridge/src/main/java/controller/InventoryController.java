@@ -2,6 +2,7 @@ package controller;
 
 import java.util.Map;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -21,7 +22,7 @@ public class InventoryController {
 	// @Inject
 	// private SessionStore sessionStore;
 
-	// EJB
+	@EJB
 	private DB_FridgeInventory dbFridgeInventory = new DB_FridgeInventory();
 
 	@DELETE

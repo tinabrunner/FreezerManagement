@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -29,6 +30,8 @@ import model.InventoryProduct;
  * Kleiner Tipp: NIEMALS, N I E M A L S auf "getippte" Zeichenketten gehen. Daf�r bitte eine �bersetzungstabelle anlegen.
  * siehe util.ShoppingListHelper (e.g. documentShoppingListProductId = "id", klar?)
  */
+
+@Stateless
 public class DB_FridgeInventory {
 
 	@EJB
@@ -68,7 +71,7 @@ public class DB_FridgeInventory {
 		String name = doc.getString(_name);
 		Date expiryDate = doc.getDate(_expiryDate);
 		InventoryProduct prod = new InventoryProduct(prodCategoryID, name, expiryDate);
-		String id = doc.getString(_id);
+		String id = doc.getObjectId(_id).toHexString();
 		Map<String, InventoryProduct> ret = new HashMap<String, InventoryProduct>();
 		ret.put(id, prod);
 		return ret;

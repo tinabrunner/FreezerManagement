@@ -22,7 +22,7 @@ public class Product {
 		return verpackungsgroesse;
 	}
 
-	public void setVerpackungsgröße(int verpackungsgroesse) {
+	public void setVerpackungsgroesse(int verpackungsgroesse) {
 		this.verpackungsgroesse = verpackungsgroesse;
 	}
 

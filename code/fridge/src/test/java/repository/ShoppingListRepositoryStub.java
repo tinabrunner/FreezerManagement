@@ -1,39 +1,40 @@
 package repository;
 
-import model.Product;
 import model.ShoppingListItem;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by JD on 16.12.2016.
  */
 public class ShoppingListRepositoryStub implements ShoppingListRepository {
 
-    private final Map<Product, Integer> shoppingList;
+    private final Set<ShoppingListItem> shoppingList;
 
-    private Map<Product, Integer> getShoppingList(){
+    private Set<ShoppingListItem> getShoppingList(){
         return this.shoppingList;
     }
 
     public ShoppingListRepositoryStub(){
-        this.shoppingList = new HashMap<>();
+        this.shoppingList = new HashSet<>();
     }
 
     @Override
-    public boolean existsProduct(Product product) {
+    public boolean existsProduct(ShoppingListItem product) {
 
-        return this.getShoppingList().entrySet()
+        return this.getShoppingList()
                 .stream()
-                .filter(map -> map.getKey().getId().equals(product.getId()))
+                .filter(map -> map.getId().equals(product.getId()))
                 .count() > 0;
     }
 
     @Override
-    public boolean addProduct(Product product, int amount) {
+    public boolean addProduct(ShoppingListItem product) {
         try {
-            this.getShoppingList().put(product, amount);
+            this.getShoppingList().add(product);
             return true;
         } catch (Exception e) {
             return false;
@@ -41,7 +42,7 @@ public class ShoppingListRepositoryStub implements ShoppingListRepository {
     }
 
     @Override
-    public boolean deleteProduct(Product product) {
+    public boolean deleteProduct(ShoppingListItem product) {
         try {
             this.getShoppingList().remove(product);
             return true;
@@ -51,19 +52,19 @@ public class ShoppingListRepositoryStub implements ShoppingListRepository {
     }
 
     @Override
-    public Map<Product, Integer> getAllProducts() {
+    public Set<ShoppingListItem> getAllProducts() {
         return this.getShoppingList();
     }
 
     @Override
-    public Product getProduct(Product product) {
+    public ShoppingListItem getProduct(ShoppingListItem product) {
 
-        return this.getShoppingList().entrySet()
+        return this.getShoppingList()
                 .stream()
-                .filter(map -> map.getKey().getId().equals(product.getId()))
-                .map(Map.Entry::getKey)
+                .filter(map -> map.getId().equals(product.getId()))
                 .findFirst()
-                .orElse(new ShoppingListItem(product.getPreis(), product.getName(), product.getVerpackungsGroesse(), product.getMindestBestand(), product.getHoechstBestand(), 0, product.isRegelmaessig(), product.getAblaufDatum()));
+                .orElse(
+                        new ShoppingListItem(product.getId(), product.getPreis(), product.getName(), product.getVerpackungsGroesse(), product.getMindestBestand(), product.getHoechstBestand(), product.isRegelmaessig()));
     }
 
     @Override

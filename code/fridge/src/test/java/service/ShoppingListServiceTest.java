@@ -1,6 +1,6 @@
 package service;
 
-import model.Product;
+import model.ShoppingListItem;
 import repository.ShoppingListRepositoryStub;
 import utils.ProductHelperTest;
 import org.junit.Assert;
@@ -33,42 +33,37 @@ public class ShoppingListServiceTest {
 
     @Test
     public void shouldReturnTrueWhenSearchingBecauseProductExists(){
-        int amount = 10;
-        repository.addProduct(ProductHelperTest.getProductDummy("", ""), amount);
+        repository.addProduct(ProductHelperTest.getProductDummy("", ""));
 
         Assert.assertTrue(shoppingListService.existsProduct(ProductHelperTest.getProductDummy("", "")));
     }
 
     @Test
     public void checkIfAddingAnewProductWorks(){
-        int amount = 10;
 
-        Assert.assertTrue(shoppingListService.addProduct(ProductHelperTest.getProductDummy("", ""), amount));
+        Assert.assertTrue(shoppingListService.addProduct(ProductHelperTest.getProductDummy("", "")));
     }
 
     @Test
     public void shouldReturnFalseBecauseProductAlreadyExists(){
-        int amount = 10;
 
-        repository.addProduct(ProductHelperTest.getProductDummy("", ""), amount);
+        repository.addProduct(ProductHelperTest.getProductDummy("", ""));
 
-        Assert.assertFalse(shoppingListService.addProduct(ProductHelperTest.getProductDummy("", ""), amount));
+        Assert.assertFalse(shoppingListService.addProduct(ProductHelperTest.getProductDummy("", "")));
     }
 
     @Test
     public void shouldReturnTrueBecauseAddingProductDoesNotExitsInList(){
-        int amount = 10;
 
-        repository.addProduct(ProductHelperTest.getProductDummy("BMW 123d", "123"), amount);
+        repository.addProduct(ProductHelperTest.getProductDummy("BMW 123d", "123"));
 
-        Assert.assertTrue(shoppingListService.addProduct(ProductHelperTest.getProductDummy("", ""), amount));
+        Assert.assertTrue(shoppingListService.addProduct(ProductHelperTest.getProductDummy("", "")));
     }
 
     @Test
     public void shouldReturnTrueIfDeletionOfProductWentWell(){
-        int amount = 10;
-        Product product = ProductHelperTest.getProductDummy("", "");
-        repository.addProduct(product, amount);
+        ShoppingListItem product = ProductHelperTest.getProductDummy("", "");
+        repository.addProduct(product);
 
         Assert.assertTrue(shoppingListService.deleteProduct(product));
     }
@@ -81,12 +76,11 @@ public class ShoppingListServiceTest {
     @Test
     public void shouldReturnTheSameProductWeInsertedBefore(){
         String searchId = "id-to-search";
-        Product searchProduct = ProductHelperTest.getProductDummy("BMW 0", searchId);
-        int amount = 10;
-        repository.addProduct(searchProduct, amount);
-        repository.addProduct(ProductHelperTest.getProductDummy("BMW 1", "123"), amount);
-        repository.addProduct(ProductHelperTest.getProductDummy("BMW 2", "456"), amount);
-        repository.addProduct(ProductHelperTest.getProductDummy("BMW 3", "789"), amount);
+        ShoppingListItem searchProduct = ProductHelperTest.getProductDummy("BMW 0", searchId);
+        repository.addProduct(searchProduct);
+        repository.addProduct(ProductHelperTest.getProductDummy("BMW 1", "123"));
+        repository.addProduct(ProductHelperTest.getProductDummy("BMW 2", "456"));
+        repository.addProduct(ProductHelperTest.getProductDummy("BMW 3", "789"));
 
         Assert.assertEquals(searchProduct.getId(), shoppingListService.getProduct(ProductHelperTest.getProductDummy("some name", searchId)).getId());
     }

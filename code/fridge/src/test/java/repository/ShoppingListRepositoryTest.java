@@ -1,6 +1,6 @@
 package repository;
 
-import model.Product;
+import model.ShoppingListItem;
 import utils.ProductHelperTest;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,7 +19,7 @@ public class ShoppingListRepositoryTest {
         this.repository = new ShoppingListRepositoryStub();
     }
 
-    private Product getFreezerProductDummy(String name, String id){
+    private ShoppingListItem getFreezerProductDummy(String name, String id){
         return ProductHelperTest.getProductDummy(name, id);
     }
 
@@ -53,26 +53,23 @@ public class ShoppingListRepositoryTest {
     @Test
     public void canInsertOneNewFreezerProduct(){
 
-        int amount = 10;
-        repository.addProduct(getFreezerProductDummy("", ""), amount);
+        repository.addProduct(getFreezerProductDummy("", ""));
         Assert.assertEquals(1, repository.getAllProducts().size());
     }
 
     @Test
     public void shouldReturnTrueIfProductIsAlreadyInShoppingList(){
 
-        int amount = 10;
-        repository.addProduct(getFreezerProductDummy("", ""), amount);
+        repository.addProduct(getFreezerProductDummy("", ""));
 
         Assert.assertTrue(repository.existsProduct(getFreezerProductDummy("", "")));
     }
 
     @Test
     public void shouldReturnFalseIfProductIsNotInShoppingList(){
-        int amount = 10;
-        repository.addProduct(getFreezerProductDummy("", ""), amount);
-
-        Product product = new Product(0, null, 0, 0, 0, 0, false, null);
+        repository.addProduct(getFreezerProductDummy("", ""));
+    
+        ShoppingListItem product = new ShoppingListItem();
         product.setId("1987");
         product.setName("Elephant");
 
@@ -81,33 +78,31 @@ public class ShoppingListRepositoryTest {
 
     @Test
     public void shouldReturnTheSameProductAsWeInserted(){
-        int amount = 10;
-        Product insertedProduct = getFreezerProductDummy("", "");
-        repository.addProduct(insertedProduct, amount);
-
-        Product extractedProduct = repository.getProduct(insertedProduct);
+        ShoppingListItem insertedProduct = getFreezerProductDummy("", "");
+        repository.addProduct(insertedProduct);
+    
+        ShoppingListItem extractedProduct = repository.getProduct(insertedProduct);
 
         Assert.assertEquals(insertedProduct.getId(), extractedProduct.getId());
     }
 
     @Test
     public void shouldReturnTheSameProductAsWeInsertedOutOfBiggerShoppingList(){
-        int amount = 10;
-        Product findThisProduct = getFreezerProductDummy("", "");
+        ShoppingListItem findThisProduct = getFreezerProductDummy("", "");
 
-        repository.addProduct(findThisProduct, amount);
-        repository.addProduct(getFreezerProductDummy("BMW 330d", "312"), 1);
-        repository.addProduct(getFreezerProductDummy("BMW M4", "123"), 1);
-        repository.addProduct(getFreezerProductDummy("BMW M135i", "789"), 1);
+        repository.addProduct(findThisProduct);
+        repository.addProduct(getFreezerProductDummy("BMW 330d", "312"));
+        repository.addProduct(getFreezerProductDummy("BMW M4", "123"));
+        repository.addProduct(getFreezerProductDummy("BMW M135i", "789"));
 
         Assert.assertEquals(findThisProduct.getId(), repository.getProduct(findThisProduct).getId());
     }
 
     @Test
     public void shouldReturnThreeAsProductCountFromShoppingList(){
-        repository.addProduct(getFreezerProductDummy("BMW 330d", "312"), 1);
-        repository.addProduct(getFreezerProductDummy("BMW M4", "123"), 1);
-        repository.addProduct(getFreezerProductDummy("BMW M135i", "789"), 1);
+        repository.addProduct(getFreezerProductDummy("BMW 330d", "312"));
+        repository.addProduct(getFreezerProductDummy("BMW M4", "123"));
+        repository.addProduct(getFreezerProductDummy("BMW M135i", "789"));
 
         Assert.assertTrue(repository.getProductCount() == 3);
     }

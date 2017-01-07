@@ -16,7 +16,11 @@ import domain.MongoProvider;
 import model.ShoppingListItem;
 
 /**
- * Created by phi on 08.12.16. .___. {o,o} /)___) --"-"--
+ * Created by phi on 08.12.16.
+ *  .___.
+ *  {o,o}
+ * /)___)
+ * --"-"--
  */
 @Stateless
 @Path("/shopping_cart")

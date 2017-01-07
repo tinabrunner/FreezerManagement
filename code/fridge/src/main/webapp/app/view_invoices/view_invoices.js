@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 
-	angular.module('fridge.invoices', [ 'ngRoute' ])
+	angular.module('fridge.invoices', ['ngRoute'])
 
-	.config([ '$routeProvider', function($routeProvider) {
+	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/invoices', {
 			templateUrl : 'view_invoices/view_invoices.html',
 			controller : 'InvoiceCtrl'
@@ -12,7 +12,7 @@
 
 	.controller('InvoiceCtrl', InvoiceCtrl);
 
-	InvoiceCtrl.$inject = [ '$http' ];
+	InvoiceCtrl.$inject = ['$http'];
 
 	function InvoiceCtrl($http) {
 		/* --- SCOPE --- (worauf .html zugreifen kann) */
@@ -25,20 +25,21 @@
 
 		function init() {
 			$http.get(URL_API + 'invoices').then(function(resp) {
-				vm.invoices = resp.data.list;
+				vm.invoices = resp.data;
 			}, function(error) {
 				console.dir(error);
 			});
 
 		}
-//		function savePDF(invoiceId) {
+		function savePDF(id) {
+			alert("save pdf with id "+id);
 //			$http.get(URL_API + 'invoices/' + invoiceId).then(function(resp) {
 //				
 //		
 //			});
 //
 //			/* --- --- */
-//		}
+		}
 	}
 
 })();

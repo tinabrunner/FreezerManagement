@@ -1,16 +1,15 @@
 package controller;
 
-import java.util.ArrayList;
-
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.json.simple.JSONArray;
+
 import db_communication.DB_Invoices;
 import model.Invoice;
-import model.InvoiceList;
 
 @Stateless
 @Path("/invoices")
@@ -28,15 +27,19 @@ public class InvoiceController {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public InvoiceList getInvoices() {
-		ArrayList<Invoice> list = new ArrayList<>();
-		InvoiceList invoiceList = new InvoiceList();
-		list = (ArrayList<Invoice>) db_invoices.getAllInvoices();
-		for (Invoice in : list) {
-			System.out.println(in.getName());
+	public JSONArray getInvoices() {
+		/*
+		 * ArrayList<Invoice> list = new ArrayList<>(); InvoiceList invoiceList
+		 * = new InvoiceList(); list = (ArrayList<Invoice>)
+		 * db_invoices.getAllInvoices(); for (Invoice in : list) {
+		 * System.out.println(in.getName()); } invoiceList.setList(list); return
+		 * invoiceList;
+		 */
+		JSONArray arr = new JSONArray();
+		for (Invoice i : db_invoices.getAllInvoices()) {
+			arr.add(i);
 		}
-		invoiceList.setList(list);
-		return invoiceList;
+		return arr;
 	}
 
 	/*

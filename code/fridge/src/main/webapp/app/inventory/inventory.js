@@ -47,26 +47,25 @@
 	
 	InventoryCtrl.$inject = ['$http'];
 	
-	function InventoryCtrl($http) {
+	function InventoryCtrl($http, products) {
 		
 		var vm = this;
 		vm.products = {};
 		vm.deleteInventoryProduct = deleteInventoryProduct;
 		vm.init = init;
-		
 		init();
 		
 		function init() {
 			$http.get(URL_API+'inventory').then(function(resp) {
-				vm.products = resp.products;
-		    	//vm.products = resp.data.products;
+				alert("geht bis vor vm.products");
+				vm.products = resp.data;
 			}, function(error) {
 				console.dir(error);
 			});
 		}
 		
-		function deleteInventoryProduct(product) {
-			alert('delete '+prod.name);
+		function deleteInventoryProduct(name, id) {
+			alert('delete product '+name+' with id '+id);
 				//redirectTo: '/home';
 		 }
 		

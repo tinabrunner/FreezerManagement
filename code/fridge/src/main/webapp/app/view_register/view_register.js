@@ -21,7 +21,7 @@
 				alert("The passwords don't match!");
 			else {
 				var dada = {
-						name : $scope.firstname, 
+						name : $scope.firstname,
 						surname : $scope.lastname,
 						username : $scope.username,
 						password : $scope.password,

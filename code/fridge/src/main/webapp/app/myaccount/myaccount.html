@@ -15,31 +15,32 @@
 				<div class="login-group">
 					<div class="form-group">
 						<label for="reg_username" class="sr-only">Username</label>
-						<input type="text" class="form-control" id="reg_username" name="reg_username" ng-model="username" placeholder="username">
+						<label hidden="true"> <input type="checkbox" ng-model="checked"></label>
+						<input type="text" ng-readonly="checked" class="form-control" id="reg_username" name="reg_username" ng-model="username" placeholder="username">
 					</div>
 					<div class="form-group">
 						<label for="reg_password" class="sr-only">Password</label>
-						<input type="password" class="form-control" id="reg_password" name="reg_password" ng-model="password" placeholder="password">
+						<input type="password" ng-readonly="checked" class="form-control" id="reg_password" name="reg_password" ng-model="password" placeholder="password">
 					</div>
 					<div class="form-group">
 						<label for="reg_password_confirm" class="sr-only">Password Confirm</label>
-						<input type="password" class="form-control" id="reg_password_confirm" name="reg_password_confirm" ng-model="password_confirm" placeholder="if you want to change your password, please confirm it here">
+						<input type="password" ng-hide="checked" class="form-control" id="reg_password_confirm" name="reg_password_confirm" ng-model="password_confirm" placeholder="confirm password">
 					</div>
 					<div class="form-group">
 						<label for="reg_firstname" class="sr-only">First Name</label>
-						<input type="text" class="form-control" id="reg_firstname" name="reg_firstname" ng-model="firstname" placeholder="first name">
+						<input type="text" ng-readonly="checked" class="form-control" id="reg_firstname" name="reg_firstname" ng-model="firstname" placeholder="first name">
 					</div>
 					<div class="form-group">
 						<label for="reg_lastname" class="sr-only">Last Name</label>
-						<input type="text" class="form-control" id="reg_lastname" name="reg_lastname" ng-model="lastname" placeholder="last name">
+						<input type="text" ng-readonly="checked" class="form-control" id="reg_lastname" name="reg_lastname" ng-model="lastname" placeholder="last name">
 					</div>
 					<div class="form-group">
 						<label for="reg_email" class="sr-only">Email</label>
-						<input type="text" class="form-control" id="reg_email" name="reg_email" ng-model="email" placeholder="email">
+						<input type="text" ng-readonly="checked" class="form-control" id="reg_email" name="reg_email" ng-model="email" placeholder="email">
 					</div>
 					
 					
-					<div class="form-group login-group-checkbox">
+					<div ng-hide="checked" class="form-group login-group-checkbox">
 						<input type="radio" class="" name="reg_usertype" id="admin" ng-model="usertype_admin" placeholder="admin">
 						<label for="admin">admin</label>
 						
@@ -49,7 +50,7 @@
 					
 					
 				</div>
-				<button type="submit" class="login-button" id="btn_edit" ng-click="EditAccount()">Edit Account</button>
+				<button type="submit" class="login-button" id="btn_edit" ng-click="EditAccount()"> {{ MyText }} </button>
 			</div>
 		</form>
 	</div>

@@ -1,8 +1,9 @@
 package repository;
 
-import model.Product;
+import model.ShoppingListItem;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by JD on 10.12.2016.
@@ -14,28 +15,28 @@ public class ShoppingListRepositoryImpl implements ShoppingListRepository {
     }
 
     @Override
-    public boolean existsProduct(Product product) {
+    public boolean existsProduct(ShoppingListItem product) {
         return false;
     }
 
     @Override
-    public boolean addProduct(Product product, int amount) {
+    public boolean addProduct(ShoppingListItem product) {
 
         return false;
     }
 
     @Override
-    public boolean deleteProduct(Product product) {
+    public boolean deleteProduct(ShoppingListItem product) {
         return false;
     }
 
     @Override
-    public Map<Product, Integer> getAllProducts() {
+    public Set<ShoppingListItem> getAllProducts() {
         return null;
     }
 
     @Override
-    public Product getProduct(Product product) {
+    public ShoppingListItem getProduct(ShoppingListItem product) {
         return null;
     }
 

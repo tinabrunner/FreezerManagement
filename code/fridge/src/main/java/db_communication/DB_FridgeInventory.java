@@ -11,7 +11,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 
 import domain.MongoProvider;
-import domain.Product;
+import model.Product;
 
 /* 
  * Die Klasse DB_FridgeInventory schreibt alle Produkte inkl. aller Attribute (Anzahl, ID, Name) in die Datenbank,

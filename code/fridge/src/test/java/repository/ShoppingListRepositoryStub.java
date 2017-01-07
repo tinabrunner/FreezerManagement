@@ -1,7 +1,7 @@
 package repository;
 
-import domain.Product;
-import domain.ShoppingListItem;
+import model.Product;
+import model.ShoppingListItem;
 
 import java.util.HashMap;
 import java.util.Map;

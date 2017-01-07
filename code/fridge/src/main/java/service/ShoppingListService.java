@@ -1,6 +1,6 @@
 package service;
 
-import domain.Product;
+import model.Product;
 
 import java.util.Map;
 

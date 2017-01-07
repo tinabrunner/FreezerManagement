@@ -1,8 +1,6 @@
 package utils;
 
-import java.util.Date;
-
-import domain.Product;
+import model.Product;
 
 /**
  * Created by JD on 16.12.2016.

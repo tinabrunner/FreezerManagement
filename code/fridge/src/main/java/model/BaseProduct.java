@@ -1,4 +1,4 @@
-package domain;
+package model;
 
 /**
  * Created by JD on 07.12.2016.

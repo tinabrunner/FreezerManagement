@@ -1,7 +1,7 @@
 package controller;
 
 import domain.MongoProvider;
-import domain.Product;
+import model.Product;
 
 import javax.ejb.EJB;
 import javax.ejb.Singleton;

@@ -3,8 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import domain.Product;
-
 public class Fridge {
 	
 	private static int count_id = 1;

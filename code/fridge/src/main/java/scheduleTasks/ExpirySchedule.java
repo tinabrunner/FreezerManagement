@@ -1,7 +1,12 @@
 package scheduleTasks;
 
+import java.util.List;
+
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
+
+import db_communication.DB_FridgeInventory;
+import model.InventoryProduct;
 
 /**
  * @author Marius Koch
@@ -11,33 +16,41 @@ import javax.ejb.Stateless;
 @Stateless
 public class ExpirySchedule {
 
-	@Schedule(minute = "*/1", hour = "*")
+	DB_FridgeInventory db_fridgeInventory;
+
+	@Schedule(minute = "1", hour = "*")
+	// dayOfWeek="*";
 	private void run() {
 		System.out.println("Tina und Phil sind die coolsten Boys auf der ganzen Welt");
+
+		// LocalDate today = LocalDate.now();
+		// LocalDate inThreeDays = today.plusDays(3);
+		//
+		// List<InventoryProduct> inventoryProducts =
+		// db_fridgeInventory.getAllProducts();
+		// List<InventoryProduct> soonExpiredProducts = new ArrayList<>();
+		// List<InventoryProduct> expiredProducts = new ArrayList<>();
+		//
+		// for (InventoryProduct product : inventoryProducts) {
+		// Date input = product.getExpiryDate();
+		// LocalDate expiryDate =
+		// input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		//
+		// if (today.compareTo(expiryDate) > 0) {
+		// expiredProducts.add(product);
+		// } else if (inThreeDays.compareTo(expiryDate) > 0 &&
+		// today.compareTo(expiryDate) < 0) {
+		// soonExpiredProducts.add(product);
+		// }
+		// }
+		//
+		// if (!soonExpiredProducts.isEmpty() || !expiredProducts.isEmpty()) {
+		// sendMail(soonExpiredProducts, expiredProducts);
+		// }
+
 	}
 
-	// @Schedule(second = "*/1", minute = "*", hour = "*")
-	// private void run1() {
-	// System.out.println("Tina und Phil sind die coolsten Boys auf der ganzen
-	// Welt");
-	//
-	// }
-
-	// private void startScheduleTask() {
-	// LocalDateTime localNow = LocalDateTime.now();
-	// ZoneId currentZone = ZoneId.of("Europe/Berlin");
-	// ZonedDateTime zonedNow = ZonedDateTime.of(localNow, currentZone);
-	// ZonedDateTime zonedNext5;
-	// zonedNext5 = zonedNow.withHour(5).withMinute(0).withSecond(0);
-	// if (zonedNow.compareTo(zonedNext5) > 0)
-	// zonedNext5 = zonedNext5.plusDays(1);
-	//
-	// Duration duration = Duration.between(zonedNow, zonedNext5);
-	// long initalDelay = duration.getSeconds();
-	//
-	// ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-	// scheduler.scheduleAtFixedRate(new DateOfExpiryNotification(),
-	// initalDelay, 24 * 60 * 60, TimeUnit.SECONDS);
-	// }
-
+	private void sendMail(List<InventoryProduct> soonExpiredProducts, List<InventoryProduct> expiredProducts) {
+		// TODO
+	}
 }

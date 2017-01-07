@@ -1,6 +1,6 @@
 package controller;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.ws.rs.DELETE;
@@ -39,8 +39,8 @@ public class InventoryController {
 	}
 
 	@GET
-	public List<InventoryProduct> getAllProducts() {
-		List<InventoryProduct> inventory = dbFridgeInventory.getAllProducts();
+	public Map<String, InventoryProduct> getAllProducts() {
+		Map<String, InventoryProduct> inventory = dbFridgeInventory.getAllProducts();
 		return inventory;
 	}
 

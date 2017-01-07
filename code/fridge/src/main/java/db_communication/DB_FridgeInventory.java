@@ -1,8 +1,8 @@
 package db_communication;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ejb.EJB;
 
@@ -32,7 +32,7 @@ import model.InventoryProduct;
 public class DB_FridgeInventory {
 
 	@EJB
-	private MongoProvider mongoProvider;// = new MongoProvider();
+	private MongoProvider mongoProvider = new MongoProvider();
 
 	private static final String _frigde = "fridge";
 	private static final String _inventoryProducts = "inventoryProducts";
@@ -63,12 +63,15 @@ public class DB_FridgeInventory {
 		return doc;
 	}
 
-	private InventoryProduct convertDocumentToInventoryProd(Document doc) {
+	private Map<String, InventoryProduct> convertDocumentToInventoryProd(Document doc) {
 		String prodCategoryID = doc.getString(_prodCategoryID);
 		String name = doc.getString(_name);
 		Date expiryDate = doc.getDate(_expiryDate);
 		InventoryProduct prod = new InventoryProduct(prodCategoryID, name, expiryDate);
-		return prod;
+		String id = doc.getString(_id);
+		Map<String, InventoryProduct> ret = new HashMap<String, InventoryProduct>();
+		ret.put(id, prod);
+		return ret;
 	}
 
 	/*
@@ -91,13 +94,13 @@ public class DB_FridgeInventory {
 	}
 
 	// Method to get all Product from Inventory
-	public List<InventoryProduct> getAllProducts() {
+	public Map<String, InventoryProduct> getAllProducts() {
 		MongoCollection<Document> products = getProductsCollection();
-		List<InventoryProduct> allProducts = new ArrayList<InventoryProduct>();
+		Map<String, InventoryProduct> allProducts = new HashMap<String, InventoryProduct>();
 
 		FindIterable<Document> search = products.find();
 		for (Document current : search) {
-			allProducts.add(convertDocumentToInventoryProd(current));
+			allProducts.putAll(convertDocumentToInventoryProd(current));
 		}
 
 		return allProducts;

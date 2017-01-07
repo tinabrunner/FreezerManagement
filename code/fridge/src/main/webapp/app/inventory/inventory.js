@@ -10,30 +10,58 @@
 	.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/inventory', {
 			templateUrl: 'inventory/inventory.html',
-			controller: 'view_inventory1Ctrl'
+			controller: 'InventoryCtrl'
 		});
 	}])
 
-	/*.controller('view_inventory1Ctrl', DeleteInvProduct);
-
-	DeleteInvProduct.$inject = ['$http'];
-
+	.controller('InventoryCtrl', InventoryCtrl);
 	
-	function DeleteInvProduct($http) {
+	InventoryCtrl.$inject = ['$http'];
+	
+	function InventoryCtrl($http) {
+		
 		var vm = this;
-		altert("delete this product");
-	};*/
+		vm.products = {};
+		vm.deleteInventoryProduct = deleteInventoryProduct;
+		vm.init = init;
+		
+		init();
+		
+		function init() {
+			var data = {
+				name : "prod1",
+				prodCategoryID : "id001"
+			}
+			$http.get(URL_API+'inventory').then(function(resp) {
+				vm.products = resp.data.products;
+		    	//vm.products = resp.data.products;
+			}, function(error) {
+				console.dir(error);
+			});
+		}
+		
+		function deleteInventoryProduct(product) {
+			alert('delete '+prod.name);
+				//redirectTo: '/home';
+		 }
+		
+		/*$scope.DeleteInvProduct = function(id) { 
+			alert('delete '+prod.name);
+			
+			$http.get(URL_API+'inventory').then(function(resp) {
+				alert("product was deleted");
+				//vm.products = resp.data.products;
+			}, function(error) {
+				console.dir(error);
+			});
+		}*/
+
+		
+	}
 	
-	.controller('view_inventory1Ctrl', function($scope) {
+	
 		
-		// OnPageLoad-Method um tabelle zu füllen
-		
-		$scope.DeleteInvProduct = function() {
-			// delete the selected product
-			redirectTo: '/home';
-	    }
-		
-	});
+	//});
 	
 
 

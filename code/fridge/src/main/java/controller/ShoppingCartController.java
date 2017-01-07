@@ -12,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import db_communication.DB_ShoppingList;
 import domain.MongoProvider;
 import model.ShoppingListItem;
 
@@ -32,21 +33,20 @@ public class ShoppingCartController {
 	MongoProvider mongoProvider;
 
 	@GET
-
 	/** Shopping carts (Warenkörbe): non-persistent */
 	public Set<ShoppingListItem> createShoopingCart() throws ParseException {
 
-		// DB_ShoppingList db_shoppingList = new DB_ShoppingList();
-		// Map<Product, Integer> shoppingListProducts =
-		// db_shoppingList.getAllProductsFromShoppingList(); // miau
+		DB_ShoppingList db_shoppingList = new DB_ShoppingList();
+		Set<ShoppingListItem> shoppingListProducts = db_shoppingList.getAllProductsFromShoppingList(); // miau
 
+		/*
 		Set<ShoppingListItem> shoppingListProducts = new HashSet<>();
 		shoppingListProducts.add(new ShoppingListItem("i1", 1.99d, "Belegte Banane", 1, 1, 2, true));
 		shoppingListProducts.add(new ShoppingListItem("i2", 2.99d, "Abenteurlicher Apfel", 1, 5, 10, true));
 		shoppingListProducts.add(new ShoppingListItem("i3", 458.99d, "Emmentaler", 1, -1, 1, false));
 		shoppingListProducts.add(new ShoppingListItem("i4", 0.45d, "Gouda", 1, -1, 2, false));
 		shoppingListProducts.add(new ShoppingListItem("i4", 2.99d, "Eier", 6, 6, 10, true));
-
+		*/
 		return shoppingListProducts;
 	}
 }

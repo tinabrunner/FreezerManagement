@@ -13,7 +13,6 @@ import repository.ShoppingListRepositoryMongoImpl;
 //import repository.ShoppingListRepositoryMongoImpl;
 import service.ShoppingListServiceImpl;
 
-import java.util.Map;
 import java.util.Set;
 
 @Stateless
@@ -26,6 +25,10 @@ public class DB_ShoppingList {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/shoppinglist")
 	public Set<ShoppingListItem> getAllProductsFromShoppingList () {
+		
+		this.mongoProvider = new MongoProvider2("localhost", 27017); // TODO ?
+		this.mongoProvider.setDatabaseName("fridge");
+		this.mongoProvider.connect();
 
 		ShoppingListRepositoryMongoImpl shoppingListRepositoryMongo = new ShoppingListRepositoryMongoImpl(this.mongoProvider);
 		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);

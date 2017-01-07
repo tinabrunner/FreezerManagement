@@ -8,6 +8,10 @@ public class InventoryProduct {
 	private String name;
 	private Date expiryDate;
 
+	// Default-Constructor
+	public InventoryProduct() {
+	}
+
 	public InventoryProduct(String prodCategoryId, String name, Date expiryDate) {
 		this.prodCategoryId = prodCategoryId;
 		this.name = name;

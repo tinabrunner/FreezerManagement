@@ -9,6 +9,7 @@ import controller.InventoryController;
 import controller.InvoiceController;
 import controller.LoginController;
 import controller.ShoppingCartController;
+import controller.ShoppingListController;
 
 /**
  * User: phi Date: 04.01.17 .___. {o,o} /)___) --"-"--
@@ -25,6 +26,7 @@ public class ApplicationConfig extends Application {
 		classes.add(InvoiceController.class);
 		classes.add(LoginController.class);
 		classes.add(AccountController.class);
+		classes.add(ShoppingListController.class);
 
 		return classes;
 	}

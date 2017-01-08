@@ -7,7 +7,6 @@ import javax.ejb.Stateless;
 import domain.MongoProvider2;
 import model.ShoppingListItem;
 import repository.ShoppingListRepositoryMongoImpl;
-//import repository.ShoppingListRepositoryMongoImpl;
 import service.ShoppingListServiceImpl;
 
 @Stateless
@@ -38,9 +37,11 @@ public class DB_ShoppingList {
 				this.mongoConnection);
 		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);
 
+		Set<ShoppingListItem> result = shoppingListService.getAllProducts();
+
 		this.mongoConnection.disconnect();
 
-		return shoppingListService.getAllProducts();
+		return result;
 	}
 
 	// DELETE
@@ -50,9 +51,11 @@ public class DB_ShoppingList {
 				this.mongoConnection);
 		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);
 
+		Boolean result = shoppingListService.deleteProduct(item);
+
 		this.mongoConnection.disconnect();
 
-		return shoppingListService.deleteProduct(item);
+		return result;
 	}
 
 	// ADD
@@ -61,10 +64,10 @@ public class DB_ShoppingList {
 		ShoppingListRepositoryMongoImpl shoppingListRepositoryMongo = new ShoppingListRepositoryMongoImpl(
 				this.mongoConnection);
 		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);
+		Boolean result = shoppingListService.addProduct(item);
 
 		this.mongoConnection.disconnect();
 
-		return shoppingListService.addProduct(item);
+		return result;
 	}
-
 }

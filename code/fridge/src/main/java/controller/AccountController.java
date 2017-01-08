@@ -1,5 +1,6 @@
 package controller;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -19,33 +20,28 @@ import model.FridgeUser;
 @Path("/account")
 public class AccountController {
 
-	// @EJB
+	@EJB
 	private DB_FridgeUser db_fridgeUser = new DB_FridgeUser();
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
 	// Method to create an account and write the user to DB
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public String createAccount(FridgeUser user) {
-		// DB_FridgeUser checks, if the username already exists
 		boolean insertionTrue = db_fridgeUser.insertUserToDB(user);
 		if (insertionTrue)
-			return "true";
+			return "";
 		else {
-			System.out.print("Username already exists! Please enter another username!");
-			return "false";
+			return "Username already exists - Please enter another username!";
 		}
 	}
 
 	@PUT
 	// Method to edit an Account and write the changes to the DB
-	public boolean editAccount(@FormParam("name") String name, @FormParam("surname") String surname,
-			@FormParam("username") String username, @FormParam("password") String password,
-			@FormParam("email") String email, @FormParam("userrole") String userrole) {
+	public boolean editAccount(FridgeUser fridgeUser) {
 
 		// TODO: Checken ob überhaupt Attribut-Werte verändert wurde !?
 
-		FridgeUser fridgeUser = new FridgeUser(name, surname, username, password, email, userrole);
 		db_fridgeUser.updateUserFromDB(fridgeUser);
 		return true;
 	}
@@ -65,7 +61,7 @@ public class AccountController {
 	// Method to create an account and write the user to DB
 	public FridgeUser getAccountDetails(@HeaderParam("username") String username) {
 		// TODO: irgendwie als JSON serialisieren?
-		return db_fridgeUser.getUserFromDB(username);
+		return db_fridgeUser.getUser(username);
 	}
 
 }

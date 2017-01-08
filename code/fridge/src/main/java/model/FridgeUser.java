@@ -14,53 +14,49 @@ public class FridgeUser implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String name;
-	private String surname;
+	private String firstName;
+	private String lastName;
 	private String username;
 	private String password;
 	private String email;
+	private String role;
 
 	public enum Roles {
 		ADMIN, USER;
 	};
 
-	private String role;
-
 	// default constructor
 	public FridgeUser() {
 	}
 
-	public FridgeUser(String name, String surname, String username, String password, String email, String userrole) {
-		this.name = name;
-		this.surname = surname;
+	public FridgeUser(String firstName, String lastName, String username, String password, String email, String role) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.username = username;
-		this.password = password; // Password check?? Bzw. auch 2 pw zur
-									// korrekten Eingabe?!
+		this.password = password;
 		this.email = email;
 
-		if (userrole.equals(Roles.ADMIN))
+		if (role.equals(Roles.ADMIN))
 			this.role = Roles.ADMIN.toString();
-		else // if (userrole.equals(Roles.USER))
+		else
 			this.role = Roles.USER.toString();
-		// else
-		// System.out.println("The Userrole doesn't match ADMIN or USER!");
 
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getSurname() {
-		return surname;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setSurname(String surname) {
-		this.surname = surname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getUsername() {
@@ -76,10 +72,7 @@ public class FridgeUser implements Serializable {
 	}
 
 	public void setPassword(String password) {
-		if (this.password.equals(password))
-			System.out.println("The password can't be the same like the old one!");
-		else
-			this.password = password;
+		this.password = password;
 	}
 
 	public String getEmail() {
@@ -94,13 +87,18 @@ public class FridgeUser implements Serializable {
 		return role;
 	}
 
-	@Override
-	public String toString() {
-		return "User [FirstName=" + this.getSurname() + ", lastName=" + this.getName() + ", username="
-				+ this.getUsername() + ", email=" + this.getEmail() + ", role=" + this.getRole() + "]";
-	}
-
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		return "User [FirstName=" + this.getFirstName() + ", lastName=" + this.getLastName() + ", username="
+				+ this.getUsername() + ", email=" + this.getEmail() + ", role=" + this.getRole() + "]";
+	}
+
 }

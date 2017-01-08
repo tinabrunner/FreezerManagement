@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
@@ -39,11 +40,11 @@ public class DB_FridgeInventory {
 
 	private static final String _fridge = "fridge";
 	private static final String _inventoryProducts = "inventoryProducts";
-	private static final String _prodCategoryId = "prodCategoryId";
-	private static final String _name = "name";
-	private static final String _expiryDate = "expiryDate";
-	private static final String _username = "username";
-	private static final String _id = "_id";
+	public static final String _prodCategoryId = "prodCategoryId";
+	public static final String _name = "name";
+	public static final String _expiryDate = "expiryDate";
+	public static final String _username = "username";
+	public static final String _id = "_id";
 
 	/*
 	 * STANDARDMETHODS FOR RE-USE
@@ -90,11 +91,27 @@ public class DB_FridgeInventory {
 	}
 
 	// Method to Delete a Product
-	public void deleteProductFromDBInventory(String id) {
+	public boolean deleteProductFromDBInventory(String id) {
 		MongoCollection<Document> products = getProductsCollection();
 
-		Bson filter = Filters.eq(_id, id);
-		products.findOneAndDelete(filter);
+		if (productExists(id)) {
+			ObjectId objId = new ObjectId(id);
+			Bson filter = Filters.eq(_id, objId);
+			products.findOneAndDelete(filter);
+			return true;
+		} else
+			return false;
+	}
+
+	// Method to Search for a Product
+	public boolean productExists(String id) {
+		MongoCollection<Document> products = getProductsCollection();
+		ObjectId objId = new ObjectId(id);
+		Bson filter = Filters.eq(_id, objId);
+		if (products.count(filter) > 0)
+			return true;
+		else
+			return false;
 	}
 
 	// Method to get all Product from Inventory

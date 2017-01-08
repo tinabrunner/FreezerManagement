@@ -16,9 +16,9 @@
 	
 	.controller('InventoryCtrl', InventoryCtrl);
 	
-	InventoryCtrl.$inject = ['$http'];
+	InventoryCtrl.$inject = ['$http', '$route'];
 	
-	function InventoryCtrl($http) {
+	function InventoryCtrl($http, $route) {
 		
 		var vm = this;
 		vm.products = {};
@@ -36,8 +36,18 @@
 		}
 		
 		function deleteInventoryProduct(id) {
-			alert('delete product with id '+id);
-			// TODO: delete product from DB and reload
+			$http.delete(URL_API+'inventory'+'/'+id).then(function(response){
+			    	   if (!response.data) {
+			    		   $route.reload();
+						}
+						else {
+							alert("Fehler: "+response.data);
+						}
+			       }, 
+			       function(response){
+			         alert("Something went wrong - Product could not be deleted");
+			       }
+			    );
 		 }
 		
 	}

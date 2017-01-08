@@ -18,7 +18,7 @@
 	
 	InventoryCtrl.$inject = ['$http'];
 	
-	function InventoryCtrl($http, products) {
+	function InventoryCtrl($http) {
 		
 		var vm = this;
 		vm.products = {};
@@ -35,8 +35,8 @@
 			});
 		}
 		
-		function deleteInventoryProduct(name, id) {
-			alert('delete product '+name+' with id '+id);
+		function deleteInventoryProduct(id) {
+			alert('delete product with id '+id);
 			// TODO: delete product from DB and reload
 		 }
 		

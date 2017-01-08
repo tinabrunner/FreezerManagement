@@ -1,5 +1,5 @@
-<div>
-	<p><b>Inventory</b></p>
+<div style="padding:5%;">
+	<h2 align="center">Inventory</h2>
 </div>
 <div ng-controller="InventoryCtrl as inventory">
 <table class="table table-striped table-bordered" cellspacing="0">
@@ -16,7 +16,7 @@
 	        <td>{{ product.name }}</td>
 	        <td>{{ product.expiryDate }}</td>
 	        <td>
-				<button type="submit" class="delete-button" ng-click="inventory.deleteInventoryProduct(product.name, product.ObjectID)">Delete</button>
+				<button type="button" class="btn btn-danger" ng-click="inventory.deleteInventoryProduct(product.ObjectID)">Delete</button>
 	        </td>
         </tr>
 </table>

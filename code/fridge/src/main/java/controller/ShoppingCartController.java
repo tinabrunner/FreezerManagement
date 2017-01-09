@@ -1,6 +1,5 @@
 package controller;
 
-import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -13,20 +12,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import db_communication.DB_FridgeInventory;
 import db_communication.DB_ShoppingList;
 import domain.MongoProvider;
-import domain.MongoProvider2;
 import model.InventoryProduct;
+import model.ShoppingCartItem;
 import model.ShoppingListItem;
-import org.bson.Document;
-import repository.ShoppingListRepositoryMongoImpl;
-import service.ShoppingListServiceImpl;
-import util.ShoppingListHelper;
 
 /**
  * Created by phi on 08.12.16.
@@ -46,7 +37,7 @@ public class ShoppingCartController {
 
 	@GET
 	/** Shopping carts (Warenkörbe): non-persistent */
-	public Set<ShoppingListItem> createShoopingCart() throws ParseException {
+	public Set<ShoppingCartItem> createShoopingCart() {
 
 		/* current items in shopping list */
 		DB_ShoppingList db_shoppingList = new DB_ShoppingList();
@@ -56,18 +47,66 @@ public class ShoppingCartController {
 		DB_FridgeInventory db_fridgeInventory = new DB_FridgeInventory();
 		Map<String, InventoryProduct> inventoryProducts = db_fridgeInventory.getAllProducts();
 		
-/*
-		MongoProvider2 mongoProvider = new MongoProvider2("localhost", 27017);
-		mongoProvider.setDatabaseName("fridge");
-		mongoProvider.connect();
-		ShoppingListRepositoryMongoImpl shoppingListRepositoryMongo = new ShoppingListRepositoryMongoImpl(mongoProvider);
-		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);
-		shoppingListService.addProduct(new ShoppingListItem("i1", 1.99d, "Belegte Banane", 1, 1, 2, true));
-		shoppingListService.addProduct(new ShoppingListItem("i2", 2.99d, "Abenteurlicher Apfel", 1, 5, 10, true));
-		shoppingListService.addProduct(new ShoppingListItem("i3", 458.99d, "Emmentaler", 1, -1, 1, false));
-		shoppingListService.addProduct(new ShoppingListItem("i4", 0.45d, "Gouda", 1, -1, 2, false));
-		shoppingListService.addProduct(new ShoppingListItem("i4", 2.99d, "Eier", 6, 6, 10, true));
-*/
-		return shoppingListProducts;
+		/* to fill: warenkorb */
+		Set<ShoppingCartItem> shoppingCartItems = this.fillShoppingCart( shoppingListProducts, inventoryProducts );
+		
+		return shoppingCartItems;
+	}
+	
+	/**
+	 * Berechet Warenkorb anhand Mindest- / Höchstbestand, Regelmäßig, Amount in Inventory.
+	 * @param shoppingListProducts
+	 * @param inventoryProducts
+	 * @return Map<String,InventoryProduct>
+	 */
+	private Set<ShoppingCartItem> fillShoppingCart(
+			Set<ShoppingListItem> shoppingListProducts,
+			Map<String, InventoryProduct> inventoryProducts)
+	{
+		Set<ShoppingCartItem> shoppingCartItems = new HashSet<>();
+		
+		for( ShoppingListItem shoppingListItem : shoppingListProducts ) {
+			int list_min = shoppingListItem.getMindestBestand();
+			if (!shoppingListItem.isRegelmaessig()) {
+				// manuelle bestellung: auf cart
+				shoppingCartItems.add(new ShoppingCartItem(
+						shoppingListItem.getId(),
+						shoppingListItem.getPreis(),
+						shoppingListItem.getName(),
+						shoppingListItem.getVerpackungsGroesse(),
+						// amount
+						list_min));
+			} else {
+				// regelmäßige bestellung
+				int list_max = shoppingListItem.getHoechstBestand();
+				int inv_amount;
+				
+				// corresponding products of category
+					InventoryProduct inventoryProduct = inventoryProducts.get(shoppingListItem.getId());
+					inv_amount = 1; // todo
+				//Set<InventoryProduct> inventoryProducts = inventoryProducts.get( shoppingListItem.getId() );
+				//inv_amount = inventoryProducts.size();
+				
+				if (inv_amount < list_min) {
+					// mindestbestand unterschritten
+					int to_buy_amount = list_min - inv_amount;
+					
+					int verpackungsGroesse = shoppingListItem.getVerpackungsGroesse();
+					int packs = to_buy_amount / verpackungsGroesse; // abrunden
+					// kaufmenge = maximal mögliches vielfaches der verpackungsgröße
+					to_buy_amount = packs * verpackungsGroesse;
+					if (to_buy_amount > 1) {
+						shoppingCartItems.add(new ShoppingCartItem(
+								shoppingListItem.getId(),
+								shoppingListItem.getPreis(),
+								shoppingListItem.getName(),
+								shoppingListItem.getVerpackungsGroesse(),
+								// amount
+								to_buy_amount));
+					}
+				}
+			}
+		}
+		return shoppingCartItems;
 	}
 }

@@ -13,12 +13,12 @@
 			controller: 'InventoryCtrl'
 		});
 	}])
-
+	
 	.controller('InventoryCtrl', InventoryCtrl);
 	
-	InventoryCtrl.$inject = ['$http'];
+	InventoryCtrl.$inject = ['$http', '$route'];
 	
-	function InventoryCtrl($http) {
+	function InventoryCtrl($http, $route) {
 		
 		var vm = this;
 		vm.products = {};
@@ -28,41 +28,29 @@
 		init();
 		
 		function init() {
-			var data = {
-				name : "prod1",
-				prodCategoryID : "id001"
-			}
 			$http.get(URL_API+'inventory').then(function(resp) {
-				vm.products = resp.data.products;
-		    	//vm.products = resp.data.products;
+				vm.products = resp.data;
 			}, function(error) {
 				console.dir(error);
 			});
 		}
 		
-		function deleteInventoryProduct(product) {
-			alert('delete '+prod.name);
-				//redirectTo: '/home';
+		function deleteInventoryProduct(id) {
+			$http.delete(URL_API+'inventory'+'/'+id).then(function(response){
+			    	   if (!response.data) {
+			    		   $route.reload();
+						}
+						else {
+							alert("Fehler: "+response.data);
+						}
+			       }, 
+			       function(response){
+			         alert("Something went wrong - Product could not be deleted");
+			       }
+			    );
 		 }
-		
-		/*$scope.DeleteInvProduct = function(id) { 
-			alert('delete '+prod.name);
-			
-			$http.get(URL_API+'inventory').then(function(resp) {
-				alert("product was deleted");
-				//vm.products = resp.data.products;
-			}, function(error) {
-				console.dir(error);
-			});
-		}*/
-
 		
 	}
 	
 	
-		
-	//});
-	
-
-
 })();

@@ -3,11 +3,15 @@ package db_communication;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 import domain.MongoProvider;
 import model.FridgeUser;
@@ -24,131 +28,123 @@ public class DB_FridgeUser {
 	@EJB
 	private MongoProvider mongoProvider = new MongoProvider();
 
+	private static final String _fridge = "fridge";
+	private static final String _users = "users";
+	private static final String _username = "username";
+	private static final String _password = "password";
+	private static final String _firstName = "firstName";
+	private static final String _lastName = "lastName";
+	private static final String _email = "email";
+	private static final String _role = "role";
+
+	/*
+	 * STANDARDMETHODS FOR RE-USE
+	 */
+
+	// create a client and get the database and usersCollection
+	private MongoCollection<Document> getUsersCollection() {
+		MongoClient mongoClient = this.mongoProvider.getMongoClient();
+		MongoDatabase db = mongoClient.getDatabase(_fridge);
+		MongoCollection<Document> users = db.getCollection(_users);
+		return users;
+	}
+
+	public Document convertUserToDocument(FridgeUser fridgeUser) {
+		Document doc = new Document(_username, fridgeUser.getUsername()).append(_password, fridgeUser.getPassword())
+				.append(_firstName, fridgeUser.getFirstName()).append(_lastName, fridgeUser.getLastName())
+				.append(_email, fridgeUser.getEmail()).append(_role, fridgeUser.getRole());
+		return doc;
+	}
+
+	public FridgeUser convertDocumentToUser(Document doc) {
+		String username = doc.getString(_username);
+		String password = doc.getString(_password);
+		String firstName = doc.getString(_firstName);
+		String lastName = doc.getString(_lastName);
+		String email = doc.getString(_email);
+		String role = doc.getString(_role);
+		return new FridgeUser(username, password, firstName, lastName, email, role);
+	}
+
+	/*
+	 * METHODS TO COMMUNICATE WITH DB
+	 */
+
 	// Method to Insert an User
 	public boolean insertUserToDB(FridgeUser fridgeUser) {
-		boolean ret = false;
-
-		// create a client and get the database and usersCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection users = (DBCollection) db.getCollection("users");
+		MongoCollection<Document> users = getUsersCollection();
 
 		if (!userExists(fridgeUser.getUsername())) {
-			/*
-			 * Document doc = new Document("username", fridgeUser.getUsername())
-			 * .append("password", fridgeUser.getPassword()).append("firstName",
-			 * fridgeUser.getName()) .append("lastName",
-			 * fridgeUser.getSurname()).append("email", fridgeUser.getEmail())
-			 * .append("role", fridgeUser.getRole());
-			 */
-			BasicDBObject doc = new BasicDBObject("username", fridgeUser.getUsername())
-					.append("password", fridgeUser.getPassword()).append("firstName", fridgeUser.getName())
-					.append("lastName", fridgeUser.getSurname()).append("email", fridgeUser.getEmail())
-					.append("role", fridgeUser.getRole());
-			users.save(doc);
-			ret = true;
-		}
-		return ret;
+			Document doc = convertUserToDocument(fridgeUser);
+			users.insertOne(doc);
+			return true;
+		} else
+			return false;
 	}
 
 	// Method to Search for an User
-	public FridgeUser getUserFromDB(String username) {
+	public boolean userExists(String username) {
+		MongoCollection<Document> users = getUsersCollection();
+		Bson filter = Filters.eq(_username, username);
+		if (users.count(filter) > 0)
+			return true;
+		else
+			return false;
+	}
 
-		// create FrigdUser variable for the return-statement
-		FridgeUser fridgeUser = null;
-
-		DBCollection users = getUsersCollection();
-
-		// create a query to search for the FrigdeUser with the passed
-		// 'username'
-		BasicDBObject whereQuery = new BasicDBObject();
-		whereQuery.put("username", username);
-		DBCursor cursor = users.find(whereQuery);
-
-		// get the attributes for FridgeUser
-		if (cursor.count() != 1) {
-			System.out.print("Something went wrong! More than one user was found for the given username.");
-		} else {
-			BasicDBObject doc = (BasicDBObject) cursor.curr();
-			String name = doc.getString("firstName");
-			String surname = doc.getString("lastName");
-			String password = doc.getString("password");
-			String email = doc.getString("email");
-			String role = doc.getString("role");
-			fridgeUser = new FridgeUser(name, surname, username, password, email, role);
-		}
-
-		return fridgeUser;
-
+	// Method to Search for an User
+	public FridgeUser getUser(String username) {
+		MongoCollection<Document> users = getUsersCollection();
+		FridgeUser user = null;
+		Bson filter = Filters.eq(_username, username);
+		FindIterable<Document> result = users.find(filter);
+		if (users.count(filter) == 1)
+			user = convertDocumentToUser(result.first());
+		return user;
 	}
 
 	// Method to Update an User
-	public void updateUserFromDB(FridgeUser user) {
+	public boolean updateUserFromDB(FridgeUser user) {
+		MongoCollection<Document> users = getUsersCollection();
 
-		DBCollection users = getUsersCollection();
-
-		// create a query to search for the FrigdeUser that should be updated
-		BasicDBObject updateUser = new BasicDBObject("username", user.getUsername())
-				.append("password", user.getPassword()).append("firstName", user.getName())
-				.append("lastName", user.getSurname()).append("email", user.getEmail()).append("role", user.getRole());
-		BasicDBObject searchQuery = new BasicDBObject().append("username", user.getUsername());
-		users.update(searchQuery, updateUser);
+		Document doc = convertUserToDocument(user);
+		Bson filter = Filters.eq(_username, user.getUsername());
+		if (getUser(user.getUsername()) != null) {
+			users.findOneAndUpdate(filter, doc);
+			return true;
+		} else
+			return false;
 	}
 
 	// Method to Delete an User
 	public boolean deleteUserFromDB(String username) {
-		boolean ret = false;
+		MongoCollection<Document> users = getUsersCollection();
 
-		DBCollection users = getUsersCollection();
-
-		if (userExists(username)) {
-			// create a query to get the user and delete it
-			BasicDBObject deleteUser = new BasicDBObject();
-			deleteUser.put("username", username);
-			users.remove(deleteUser);
-			ret = true;
-		}
-		return ret;
+		if (getUser(username) != null) {
+			Bson filter = Filters.eq(_username, username);
+			users.findOneAndDelete(filter);
+			return true;
+		} else
+			return false;
 	}
 
-	// Method to Check if a User exists
-	public boolean userExists(String username) {
-		boolean ret = false;
-
-		DBCollection users = getUsersCollection();
-
-		// create a query and check if there are more than 0 elements in the db
-		BasicDBObject checkUser = new BasicDBObject();
-		checkUser.put("username", username);
-		if (users.getCount(checkUser) > 0)
-			ret = true;
-		return ret;
-	}
-
+	// TODO: kann GELÖSCHT werden, wenn user via username ausgegeben wird ???
 	// Method to Check if username and password fits
 	public boolean check_UsernameAndPassword(String username, String password) {
 		boolean ret = false;
 		FridgeUser user;
 
-		DBCollection users = getUsersCollection();
+		MongoCollection<Document> users = getUsersCollection();
 
 		// create a query and check if the password matches
 		BasicDBObject checkUser = new BasicDBObject();
 		checkUser.put("username", username);
-		if (users.getCount(checkUser) == 1) {
-			user = getUserFromDB(username);
-			String userPassword = user.getPassword();
-			if (userPassword.equals(password))
-				ret = true;
-		}
+		/*
+		 * if (users.getCount(checkUser) == 1) { user = getUserFromDB(username);
+		 * String userPassword = user.getPassword(); if
+		 * (userPassword.equals(password)) ret = true; }
+		 */
 		return ret;
-	}
-
-	// create a client and get the database and usersCollection
-	public DBCollection getUsersCollection() {
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("fridge");
-		return (DBCollection) db.getCollection("users");
 	}
 
 }

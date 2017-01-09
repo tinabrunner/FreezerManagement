@@ -13,47 +13,37 @@
 			controller: 'view_register1Ctrl'
 		});
 	}])
-	.controller('view_register1Ctrl', function($scope, $http) {
+	.controller('view_register1Ctrl', function($scope, $http, $location) {
 		$scope.Register = function() {
-			if (!$scope.username || !$scope.password || !$scope.password_confirm || !$scope.firstname || !$scope.lastname || !$scope.email)
+			
+			if (!$scope.username || !$scope.password || !$scope.password_confirm || !$scope.firstName || !$scope.lastName || !$scope.email || !$scope.role)
 				alert("Please fill all fields!");
 			else if ($scope.password != $scope.password_confirm)
 				alert("The passwords don't match!");
 			else {
-				var dada = {
-						name : $scope.firstname,
-						surname : $scope.lastname,
+				var objData = {
+						firstName : $scope.firstName,
+						lastName : $scope.lastName,
 						username : $scope.username,
 						password : $scope.password,
 						email : $scope.email,
-						userrole : $scope.usertype //('input:checkbox[name="reg_usertype"]:checked')
+						role : $scope.role
+		        };
+				$http.post(URL_API+'account', objData).then((function(response){
+				if (response.data) {
+					alert("Fehler: "+response.data);
 				}
-				$http.post(URL_API+"account", dada).then((function(response){
-					if (response.data)
-						redirectTo: '/home';
+				else {
+					// TODO: Login !!!
+					$location.path("/home");
+				}
 				}), 
-				alert("Something went wrong"));
+				function(response) { 
+					alert("Something went wrong: "+response.data);
+				});
 				
-				// kommunikation mit java controller !!
-				// --> wenn Register-Methode TRUE zurück gibt: einloggen und redirectTo: '/view1';
-				// --> wenn FALSE zur erneuten Eingabe auffordern
-				
-				// var accountController = new java.controller.AccountController();
 			}
 	    }
 	});
 	
 })();
-
-/*
-	.controller('view_register1Ctrl', RegisterCtrl);
-
-	RegisterCtrl.$inject = ['$http'];
-
-	
-	function RegisterCtrl($http) {
-		var vm = this;
-
-	};
-})();
-*/

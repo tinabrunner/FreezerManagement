@@ -1,37 +1,73 @@
 package db_communication;
 
-import javax.ejb.EJB;
+import java.util.Set;
+
 import javax.ejb.Stateless;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 import domain.MongoProvider2;
 import model.ShoppingListItem;
 import repository.ShoppingListRepositoryMongoImpl;
-//import repository.ShoppingListRepositoryMongoImpl;
 import service.ShoppingListServiceImpl;
-
-import java.util.Set;
 
 @Stateless
 public class DB_ShoppingList {
 
-	@EJB
-	MongoProvider2 mongoProvider;
+	private static final String MONGO_HOST = "localhost";
+	private static final int MONGO_PORT = 27017;
+	private static final String MONGO_DB = "fridge";
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/shoppinglist")
-	public Set<ShoppingListItem> getAllProductsFromShoppingList () {
-		
-		this.mongoProvider = new MongoProvider2("localhost", 27017); // TODO ?
-		this.mongoProvider.setDatabaseName("fridge");
-		this.mongoProvider.connect();
+	private MongoProvider2 mongoConnection;
 
-		ShoppingListRepositoryMongoImpl shoppingListRepositoryMongo = new ShoppingListRepositoryMongoImpl(this.mongoProvider);
+	private MongoProvider2 getMongoConnection() {
+		MongoProvider2 mongoDB = new MongoProvider2(MONGO_HOST, MONGO_PORT);
+		mongoDB.setDatabaseName(MONGO_DB);
+		mongoDB.connect();
+
+		return mongoDB;
+	}
+
+	public DB_ShoppingList() {
+		this.mongoConnection = getMongoConnection();
+	}
+
+	// GET
+	public Set<ShoppingListItem> getAllProductsFromShoppingList() {
+
+		ShoppingListRepositoryMongoImpl shoppingListRepositoryMongo = new ShoppingListRepositoryMongoImpl(
+				this.mongoConnection);
 		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);
-		return shoppingListService.getAllProducts();
-	}	
+
+		Set<ShoppingListItem> result = shoppingListService.getAllProducts();
+
+		this.mongoConnection.disconnect();
+
+		return result;
+	}
+
+	// DELETE
+	public Boolean deleteProductFromShoppingList(ShoppingListItem item) {
+
+		ShoppingListRepositoryMongoImpl shoppingListRepositoryMongo = new ShoppingListRepositoryMongoImpl(
+				this.mongoConnection);
+		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);
+
+		Boolean result = shoppingListService.deleteProduct(item);
+
+		this.mongoConnection.disconnect();
+
+		return result;
+	}
+
+	// ADD
+	public Boolean addProductToShoppingList(ShoppingListItem item) {
+
+		ShoppingListRepositoryMongoImpl shoppingListRepositoryMongo = new ShoppingListRepositoryMongoImpl(
+				this.mongoConnection);
+		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);
+		Boolean result = shoppingListService.addProduct(item);
+
+		this.mongoConnection.disconnect();
+
+		return result;
+	}
 }

@@ -45,9 +45,9 @@
 
 		<!-- https://mvnrepository.com/artifact/javax/javaee-api -->
 		<dependency>
-			<groupId>javax</groupId>
+			<groupId>org.apache.openejb</groupId>
 			<artifactId>javaee-api</artifactId>
-			<version>6.0</version>
+			<version>6.0-5</version>
 		</dependency>
 
 		<!-- <dependency> <groupId>org.jboss.spec.javax.ejb</groupId> <artifactId>jboss-ejb-api_3.1_spec</artifactId> 
@@ -86,6 +86,12 @@
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>eclipselink</artifactId>
 			<version>2.6.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.googlecode.json-simple</groupId>
+		    <artifactId>json-simple</artifactId>
+		    <version>1.1.1</version>
 		</dependency>
 
 	</dependencies>

@@ -12,7 +12,11 @@ import controller.ShoppingCartController;
 import controller.ShoppingListController;
 
 /**
- * User: phi Date: 04.01.17 .___. {o,o} /)___) --"-"--
+ * User: phi Date: 04.01.17
+ *  .___.
+ *  {o,o}
+ * /)___)
+ * --"-"--
  */
 @ApplicationPath("/api")
 public class ApplicationConfig extends Application {

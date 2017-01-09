@@ -3,6 +3,7 @@ package controller;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -28,24 +29,24 @@ import model.ShoppingListItem;
  */
 @Stateless
 @Path("/shopping_cart")
-@Singleton
 @Produces(MediaType.APPLICATION_JSON)
 public class ShoppingCartController {
-
+	
 	@EJB
-	MongoProvider mongoProvider;
+	private DB_FridgeInventory dbFridgeInventory;
+	
+	@EJB
+	private DB_ShoppingList db_shoppingList;
 
 	@GET
 	/** Shopping carts (Warenkörbe): non-persistent */
 	public Set<ShoppingCartItem> createShoopingCart() {
-
-		/* current items in shopping list */
-		DB_ShoppingList db_shoppingList = new DB_ShoppingList();
-		Set<ShoppingListItem> shoppingListProducts = db_shoppingList.getAllProductsFromShoppingList(); // miau
 		
 		/* current items in inventory: <categoryId, inventoryProduct> */
-		DB_FridgeInventory db_fridgeInventory = new DB_FridgeInventory();
-		Map<String, InventoryProduct> inventoryProducts = db_fridgeInventory.getAllProducts();
+		Map<String, InventoryProduct> inventoryProducts = dbFridgeInventory.getAllProducts();
+		
+		/* current items in shopping list */
+		Set<ShoppingListItem> shoppingListProducts = db_shoppingList.getAllProductsFromShoppingList(); // miau
 		
 		/* to fill: warenkorb */
 		Set<ShoppingCartItem> shoppingCartItems = this.fillShoppingCart( shoppingListProducts, inventoryProducts );
@@ -59,10 +60,12 @@ public class ShoppingCartController {
 	 * @param inventoryProducts
 	 * @return Map<String,InventoryProduct>
 	 */
+	
 	private Set<ShoppingCartItem> fillShoppingCart(
 			Set<ShoppingListItem> shoppingListProducts,
 			Map<String, InventoryProduct> inventoryProducts)
 	{
+		
 		Set<ShoppingCartItem> shoppingCartItems = new HashSet<>();
 		
 		for( ShoppingListItem shoppingListItem : shoppingListProducts ) {
@@ -79,23 +82,35 @@ public class ShoppingCartController {
 			} else {
 				// regelmäßige bestellung
 				int list_max = shoppingListItem.getHoechstBestand();
-				int inv_amount;
 				
 				// corresponding products of category
-					InventoryProduct inventoryProduct = inventoryProducts.get(shoppingListItem.getId());
-					inv_amount = 1; // todo
-				//Set<InventoryProduct> inventoryProducts = inventoryProducts.get( shoppingListItem.getId() );
-				//inv_amount = inventoryProducts.size();
+				/* MACHT EJB INJECTION KAPUTT WTF
+				int inv_amount = inventoryProducts.values().stream()
+						.filter( i -> i.getProdCategoryId().equals(shoppingListItem.getId()))
+						.collect(Collectors.toSet())
+						.size();
+				*/
+				Set<InventoryProduct> inventoryProductsInCategory = new HashSet<>();
+				for(InventoryProduct i : inventoryProducts.values() ) {
+					if( i.getProdCategoryId().equals( shoppingListItem.getId() )) {
+						inventoryProductsInCategory.add( i );
+					}
+				}
+				int inv_amount = inventoryProductsInCategory.size();
 				
 				if (inv_amount < list_min) {
-					// mindestbestand unterschritten
+					// mindestbestand unterschritten.
+					
 					int to_buy_amount = list_min - inv_amount;
 					
 					int verpackungsGroesse = shoppingListItem.getVerpackungsGroesse();
-					int packs = to_buy_amount / verpackungsGroesse; // abrunden
-					// kaufmenge = maximal mögliches vielfaches der verpackungsgröße
-					to_buy_amount = packs * verpackungsGroesse;
-					if (to_buy_amount > 1) {
+					if( verpackungsGroesse > 0 ) {
+						// kaufmenge = maximal mögliches vielfaches der verpackungsgröße:
+						int packs = to_buy_amount / verpackungsGroesse; // abrunden
+						to_buy_amount = packs * verpackungsGroesse;
+					}
+					
+					if (to_buy_amount > 0) {
 						shoppingCartItems.add(new ShoppingCartItem(
 								shoppingListItem.getId(),
 								shoppingListItem.getPreis(),

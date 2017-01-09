@@ -30,7 +30,7 @@
 				surname: 'b'
 			};
 			$http.get(URL_API+'shopping_cart').then(function(resp) {
-				vm.products = resp.data.products;
+				vm.products = resp.data;
 			}, function(error) {
 				console.dir(error);
 			});

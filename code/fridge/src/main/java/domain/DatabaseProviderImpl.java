@@ -12,27 +12,31 @@ import javax.ejb.Stateless;
  */
 public class DatabaseProviderImpl implements DatabaseProvider {
     
-    @EJB
     private MongoProvider mongoConnection;
-    
     private String databaseName;
     private MongoDatabase database;
     
-    public DatabaseProviderImpl(String databaseName) {
+    public DatabaseProviderImpl( MongoProvider mongoConnection ) {
+        this.mongoConnection = mongoConnection;
+    }
+    
+    @Override
+    public void setDatabaseName(String databaseName ) {
         this.databaseName = databaseName;
     }
     
     @Override
     public boolean connect() {
-        try {
+       // try {
             this.database = this.mongoConnection
                     .getMongoClient() // singleton connection instance
                     .getDatabase(this.databaseName);
             return true;
-        } catch (Exception e) {
-            System.err.println("MongoConnection: " + e.getMessage());
+  /*      } catch (Exception e) {
+            System.err.println("MongoConnection: " + e.getMessage()  + " in: ");
+            e.printStackTrace();
             return false;
-        }
+        }*/
     }
     
     public MongoDatabase getDatabase() {

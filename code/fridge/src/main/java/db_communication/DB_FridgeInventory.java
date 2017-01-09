@@ -35,6 +35,7 @@ import model.InventoryProduct;
 @Stateless
 public class DB_FridgeInventory {
 
+	@EJB
 	private MongoProvider mongoProvider;
 
 	private static final String _fridge = "fridge";

@@ -3,6 +3,7 @@ package controller;
 import java.text.ParseException;
 import java.util.Set;
 
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.ws.rs.DELETE;
@@ -26,12 +27,14 @@ import model.ShoppingListItem;
 @Singleton
 @Produces(MediaType.APPLICATION_JSON)
 public class ShoppingListController {
+	
+	@EJB
+	DB_ShoppingList db_shoppingList;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAllProductsFromShoppingList() throws ParseException {
-
-		DB_ShoppingList db_shoppingList = new DB_ShoppingList();
+		
 		Set<ShoppingListItem> shoppingListProducts = db_shoppingList.getAllProductsFromShoppingList();
 
 		// TODO: (JD) Dummy entfernen

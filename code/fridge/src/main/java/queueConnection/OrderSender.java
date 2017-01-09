@@ -1,5 +1,6 @@
 package queueConnection;
 
+import javax.ejb.Stateless;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
@@ -9,6 +10,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 
+@Stateless
 public class OrderSender {
 	public void sendInvoice(String order) {
 		String message = order;
@@ -16,7 +18,7 @@ public class OrderSender {
 		try {
 			// 1) Create and start connection
 			InitialContext ctx = new InitialContext();
-			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("myQueueConnectionFactory");
+			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/myQueueConnectionFactory");
 			QueueConnection con = f.createQueueConnection();
 			con.start();
 
@@ -24,7 +26,7 @@ public class OrderSender {
 			QueueSession ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
 			// 3) get the Queue object
-			Queue t = (Queue) ctx.lookup("myQueue");
+			Queue t = (Queue) ctx.lookup("jms/invoiceQueue/invoices");
 
 			// 4)create QueueSender object
 			QueueSender sender = ses.createSender(t);

@@ -9,9 +9,10 @@ import javax.ejb.EJB;
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.Block;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
@@ -27,6 +28,10 @@ public class DB_Invoice {
 	// Method to Insert an Invoice
 
 	public void insertInvoiceToDB(Invoice invoice) {
+		// create a client and get the database and invoicesCollection
+		mongoProvider = new MongoProvider("localhost", 27017);
+		mongoProvider.setDatabaseName("supermarket");
+		mongoProvider.connect();
 		// create a client and get the database and invoicesCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("supermarket");
@@ -45,9 +50,13 @@ public class DB_Invoice {
 	// Method to Get one Invoice
 	public Invoice getInvoice(String id) {
 		// create a client and get the database and invoicesCollection
+		mongoProvider = new MongoProvider("localhost", 27017);
+		mongoProvider.setDatabaseName("supermarket");
+		mongoProvider.connect();
+		// create a client and get the database and invoicesCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection invoices = (DBCollection) db.getCollection("invoices");
+		MongoDatabase db = mongoClient.getDatabase("supermarket");
+		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		// Create Invoice-Element for return-statement
 		Invoice invoice = null;
@@ -55,13 +64,14 @@ public class DB_Invoice {
 		// create a query to search for the Invoice with the passed 'id'
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("id", id);
-		DBCursor cursor = invoices.find(whereQuery);
+
+		FindIterable<Document> cursor = invoices.find(whereQuery);
 
 		// get the attributes for invoice
-		if (cursor.count() != 1) {
+		if (((DBCollection) cursor).count() != 1) {
 			System.out.print("Something went wrong! More than one invoice was found for the given id.");
 		} else {
-			BasicDBObject doc = (BasicDBObject) cursor.curr();
+			Document doc = (Document) invoices.find(whereQuery);
 			String name = doc.getString("name");
 			Date billingDate = doc.getDate("billingDate");
 			Date orderDate = doc.getDate("orderDate");
@@ -75,28 +85,28 @@ public class DB_Invoice {
 
 	// Method to Get all Invoices
 	public List<Invoice> getAllInvoices() {
+		mongoProvider = new MongoProvider("localhost", 27017);
+		mongoProvider.setDatabaseName("supermarket");
+		mongoProvider.connect();
 		// create a client and get the database and invoicesCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection invoices = (DBCollection) db.getCollection("invoices");
+		MongoDatabase db = mongoClient.getDatabase("supermarket");
+		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		// Create a list for all invoices and get a cursor to go through the
 		// DBCollection
-		List<Invoice> allInvoices = new ArrayList<Invoice>();
-		DBCursor cursor = invoices.find();
 
-		while (cursor.hasNext()) {
-			BasicDBObject doc = (BasicDBObject) cursor.curr();
-			String id = doc.getString("id");
-			String name = doc.getString("name");
-			Date billingDate = doc.getDate("billingDate");
-			Date orderDate = doc.getDate("orderDate");
-			double totalPrice = doc.getDouble("totalPrice");
-			String invoiceURL = doc.getString("invoiceURL");
-			List<InvoiceItem> items = (List<InvoiceItem>) doc.get("items");
-			allInvoices.add(new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL, items));
-		}
-		return allInvoices;
+		List<Invoice> invoicesResult = new ArrayList<>();
+		invoices.find().forEach((Block<Document>) document -> {
+			String id = document.getString("id");
+			String name = document.getString("name");
+			Date billingDate = document.getDate("billingDate");
+			Date orderDate = document.getDate("orderDate");
+			double totalPrice = document.getDouble("totalPrice");
+			String invoiceURL = document.getString("invoiceURL");
+			invoicesResult.add(new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL));
+		});
+		return invoicesResult;
 	}
 
 	// Method to Check if a User exists
@@ -104,14 +114,18 @@ public class DB_Invoice {
 		boolean ret = false;
 
 		// create a client and get the database and invoicesCollection
+		mongoProvider = new MongoProvider("localhost", 27017);
+		mongoProvider.setDatabaseName("supermarket");
+		mongoProvider.connect();
+		// create a client and get the database and invoicesCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection invoices = (DBCollection) db.getCollection("invoices");
+		MongoDatabase db = mongoClient.getDatabase("supermarket");
+		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		// create a query and check if there are more than 0 elements in the db
 		BasicDBObject checkInvoice = new BasicDBObject();
 		checkInvoice.put("id", id);
-		if (invoices.getCount(checkInvoice) > 0)
+		if (invoices.count(checkInvoice) > 0)
 			ret = true;
 		return ret;
 	}

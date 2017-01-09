@@ -1,5 +1,6 @@
 package queueConnection;
 
+import javax.ejb.Stateless;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
@@ -13,6 +14,7 @@ import javax.naming.InitialContext;
  * @author Marius Koch
  *
  */
+@Stateless
 public class InvoiceSender {
 
 	public void sendInvoice(String invoice) {
@@ -21,7 +23,7 @@ public class InvoiceSender {
 		try {
 			// 1) Create and start connection
 			InitialContext ctx = new InitialContext();
-			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("myQueueConnectionFactory");
+			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/myConnectionFactory");
 			QueueConnection con = f.createQueueConnection();
 			con.start();
 
@@ -29,7 +31,7 @@ public class InvoiceSender {
 			QueueSession ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
 			// 3) get the Queue object
-			Queue t = (Queue) ctx.lookup("myQueue");
+			Queue t = (Queue) ctx.lookup("jms/invoiceQueue/invoices");
 
 			// 4)create QueueSender object
 			QueueSender sender = ses.createSender(t);

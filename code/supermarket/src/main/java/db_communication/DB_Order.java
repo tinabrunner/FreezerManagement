@@ -9,8 +9,8 @@ import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
@@ -24,6 +24,10 @@ public class DB_Order {
 	private MongoProvider mongoProvider;
 
 	public void insertOrderToDB(Order order) {
+		// create a client and get the database and invoicesCollection
+		mongoProvider = new MongoProvider("localhost", 27017);
+		mongoProvider.setDatabaseName("supermarket");
+		mongoProvider.connect();
 		// create a client and get the database and invoicesCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("supermarket");
@@ -42,23 +46,30 @@ public class DB_Order {
 		boolean ret = false;
 
 		// create a client and get the database and invoicesCollection
+		mongoProvider = new MongoProvider("localhost", 27017);
+		mongoProvider.setDatabaseName("supermarket");
+		mongoProvider.connect();
+		// create a client and get the database and invoicesCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("supermarket");
-		DBCollection orders = (DBCollection) db.getCollection("orders");
+		MongoCollection<Document> orders = db.getCollection("orders");
 
 		// create a query and check if there are more than 0 elements in the db
 		BasicDBObject checkOrder = new BasicDBObject();
 		checkOrder.put("id", id);
-		if (orders.getCount(checkOrder) > 0)
+		if (orders.count(checkOrder) > 0)
 			ret = true;
 		return ret;
 	}
 
 	public Order getOrder(String id) {
+		mongoProvider = new MongoProvider("localhost", 27017);
+		mongoProvider.setDatabaseName("supermarket");
+		mongoProvider.connect();
 		// create a client and get the database and invoicesCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("supermarkt");
-		DBCollection orders = (DBCollection) db.getCollection("orders");
+		MongoDatabase db = mongoClient.getDatabase("supermarket");
+		MongoCollection<Document> orders = db.getCollection("orders");
 
 		// Create Invoice-Element for return-statement
 		Order order = null;
@@ -66,13 +77,13 @@ public class DB_Order {
 		// create a query to search for the Invoice with the passed 'id'
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("id", id);
-		DBCursor cursor = orders.find(whereQuery);
 
+		FindIterable<Document> cursor = orders.find(whereQuery);
 		// get the attributes for invoice
-		if (cursor.count() != 1) {
+		if (((DBCollection) cursor).count() != 1) {
 			System.out.print("Something went wrong! More than one invoice was found for the given id.");
 		} else {
-			BasicDBObject doc = (BasicDBObject) cursor.curr();
+			Document doc = (Document) orders.find(whereQuery);
 			Date receiveDate = doc.getDate("receiveDate");
 			double totalPrice = doc.getDouble("totalPrice");
 			String customerId = doc.getString("customerId");

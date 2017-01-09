@@ -31,7 +31,7 @@ public class OrderReceiver implements MessageListener {
 		try {
 			// 1) Create and start connection
 			InitialContext ctx = new InitialContext();
-			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("myQueueConnectionFactory");
+			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/myConnectionFactory");
 			QueueConnection con = f.createQueueConnection();
 			con.start();
 
@@ -39,7 +39,7 @@ public class OrderReceiver implements MessageListener {
 			QueueSession ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
 			// 3) get the Queue object
-			Queue t = (Queue) ctx.lookup("myQueue");
+			Queue t = (Queue) ctx.lookup("jms/invoiceQueue/invoices");
 
 			// 4)create QueueReceiver
 			QueueReceiver receiver = ses.createReceiver(t);

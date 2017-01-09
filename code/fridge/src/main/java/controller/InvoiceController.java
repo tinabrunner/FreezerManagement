@@ -15,7 +15,7 @@ import model.Invoice;
 @Path("/invoices")
 public class InvoiceController {
 
-	DB_Invoices db_invoices = new DB_Invoices();
+	private DB_Invoices db_invoices;
 
 	// private static List<Invoice> invoices;
 	private static String filePath = new String("src/invoices/");

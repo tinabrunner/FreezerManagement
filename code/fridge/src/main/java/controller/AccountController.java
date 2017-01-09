@@ -21,7 +21,7 @@ import model.FridgeUser;
 public class AccountController {
 
 	@EJB
-	private DB_FridgeUser db_fridgeUser = new DB_FridgeUser();
+	private DB_FridgeUser db_fridgeUser;
 
 	// Method to create an account and write the user to DB
 	@POST

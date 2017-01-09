@@ -3,13 +3,13 @@ package repository;
 import java.util.HashSet;
 import java.util.Set;
 
+import domain.DatabaseProviderImpl;
 import org.bson.Document;
 
 import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
 
-import domain.MongoProvider2;
 import model.ShoppingListItem;
 import util.ShoppingListHelper;
 
@@ -21,7 +21,7 @@ public class ShoppingListRepositoryMongoImpl implements ShoppingListRepository {
 	/**
 	 * Internal usage of database provider
 	 */
-	private final MongoProvider2 mongoProvider;
+	private final DatabaseProviderImpl mongoProvider;
 
 	/**
 	 * Naming for "table" equivalent holding the data
@@ -33,7 +33,7 @@ public class ShoppingListRepositoryMongoImpl implements ShoppingListRepository {
 	 * 
 	 * @param provider
 	 */
-	public ShoppingListRepositoryMongoImpl(MongoProvider2 provider) {
+	public ShoppingListRepositoryMongoImpl(DatabaseProviderImpl provider) {
 		this.mongoProvider = provider;
 	}
 

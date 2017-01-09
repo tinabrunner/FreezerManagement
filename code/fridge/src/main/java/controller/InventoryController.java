@@ -27,7 +27,7 @@ public class InventoryController {
 	// private SessionStore sessionStore;
 
 	@EJB
-	private DB_FridgeInventory dbFridgeInventory = new DB_FridgeInventory();
+	private DB_FridgeInventory dbFridgeInventory;
 
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)

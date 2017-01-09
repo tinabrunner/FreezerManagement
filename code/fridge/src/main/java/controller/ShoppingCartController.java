@@ -49,7 +49,7 @@ public class ShoppingCartController {
 		Set<ShoppingListItem> shoppingListProducts = db_shoppingList.getAllProductsFromShoppingList(); // miau
 		
 		/* to fill: warenkorb */
-		Set<ShoppingCartItem> shoppingCartItems = this.fillShoppingCart( shoppingListProducts, inventoryProducts );
+		Set<ShoppingCartItem> shoppingCartItems = this.fillShoppingCart( shoppingListProducts, inventoryProducts ); // new HashSet<>();
 		
 		return shoppingCartItems;
 	}

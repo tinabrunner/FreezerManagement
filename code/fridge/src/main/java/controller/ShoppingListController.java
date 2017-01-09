@@ -52,7 +52,7 @@ public class ShoppingListController {
 	}
 
 	@DELETE
-	@Path("/{product}")
+	@Path("{product}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Boolean deleteProductFromShoppingList(@PathParam("product") String productId) {
 		ShoppingListItem itemToDelete = new ShoppingListItem();

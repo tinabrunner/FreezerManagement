@@ -35,8 +35,7 @@ import model.InventoryProduct;
 @Stateless
 public class DB_FridgeInventory {
 
-	@EJB
-	private MongoProvider mongoProvider = new MongoProvider();
+	private MongoProvider mongoProvider;
 
 	private static final String _fridge = "fridge";
 	private static final String _inventoryProducts = "inventoryProducts";
@@ -57,6 +56,7 @@ public class DB_FridgeInventory {
 
 		MongoCollection<Document> products = db.getCollection(_inventoryProducts);
 		// DBCollection users = (DBCollection) db.getCollection("users");
+		
 		return products;
 	}
 

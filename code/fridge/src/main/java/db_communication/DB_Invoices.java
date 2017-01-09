@@ -17,7 +17,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import domain.MongoProvider2;
+import domain.MongoProvider;
 import model.Invoice;
 
 /* 
@@ -30,16 +30,14 @@ import model.Invoice;
 public class DB_Invoices {
 
 	@EJB
-	private MongoProvider2 mongoProvider;
+	private MongoProvider mongoProvider;
 
 	// Method to Insert an Invoice
 	public void insertInvoiceToDB(Invoice invoice) {
-		mongoProvider = new MongoProvider2("localhost", 27017);
-		mongoProvider.setDatabaseName("fridge");
-		mongoProvider.connect();
-		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getClient();
+		// create a client and get the database
+		MongoClient mongoClient = mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
+		// and invoicesCollection
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		if (!invoiceExists(invoice.getId())) {
@@ -54,7 +52,7 @@ public class DB_Invoices {
 	// Method to Get one Invoice
 	public Invoice getInvoice(String id) {
 		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getClient();
+		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
 		DBCollection invoices = (DBCollection) db.getCollection("invoices");
 
@@ -83,12 +81,9 @@ public class DB_Invoices {
 
 	// Method to Get all Invoices
 	public List<Invoice> getAllInvoices() {
-
-		mongoProvider = new MongoProvider2("localhost", 27017);
-		mongoProvider.setDatabaseName("fridge");
-		mongoProvider.connect();
+		
 		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getClient();
+		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
@@ -113,7 +108,7 @@ public class DB_Invoices {
 		boolean ret = false;
 
 		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getClient();
+		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
 		DBCollection invoices = (DBCollection) db.getCollection("invoices");
 

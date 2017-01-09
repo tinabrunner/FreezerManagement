@@ -3,6 +3,8 @@ package scheduleTasks;
 import java.util.List;
 
 import javax.ejb.Schedule;
+import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 
 import model.InventoryProduct;
 
@@ -10,13 +12,14 @@ import model.InventoryProduct;
  * @author Marius Koch
  *
  */
-
+@Singleton
+@Stateless
 public class ExpirySchedule {
 
 	// DB_FridgeInventory db_fridgeInventory;
 
 	// dayOfWeek="*";
-	@Schedule(minute = "1", hour = "*")
+	@Schedule(minute = "*", hour = "*")
 	private void run() {
 		System.out.println("Tina und Phil sind die coolsten Boys auf der ganzen Welt");
 

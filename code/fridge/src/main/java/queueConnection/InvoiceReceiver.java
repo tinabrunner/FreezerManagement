@@ -1,35 +1,28 @@
 package queueConnection;
 
 import javax.ejb.Stateless;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSession;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.InitialContext;
-
-import com.google.gson.Gson;
-
-import controller.InvoiceController;
-import model.Invoice;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 
 @Stateless
-public class InvoiceReceiver implements MessageListener {
+@Path("/receiver")
+public class InvoiceReceiver {
 
-	public InvoiceReceiver() throws JMSException {
-		setupConnection();
-	}
-
-	public void setupConnection() {
+	@GET
+	@Path("/start")
+	public void run() {
+		System.out.println("started");
 		try {
 			// 1) Create and start connection
 			InitialContext ctx = new InitialContext();
-			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/myConnectionFactory");
+			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/fridgeConnectionFactory");
 			QueueConnection con = f.createQueueConnection();
 			con.start();
 
@@ -42,31 +35,33 @@ public class InvoiceReceiver implements MessageListener {
 			// 4)create QueueReceiver
 			QueueReceiver receiver = ses.createReceiver(t);
 
+			InvoiceListener listener = new InvoiceListener();
+
 			// 5) register the listener object with receiver
-			receiver.setMessageListener(this);
+			receiver.setMessageListener(listener);
 
 			while (true) {
 				Thread.sleep(1000);
+				System.out.println("sleep");
 			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 
-	public void onMessage(Message m) {
-		try {
-			TextMessage msg = (TextMessage) m;
-
-			Gson gson = new Gson();
-
-			// 2. JSON to Java object, read it from a Json String.
-			String jsonInString = msg.getText();
-			Invoice invoice = gson.fromJson(jsonInString, Invoice.class);
-			InvoiceController.addInvoice(invoice);
-
-		} catch (JMSException e) {
-			System.out.println(e);
-		}
-	}
-
+	// public void onMessage(Message m) {
+	// try {
+	// TextMessage msg = (TextMessage) m;
+	// System.out.println("Fridge:" + msg);
+	//
+	// Gson gson = new Gson();
+	//
+	// // 2. JSON to Java object, read it from a Json String.
+	// String jsonInString = msg.getText();
+	// Invoice invoice = gson.fromJson(jsonInString, Invoice.class);
+	// InvoiceController.addInvoice(invoice);
+	//
+	// } catch (JMSException e) {
+	// System.out.println(e);
+	// }
 }

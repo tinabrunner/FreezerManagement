@@ -31,7 +31,7 @@ public class OrderReceiver implements MessageListener {
 		try {
 			// 1) Create and start connection
 			InitialContext ctx = new InitialContext();
-			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/myConnectionFactory");
+			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/fridgeConnectionFactory");
 			QueueConnection con = f.createQueueConnection();
 			con.start();
 

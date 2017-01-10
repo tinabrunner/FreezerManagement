@@ -3,8 +3,10 @@ package db_communication;
 import java.util.Date;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 
+import domain.DatabaseProviderImpl;
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
@@ -19,18 +21,21 @@ import Model.Product;
 import domain.MongoProvider;
 
 public class DB_Order {
-
+	
 	@EJB
-	private MongoProvider mongoProvider;
+	MongoProvider mongoProvider;
+	
+	DatabaseProviderImpl db;
+	
+	@PostConstruct
+	public void init() {
+		db = new DatabaseProviderImpl( this.mongoProvider );
+		db.setDatabaseName("supermarket");
+		db.connect();
+	}
 
 	public void insertOrderToDB(Order order) {
-		// create a client and get the database and invoicesCollection
-		mongoProvider = new MongoProvider("localhost", 27017);
-		mongoProvider.setDatabaseName("supermarket");
-		mongoProvider.connect();
-		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("supermarket");
+	
 		MongoCollection<Document> orders = db.getCollection("orders");
 
 		if (!orderExist(order.getId())) {
@@ -45,13 +50,6 @@ public class DB_Order {
 	public boolean orderExist(String id) {
 		boolean ret = false;
 
-		// create a client and get the database and invoicesCollection
-		mongoProvider = new MongoProvider("localhost", 27017);
-		mongoProvider.setDatabaseName("supermarket");
-		mongoProvider.connect();
-		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("supermarket");
 		MongoCollection<Document> orders = db.getCollection("orders");
 
 		// create a query and check if there are more than 0 elements in the db
@@ -63,12 +61,7 @@ public class DB_Order {
 	}
 
 	public Order getOrder(String id) {
-		mongoProvider = new MongoProvider("localhost", 27017);
-		mongoProvider.setDatabaseName("supermarket");
-		mongoProvider.connect();
-		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("supermarket");
+	
 		MongoCollection<Document> orders = db.getCollection("orders");
 
 		// Create Invoice-Element for return-statement

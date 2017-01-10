@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 
+import domain.DatabaseProviderImpl;
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
@@ -21,20 +23,23 @@ import Model.InvoiceItem;
 import domain.MongoProvider;
 
 public class DB_Invoice {
-
+	
 	@EJB
-	private MongoProvider mongoProvider;
+	MongoProvider mongoProvider;
+	
+	DatabaseProviderImpl db;
+	
+	@PostConstruct
+	public void init() {
+		db = new DatabaseProviderImpl( this.mongoProvider );
+		db.setDatabaseName("supermarket");
+		db.connect();
+	}
 
 	// Method to Insert an Invoice
 
 	public void insertInvoiceToDB(Invoice invoice) {
-		// create a client and get the database and invoicesCollection
-		mongoProvider = new MongoProvider("localhost", 27017);
-		mongoProvider.setDatabaseName("supermarket");
-		mongoProvider.connect();
-		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("supermarket");
+		
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		if (!invoiceExists(invoice.getId())) {
@@ -49,13 +54,7 @@ public class DB_Invoice {
 
 	// Method to Get one Invoice
 	public Invoice getInvoice(String id) {
-		// create a client and get the database and invoicesCollection
-		mongoProvider = new MongoProvider("localhost", 27017);
-		mongoProvider.setDatabaseName("supermarket");
-		mongoProvider.connect();
-		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("supermarket");
+
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		// Create Invoice-Element for return-statement
@@ -85,12 +84,7 @@ public class DB_Invoice {
 
 	// Method to Get all Invoices
 	public List<Invoice> getAllInvoices() {
-		mongoProvider = new MongoProvider("localhost", 27017);
-		mongoProvider.setDatabaseName("supermarket");
-		mongoProvider.connect();
-		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("supermarket");
+		
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		// Create a list for all invoices and get a cursor to go through the
@@ -112,14 +106,7 @@ public class DB_Invoice {
 	// Method to Check if a User exists
 	public boolean invoiceExists(String id) {
 		boolean ret = false;
-
-		// create a client and get the database and invoicesCollection
-		mongoProvider = new MongoProvider("localhost", 27017);
-		mongoProvider.setDatabaseName("supermarket");
-		mongoProvider.connect();
-		// create a client and get the database and invoicesCollection
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
-		MongoDatabase db = mongoClient.getDatabase("supermarket");
+		
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		// create a query and check if there are more than 0 elements in the db

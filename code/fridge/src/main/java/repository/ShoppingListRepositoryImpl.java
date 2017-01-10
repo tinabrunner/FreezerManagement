@@ -1,9 +1,8 @@
 package repository;
 
-import model.ShoppingListItem;
-
-import java.util.Map;
 import java.util.Set;
+
+import model.ShoppingListItem;
 
 /**
  * Created by JD on 10.12.2016.
@@ -11,38 +10,43 @@ import java.util.Set;
  */
 public class ShoppingListRepositoryImpl implements ShoppingListRepository {
 
-    private ShoppingListRepositoryImpl() {
-    }
+	private ShoppingListRepositoryImpl() {
+	}
 
-    @Override
-    public boolean existsProduct(ShoppingListItem product) {
-        return false;
-    }
+	@Override
+	public boolean existsProduct(ShoppingListItem product) {
+		return false;
+	}
 
-    @Override
-    public boolean addProduct(ShoppingListItem product) {
+	@Override
+	public boolean addProduct(ShoppingListItem product) {
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public boolean deleteProduct(ShoppingListItem product) {
-        return false;
-    }
+	@Override
+	public boolean deleteProduct(ShoppingListItem product) {
+		return false;
+	}
 
-    @Override
-    public Set<ShoppingListItem> getAllProducts() {
-        return null;
-    }
+	@Override
+	public Set<ShoppingListItem> getAllProducts() {
+		return null;
+	}
 
-    @Override
-    public ShoppingListItem getProduct(ShoppingListItem product) {
-        return null;
-    }
+	@Override
+	public ShoppingListItem getProduct(ShoppingListItem product) {
+		return null;
+	}
 
-    @Override
-    public long getProductCount() {
-        return 0;
-    }
+	@Override
+	public Boolean updateProduct(ShoppingListItem product) {
+		return null;
+	}
+
+	@Override
+	public long getProductCount() {
+		return 0;
+	}
 
 }

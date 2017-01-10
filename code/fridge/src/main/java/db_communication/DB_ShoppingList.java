@@ -14,22 +14,22 @@ import service.ShoppingListServiceImpl;
 
 @Stateless
 public class DB_ShoppingList {
-	
+
 	private static final String MONGO_DB = "fridge";
-	
+
 	@EJB
 	private MongoProvider mongoProvider;
-	
+
 	private DatabaseProviderImpl mongoConnection;
 
 	private DatabaseProviderImpl getMongoConnection() {
-		DatabaseProviderImpl mongoDB = new DatabaseProviderImpl( this.mongoProvider );
-		mongoDB.setDatabaseName( MONGO_DB );
+		DatabaseProviderImpl mongoDB = new DatabaseProviderImpl(this.mongoProvider);
+		mongoDB.setDatabaseName(MONGO_DB);
 		mongoDB.connect();
 
 		return mongoDB;
 	}
-	
+
 	@PostConstruct
 	public void init() {
 		this.mongoConnection = getMongoConnection();
@@ -37,7 +37,7 @@ public class DB_ShoppingList {
 
 	// GET
 	public Set<ShoppingListItem> getAllProductsFromShoppingList() {
-		
+
 		ShoppingListRepositoryMongoImpl shoppingListRepositoryMongo = new ShoppingListRepositoryMongoImpl(
 				this.mongoConnection);
 		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);

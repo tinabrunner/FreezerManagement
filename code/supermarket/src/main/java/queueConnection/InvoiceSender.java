@@ -1,7 +1,6 @@
 package queueConnection;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.Date;
 
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
@@ -14,6 +13,10 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 
+import com.google.gson.Gson;
+
+import Model.Invoice;
+
 /**
  * @author Marius Koch
  *
@@ -23,39 +26,41 @@ public class InvoiceSender {
 
 	@Schedule(minute = "*", hour = "*")
 	public void sendInvoice() {
-		System.out.println("Schedule Supermarket");
-		String message = "Supermarket: Juhu eine Nachricht";
+		System.out.println("Supermarket: Send Invoice started");
+		Gson gson = new Gson();
+		Date date = new Date();
+		Invoice invoice = new Invoice("FromServer", "Masdf", date, date, 19.99, "hasdfjhaksfh");
+		System.out.println(invoice);
+		String jsonInString = gson.toJson(invoice);
+		String message = jsonInString;
+		System.out.println("Nachricht: " + message);
 
 		try {
 			// 1) Create and start connection
 			InitialContext ctx = new InitialContext();
 			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/fridgeConnectionFactory");
+
 			QueueConnection con = f.createQueueConnection();
 			con.start();
 			// 2) create queue session
 			QueueSession ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 			// 3) get the Queue object
-			Queue t = (Queue) ctx.lookup("jms/invoiceQueue/invoices");
+			Queue t = (Queue) ctx.lookup("jms/invoiceQueue");
 			// 4)create QueueSender object
 			QueueSender sender = ses.createSender(t);
 			// 5) create TextMessage object
 			TextMessage msg = ses.createTextMessage();
 
-			// 6) write message
-			BufferedReader b = new BufferedReader(new InputStreamReader(System.in));
-			while (true) {
-				System.out.println("Enter Msg, end to terminate:");
-				String s = b.readLine();
-				if (s.equals("end"))
-					break;
-				msg.setText(s);
-				// 7) send message
-				sender.send(msg);
-				System.out.println("Message successfully sent.");
-			}
+			msg.setText(message);
+			// 7) send message
+			sender.send(msg);
+			System.out.println("Message successfully sent.");
+
 			// 8) connection close
 			con.close();
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			System.out.println(e);
 		}
 	}

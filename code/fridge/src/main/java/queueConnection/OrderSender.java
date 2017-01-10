@@ -18,7 +18,7 @@ public class OrderSender {
 		try {
 			// 1) Create and start connection
 			InitialContext ctx = new InitialContext();
-			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/myQueueConnectionFactory");
+			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/orderConnectionFactory");
 			QueueConnection con = f.createQueueConnection();
 			con.start();
 
@@ -26,7 +26,7 @@ public class OrderSender {
 			QueueSession ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 
 			// 3) get the Queue object
-			Queue t = (Queue) ctx.lookup("jms/invoiceQueue/invoices");
+			Queue t = (Queue) ctx.lookup("jms/orderQueue");
 
 			// 4)create QueueSender object
 			QueueSender sender = ses.createSender(t);

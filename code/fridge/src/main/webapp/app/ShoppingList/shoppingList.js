@@ -46,10 +46,6 @@
 		vm.deleteProduct = function(product) {
 			deleteProduct(product);
 		}
-
-		vm.createOrder = function() {
-			alert(123);			
-		}
 		
 		vm.addProduct = function() {
 			alert("Redirect this button to inventory/productlist");

@@ -20,6 +20,7 @@
 		vm.products = {};
 		vm.empty = empty;
 		vm.deleteProduct = deleteProduct;
+		vm.submit = submitOrder;
 		vm.init = init;
 
 		init();
@@ -38,6 +39,10 @@
 
 		function deleteProduct(prod) {
 			alert('delete '+prod.name);
+		}
+
+		function submitOrder() {
+			alert("submit....");
 		}
 
 		/* --- --- */

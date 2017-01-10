@@ -70,6 +70,7 @@ public class ShoppingCartController {
 		
 		for( ShoppingListItem shoppingListItem : shoppingListProducts ) {
 			int list_min = shoppingListItem.getMindestBestand();
+			int list_max = shoppingListItem.getHoechstBestand();
 			if (!shoppingListItem.isRegelmaessig()) {
 				// manuelle bestellung: auf cart
 				shoppingCartItems.add(new ShoppingCartItem(
@@ -78,13 +79,12 @@ public class ShoppingCartController {
 						shoppingListItem.getName(),
 						shoppingListItem.getVerpackungsGroesse(),
 						// amount
-						list_min));
+						list_max));
 			} else {
 				// regelmäßige bestellung
-				int list_max = shoppingListItem.getHoechstBestand();
 				
 				// corresponding products of category
-				/* MACHT EJB INJECTION KAPUTT WTF
+				/* MACHT EJB INJECTION KAPUTT WTF todo
 				int inv_amount = inventoryProducts.values().stream()
 						.filter( i -> i.getProdCategoryId().equals(shoppingListItem.getId()))
 						.collect(Collectors.toSet())
@@ -101,7 +101,7 @@ public class ShoppingCartController {
 				if (inv_amount < list_min) {
 					// mindestbestand unterschritten.
 					
-					int to_buy_amount = list_min - inv_amount;
+					int to_buy_amount = list_max - inv_amount;
 					
 					int verpackungsGroesse = shoppingListItem.getVerpackungsGroesse();
 					if( verpackungsGroesse > 0 ) {

@@ -1,19 +1,18 @@
-<div ng-controller="ShoppingCartCtrl as shoppingCart">
-	<table class="table">
+<h2>Shopping Cart</h2>
+<div ng-controller="ShoppingCartCtrl as shoppingCart" class="content">
+	<table class="table table-striped table-bordered" cellspacing="0">
 		<tr>
+			<th>Amount</th>
 			<th>Product</th>
-			<th>Minimum Stock</th>
-			<th>Maximum Stock</th>
-			<th>regularly</th>
+			<th>Price per piece</th>
+			<th>Sum price</th>
 			<th> </th>
 		</tr>
-		<tr ng-repeat="prod in shoppingCart.products">
+		<tr ng-repeat="prod in shoppingCart.products" class="hoverable">
+			<td>{{ prod.amount }}</td>
 			<td>{{ prod.name }}</td>
-			<td>{{ prod.min}}</td>
-			<td>{{prod.max}}</td>
-			<td>
-				<input type="checkbox" ng-checked="prod.regularly">
-			</td>
+			<td>{{ prod.preis }}</td>
+			<td>{{ prod.preis * prod.amount }}</td>
 			<td>
 				<button ng-click="shoppingCart.deleteProduct(prod)">Delete</button>
 			</td>
@@ -23,4 +22,6 @@
 	<div ng-show="shoppingCart.empty(shoppingCart.products)">
 		Create an order in your shopping list!
 	</div>
+
+	<button ng-click="shoppingCart.submit()">Submit order</button>
 </div>

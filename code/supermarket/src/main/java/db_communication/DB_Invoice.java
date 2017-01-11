@@ -12,7 +12,6 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.Block;
 import com.mongodb.DBCollection;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -94,7 +93,8 @@ public class DB_Invoice {
 		// DBCollection
 
 		List<Invoice> invoicesResult = new ArrayList<>();
-		invoices.find().forEach((Block<Document>) document -> {
+
+		for (Document document : invoices.find()) {
 			String id = document.getString("id");
 			String name = document.getString("name");
 			Date billingDate = document.getDate("billingDate");
@@ -102,7 +102,7 @@ public class DB_Invoice {
 			double totalPrice = document.getDouble("totalPrice");
 			String invoiceURL = document.getString("invoiceURL");
 			invoicesResult.add(new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL));
-		});
+		}
 		return invoicesResult;
 	}
 
@@ -128,7 +128,8 @@ public class DB_Invoice {
 		// DBCollection
 
 		List<Invoice> invoicesResult = new ArrayList<>();
-		invoices.find().forEach((Block<Document>) document -> {
+
+		for (Document document : invoices.find()) {
 			if (!document.getBoolean("sended")) {
 				String id = document.getString("id");
 				String name = document.getString("name");
@@ -138,7 +139,7 @@ public class DB_Invoice {
 				String invoiceURL = document.getString("invoiceURL");
 				invoicesResult.add(new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL));
 			}
-		});
+		}
 		return invoicesResult;
 	}
 

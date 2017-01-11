@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -18,10 +17,10 @@ import db_communication.DB_Order;
 @Stateless(name = "orderController")
 public class OrderController {
 
-	@Resource(name = "invoiceController")
+	@EJB
 	private InvoiceController invoiceCtrl;
 
-	@Resource(name = "dbInvoice")
+	@EJB
 	private DB_Invoice dbInvoice;
 
 	@EJB

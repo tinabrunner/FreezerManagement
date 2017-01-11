@@ -71,17 +71,20 @@ public class ShoppingCartController {
 		for( ShoppingListItem shoppingListItem : shoppingListProducts ) {
 			int list_min = shoppingListItem.getMindestBestand();
 			int list_max = shoppingListItem.getHoechstBestand();
+			int verpackungsGroesse = shoppingListItem.getVerpackungsGroesse();
+			
 			if (!shoppingListItem.isRegelmaessig()) {
-				// manuelle bestellung: auf cart
+				// manuelle bestellung: sofort auf cart
+				int to_buy_amount = list_max;
+				to_buy_amount = amountByVerpackungsgroesse( to_buy_amount, verpackungsGroesse );
 				shoppingCartItems.add(new ShoppingCartItem(
 						shoppingListItem.getId(),
 						shoppingListItem.getPreis(),
 						shoppingListItem.getName(),
-						shoppingListItem.getVerpackungsGroesse(),
-						// amount
-						list_max));
+						verpackungsGroesse,
+						to_buy_amount ));
 			} else {
-				// regelmäßige bestellung
+				// regelmäßige bestellung: auf cart, wenn min unterschritten
 				
 				// corresponding products of category
 				/* MACHT EJB INJECTION KAPUTT WTF todo
@@ -102,26 +105,35 @@ public class ShoppingCartController {
 					// mindestbestand unterschritten.
 					
 					int to_buy_amount = list_max - inv_amount;
-					
-					int verpackungsGroesse = shoppingListItem.getVerpackungsGroesse();
-					if( verpackungsGroesse > 0 ) {
-						// kaufmenge = maximal mögliches vielfaches der verpackungsgröße:
-						int packs = to_buy_amount / verpackungsGroesse; // abrunden
-						to_buy_amount = packs * verpackungsGroesse;
-					}
+					to_buy_amount = amountByVerpackungsgroesse( to_buy_amount, verpackungsGroesse );
 					
 					if (to_buy_amount > 0) {
 						shoppingCartItems.add(new ShoppingCartItem(
 								shoppingListItem.getId(),
 								shoppingListItem.getPreis(),
 								shoppingListItem.getName(),
-								shoppingListItem.getVerpackungsGroesse(),
-								// amount
+								verpackungsGroesse,
 								to_buy_amount));
 					}
 				}
 			}
 		}
 		return shoppingCartItems;
+	}
+	
+	/**
+	 * Verringert Bestellmenge auf ein Vielfaches der Verpackungsgröße.
+	 * @param amount
+	 * @param packSize
+	 * @return Berechnete Menge oder amount falls packSize <= 1
+	 */
+	private int amountByVerpackungsgroesse( int amount, int packSize) {
+		if( packSize > 1 ) {
+			// kaufmenge = maximal mögliches vielfaches der verpackungsgröße:
+			int packs = amount / packSize; // abrunden
+			return packs * packSize;
+		} else {
+			return amount;
+		}
 	}
 }

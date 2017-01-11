@@ -1,29 +1,34 @@
 <h2>Shopping Cart</h2>
 <div ng-controller="ShoppingCartCtrl as shoppingCart" class="content">
-	<table class="table table-striped table-bordered" cellspacing="0">
-		<tr>
-			<th>Amount</th>
-			<th>Product</th>
-			<th>Price per piece</th>
-			<th>Sum preis</th>
-			<th> </th>
-		</tr>
-		<tr ng-repeat="prod in shoppingCart.products" class="hoverable">
-			<td>
-				<input ng-model="prod.amount" type="number" step="1" min="1" max="1000"/>
-			</td>
-			<td>{{ prod.name }}</td>
-			<td>{{ prod.preis }}</td>
-			<td>{{ prod.preis * prod.amount }}</td>
-			<td>
-				<button ng-click="shoppingCart.deleteProduct(prod)">Delete</button>
-			</td>
-		</tr>
-	</table>
+	<div ng-show="! shoppingCart.empty(shoppingCart.products)">
+		<table class="table table-striped table-bordered" cellspacing="0">
+			<tr>
+				<th>Amount</th>
+				<th>Product</th>
+				<th>Price per pack</th>
+				<th>Sum preis</th>
+				<th> </th>
+			</tr>
+			<tr ng-repeat="prod in shoppingCart.products" class="hoverable">
+				<td>
+					<input ng-model="prod.amount" type="number" step="{{prod.verpackungsGroesse}}" min="0" max="1000"/>
+				</td>
+				<td>{{ prod.name }}</td>
+				<td>{{ prod.preis }}</td>
+				<td>{{ prod.preis * prod.amount / prod.verpackungsGroesse }}</td>
+				<td>
+					<button ng-click="shoppingCart.deleteProduct(prod)">Delete</button>
+				</td>
+			</tr>
+		</table>
 
-	<div ng-show="shoppingCart.empty(shoppingCart.products)">
-		Create an order in your shopping list!
+		<div class="centerd">
+			<button ng-click="shoppingCart.submit()">Submit order</button>
+		</div>
+
 	</div>
 
-	<button ng-click="shoppingCart.submit()">Submit order</button>
+	<h3 ng-show="shoppingCart.empty(shoppingCart.products)">
+		Create an order in your shopping list!
+	</h3>
 </div>

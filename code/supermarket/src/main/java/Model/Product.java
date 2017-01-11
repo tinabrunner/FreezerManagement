@@ -8,26 +8,26 @@ public class Product {
 
 	private String id;
 	private String name;
-	private int verpackungsgroesse;
+	private int verpackungsGroesse;
 	private double preis;
 	private int calories;
 	
 	public Product() { /* keep */ }
 
-	public Product(String id, String name, int verpackungsgroesse, double preis, int calories) {
+	public Product(String id, String name, int verpackungsGroesse, double preis, int calories) {
 		this.id = id;
 		this.name = name;
-		this.verpackungsgroesse = verpackungsgroesse;
+		this.verpackungsGroesse = verpackungsGroesse;
 		this.preis = preis;
 		this.calories = calories;
 	}
 
-	public int getVerpackungsgroesse() {
-		return verpackungsgroesse;
+	public int getVerpackungsGroesse() {
+		return verpackungsGroesse;
 	}
 
-	public void setVerpackungsgroesse(int verpackungsgroesse) {
-		this.verpackungsgroesse = verpackungsgroesse;
+	public void setVerpackungsGroesse(int verpackungsGroesse) {
+		this.verpackungsGroesse = verpackungsGroesse;
 	}
 
 	public String getId() {

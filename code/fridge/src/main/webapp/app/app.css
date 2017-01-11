@@ -2,6 +2,10 @@ h2 {
   text-align:center;
   padding:2%;
 }
+h3 {
+  text-align:center;
+  padding: 1%;
+}
 
 .content {
   margin:2em;
@@ -11,6 +15,9 @@ h2 {
 
 .hoverable:hover  {
   background-color: whitesmoke;
+}
+.center {
+  text-align:center;
 }
 
 .dummy {

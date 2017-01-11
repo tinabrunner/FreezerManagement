@@ -1,39 +1,41 @@
 <h2>Settings</h2>
 <div ng-controller="SettingsCtrl as settings" class="content">
-	<div id="automatic_ordering">
-		<label>Automatic ordering
-			<input type="checkbox" ng-model="settings.config.auto"/>
-		</label>
-	</div>
+	<form form-change="settings.change()">
+		<div id="automatic_ordering">
+			<label>Automatic ordering
+				<input type="checkbox" ng-model="settings.config.auto"/>
+			</label>
+		</div>
 
-	<div id="ordering_interval">
-		<label>Day
-			<select ng-model="settings.config.ordering_interval_day">
-				<option value="1">Monday</option>
-				<option value="2">Tuesday</option>
-				<option value="3">Wednesday</option>
-				<option value="4">Thursday</option>
-				<option value="5">Friday</option>
-				<option value="6">Saturday</option>
-				<option value="7">Sunday</option>
-			</select>
-		</label>
-		<label>Every
-			<input type="number" step="1" min="1" max="58" ng-model="settings.config.order_interval_week" /> weeks
-		</label>
-	</div>
+		<div id="ordering_interval">
+			<label>Day
+				<select ng-model="settings.config.ordering_interval_day">
+					<option ng-selected="settings.config.ordering_interval_day === day.id"
+							ng-repeat = "day in settings.days"
+							ng-value="day.id">
+						{{ day.name }}
+					</option>
+				</select>
+			</label>
+			<label>Every
+				<input type="number" step="1" min="1" max="58"
+					   ng-model="settings.config.ordering_interval_week" />
+				weeks
+			</label>
+		</div>
 
-	<div id="delivery">
-		<label>Day
-			<select ng-model="settings.config.delivery_day">
-				<option value="1">Monday</option>
-				<option value="2">Tuesday</option>
-				<option value="3">Wednesday</option>
-				<option value="4">Thursday</option>
-				<option value="5">Friday</option>
-				<option value="6">Saturday</option>
-				<option value="7">Sunday</option>
-			</select>
-		</label>
-	</div>
+		<div id="delivery">
+			<label>Day
+				<select ng-model="settings.config.delivery_day">
+					<option ng-selected="settings.config.delivery_day === day.id"
+							ng-repeat = "day in settings.days"
+							ng-value="day.id">
+						{{ day.name }}
+					</option>
+				</select>
+			</label>
+		</div>
+
+		<div class="success" ng-show="settings.success">Settings saved.</div>
+	</form>
 </div>

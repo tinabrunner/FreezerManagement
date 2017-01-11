@@ -19,22 +19,44 @@
 		}])
 		.controller('SettingsCtrl', SettingsCtrl);
 
-	SettingsCtrl.$inject = ['$http', '$scope'];
+	SettingsCtrl.$inject = ['$http', '$timeout'];
 
-	function SettingsCtrl($http, $scope) {
+	function SettingsCtrl($http, $timeout) {
 		var vm = this;
 		vm.config = {};
+		vm.success = false;
 		vm.init = init;
+		vm.change = change;
+		vm.days = [
+			{ 'id': 0, 'name':'Monday'},
+			{ 'id': 1, 'name':'Tuesday'},
+			{ 'id': 2, 'name':'Wednesday'},
+			{ 'id': 3, 'name':'Thursday'},
+			{ 'id': 4, 'name':'Friday'},
+			{ 'id': 5, 'name':'Saturday'},
+			{ 'id': 6, 'name':'Sunday'}
+		];
 
 		init();
 
 		function init() {
-			/** deep watch config & PUT on change */
-			$scope.$watch(function() {
-				return vm.config;
-			}, function() {
+			$http.get(URL_API+"settings").then(function(resp) {
+				vm.config = resp.data;
+			}, function(error) {
+				console.dir(error);
+			});
+		}
 
-			}, true);
+		function change() {
+			$http.post(URL_API+"settings", vm.config).then(function(resp) {
+				/* show "saved" for 1,5 sek */
+				vm.success = true;
+				$timeout(function() {
+					vm.success = false;
+				}, 1500)
+			}, function(error) {
+				console.dir(error);
+			});
 		}
 	}
 

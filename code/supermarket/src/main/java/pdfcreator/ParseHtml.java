@@ -15,7 +15,7 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
  *
  */
 public class ParseHtml {
-	public static final String DEST = "results/xmlworker/invoice.pdf";
+	public static final String DEST = "results/xmlworker/invoice";
 	public static final String HTML = "src/main/webapp/app/invoice/invoice.html";
 
 	public ParseHtml() {

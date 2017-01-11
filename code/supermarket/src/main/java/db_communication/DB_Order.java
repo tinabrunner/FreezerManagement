@@ -5,37 +5,37 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
-import domain.DatabaseProviderImpl;
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 
 import Model.Order;
 import Model.Product;
+import domain.DatabaseProviderImpl;
 import domain.MongoProvider;
 
+@Stateless
 public class DB_Order {
-	
+
 	@EJB
 	MongoProvider mongoProvider;
-	
+
 	DatabaseProviderImpl db;
-	
+
 	@PostConstruct
 	public void init() {
-		db = new DatabaseProviderImpl( this.mongoProvider );
+		db = new DatabaseProviderImpl(this.mongoProvider);
 		db.setDatabaseName("supermarket");
 		db.connect();
 	}
 
 	public void insertOrderToDB(Order order) {
-	
+
 		MongoCollection<Document> orders = db.getCollection("orders");
 
 		if (!orderExist(order.getId())) {
@@ -61,7 +61,7 @@ public class DB_Order {
 	}
 
 	public Order getOrder(String id) {
-	
+
 		MongoCollection<Document> orders = db.getCollection("orders");
 
 		// Create Invoice-Element for return-statement

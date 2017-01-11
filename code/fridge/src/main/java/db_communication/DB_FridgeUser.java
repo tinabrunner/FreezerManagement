@@ -98,8 +98,9 @@ public class DB_FridgeUser {
 		FridgeUser user = null;
 		Bson filter = Filters.eq(_username, username);
 		FindIterable<Document> result = users.find(filter);
-		if (users.count(filter) == 1)
-			user = convertDocumentToUser(result.first());
+		for (Document current : result)
+			user = convertDocumentToUser(current);
+
 		return user;
 	}
 

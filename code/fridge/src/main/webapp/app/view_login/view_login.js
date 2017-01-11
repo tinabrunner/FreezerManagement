@@ -13,20 +13,22 @@
 			controller: 'view_login1Ctrl'
 		});
 	}])
-	.controller('view_login1Ctrl', function($scope) {
+	.controller('view_login1Ctrl', function($scope, $http) {
 		$scope.Login = function() {
 			if (!$scope.username || !$scope.password)
 				alert("Please enter username and password!");
 			else {
-				var username = $scope.username;
-				var password = $scope.password;
+				var objData = {
+						username : $scope.username,
+						password : $scope.password
+		        };
+				$http.post(URL_API+'login', objData).then((function(response){
+				alert("Passt: "+response.data);
 				
-				// kommunikation mit java controller !!
-				// --> wenn Login-Methode TRUE zurück gibt: redirectTo: '/home';
-				// --> wenn FALSE zur erneuten Eingabe auffordern
-				
-				// var loginController = new java.controller.LoginController();
-				
+				}), 
+				function(response) { 
+					alert("Something went wrong: "+response.data);
+				});
 				
 			}
 	    }

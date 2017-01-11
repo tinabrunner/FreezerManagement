@@ -29,11 +29,11 @@ public class FridgeUser implements Serializable {
 	public FridgeUser() {
 	}
 
-	public FridgeUser(String firstName, String lastName, String username, String password, String email, String role) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+	public FridgeUser(String username, String password, String firstName, String lastName, String email, String role) {
 		this.username = username;
 		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.email = email;
 
 		if (role.equals(Roles.ADMIN))

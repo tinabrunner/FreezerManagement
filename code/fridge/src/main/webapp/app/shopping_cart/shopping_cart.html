@@ -9,7 +9,9 @@
 			<th> </th>
 		</tr>
 		<tr ng-repeat="prod in shoppingCart.products" class="hoverable">
-			<td>{{ prod.amount }}</td>
+			<td>
+				<input ng-model="prod.amount" type="number" step="1" min="1" max="1000"/>
+			</td>
 			<td>{{ prod.name }}</td>
 			<td>{{ prod.preis }}</td>
 			<td>{{ prod.preis * prod.amount }}</td>

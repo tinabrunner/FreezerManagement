@@ -20,6 +20,7 @@
 		vm.products = {};
 		vm.empty = empty;
 		vm.deleteProduct = deleteProduct;
+		vm.totalPrice = totalPrice;
 		vm.submit = submitOrder;
 		vm.init = init;
 
@@ -40,6 +41,14 @@
 					vm.products.splice(i, 1);
 				}
 			}
+		}
+
+		function totalPrice() {
+			var price = 0;
+			for(var i=0; i<vm.products.length; i++) {
+				price += vm.products[i].preis * vm.products[i].amount / vm.products[i].verpackungsGroesse;
+			}
+			return price;
 		}
 
 		function submitOrder() {

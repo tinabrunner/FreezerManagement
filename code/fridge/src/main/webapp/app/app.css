@@ -40,3 +40,10 @@ h3 {
   padding-right:20%;
   padding-top:5%;
 }
+
+#shoppingCart .totalPrice {
+  font-weight: bold;
+}
+#shoppingCart .totalPrice td {
+  border: none;
+}

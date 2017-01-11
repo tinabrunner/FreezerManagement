@@ -71,5 +71,9 @@ public class ShoppingListRepositoryStub implements ShoppingListRepository {
     public long getProductCount() {
         return this.getShoppingList().size();
     }
-
+    
+    @Override
+    public Boolean updateProduct() {
+    	return true;
+    }
 }

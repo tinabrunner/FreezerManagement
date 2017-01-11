@@ -44,7 +44,6 @@
 					'Accept': 'application/json'
 				}
 			})
-			
 		}	
 			
 	}

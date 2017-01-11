@@ -8,8 +8,8 @@ public class InvoiceItem extends Product {
 	int amount;
 	double totalPrice;
 
-	public InvoiceItem(String id, String name, double price, int amount) {
-		super(id, name, 0, price);
+	public InvoiceItem(String id, String name, double price, int calories, int amount) {
+		super(id, name, 0, price, calories);
 		this.amount = amount;
 		totalPrice = amount * price;
 	}

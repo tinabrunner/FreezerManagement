@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class InventoryProduct {
 
-	private String prodCategoryId; // todo beziehung productCategory & int
-	private String name; // todo name gehört zu category
+	private String prodCategoryId;
+	private String name;
 	private Date expiryDate;
 
 	public InventoryProduct() {

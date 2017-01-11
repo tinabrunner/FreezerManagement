@@ -11,13 +11,12 @@ import controller.ProductListController;
  */
 @ApplicationPath("/api")
 public class ApplicationConfig extends Application {
+	@Override
 	public Set<Class<?>> getClasses() {
 		Set<Class<?>> classes = new HashSet<Class<?>>();
 
-		// hier klassen auflisten, die GET/POST/...-Anfragen entgegennehmen
-		// können sollen (pfad: /supermarket/api/[@Path..])
-
 		classes.add(ProductListController.class);
+		classes.add(CrossOriginFilter.class);
 
 		return classes;
 	}

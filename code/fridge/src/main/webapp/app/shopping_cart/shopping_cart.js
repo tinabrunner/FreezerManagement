@@ -26,10 +26,6 @@
 		init();
 
 		function init() {
-			var data =  {
-				name: 'a',
-				surname: 'b'
-			};
 			$http.get(URL_API+'shopping_cart').then(function(resp) {
 				vm.products = resp.data;
 			}, function(error) {
@@ -38,11 +34,16 @@
 		}
 
 		function deleteProduct(prod) {
-			alert('delete '+prod.name);
+			//this.products = this.products.filter( p => p.id != prod.id );
+			for(var i=0; i<vm.products.length; i++) {
+				if( vm.products[i] === prod) {
+					vm.products.splice(i, 1);
+				}
+			}
 		}
 
 		function submitOrder() {
-			alert("submit....");
+			console.dir(vm.products); // todo trigger OrderSender
 		}
 
 		/* --- --- */

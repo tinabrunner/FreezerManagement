@@ -12,8 +12,8 @@ public class ExpiryProduct extends Product {
 
 	Date dateOfExpiry;
 
-	public ExpiryProduct(String id, String name, int verpackungsgroesse, double price, Date dateOfExpiry) {
-		super(id, name, verpackungsgroesse, price);
+	public ExpiryProduct(String id, String name, int verpackungsgroesse, double price, int calories, Date dateOfExpiry) {
+		super(id, name, verpackungsgroesse, price, calories);
 		this.dateOfExpiry = dateOfExpiry;
 	}
 

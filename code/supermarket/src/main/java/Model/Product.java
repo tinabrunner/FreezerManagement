@@ -8,23 +8,26 @@ public class Product {
 
 	private String id;
 	private String name;
-	private int verpackungsgroesse;
-	private double price;
+	private int verpackungsGroesse;
+	private double preis;
 	private int calories;
+	
+	public Product() { /* keep */ }
 
-	public Product(String id, String name, int verpackungsgroesse, double price) {
+	public Product(String id, String name, int verpackungsGroesse, double preis, int calories) {
 		this.id = id;
 		this.name = name;
-		this.verpackungsgroesse = verpackungsgroesse;
-		this.price = price;
+		this.verpackungsGroesse = verpackungsGroesse;
+		this.preis = preis;
+		this.calories = calories;
 	}
 
-	public int getVerpackungsgroesse() {
-		return verpackungsgroesse;
+	public int getVerpackungsGroesse() {
+		return verpackungsGroesse;
 	}
 
-	public void setVerpackungsgroesse(int verpackungsgroesse) {
-		this.verpackungsgroesse = verpackungsgroesse;
+	public void setVerpackungsGroesse(int verpackungsGroesse) {
+		this.verpackungsGroesse = verpackungsGroesse;
 	}
 
 	public String getId() {
@@ -43,12 +46,12 @@ public class Product {
 		this.name = name;
 	}
 
-	public double getPrice() {
-		return price;
+	public double getPreis() {
+		return preis;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	public void setPreis(double preis) {
+		this.preis = preis;
 	}
 
 	public int getCalories() {

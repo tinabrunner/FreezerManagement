@@ -10,7 +10,6 @@ import javax.ejb.Stateless;
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.Block;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
@@ -91,7 +90,7 @@ public class DB_Invoices {
 		// DBCollection
 
 		List<Invoice> invoicesResult = new ArrayList<>();
-		invoices.find().forEach((Block<Document>) document -> {
+		for (Document document : invoices.find()) {
 			String id = document.getString("id");
 			String name = document.getString("name");
 			Date billingDate = document.getDate("billingDate");
@@ -99,7 +98,7 @@ public class DB_Invoices {
 			double totalPrice = document.getDouble("totalPrice");
 			String invoiceURL = document.getString("invoiceURL");
 			invoicesResult.add(new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL));
-		});
+		}
 		return invoicesResult;
 	}
 

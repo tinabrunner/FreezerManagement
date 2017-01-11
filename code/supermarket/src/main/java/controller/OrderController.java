@@ -27,10 +27,6 @@ public class OrderController {
 	@EJB
 	private DB_Order dborder;
 
-	public void createOrder() {
-		// TODO
-	}
-
 	public void saveOrderToDB(Order order) {
 		dborder.insertOrderToDB(order);
 	}
@@ -41,6 +37,10 @@ public class OrderController {
 		Invoice invoice = invoiceCtrl.createInvoice(order);
 		invoice.setURL(invoiceCtrl.InvoiceToHTML(invoice));
 		dbInvoice.insertInvoiceToDB(invoice);
+	}
+
+	public String getLastId() {
+		return dborder.getLastId();
 	}
 
 }

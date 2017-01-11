@@ -10,6 +10,7 @@ public class Product {
 	private String name;
 	private int verpackungsgroesse;
 	private double price;
+	private int calories;
 
 	public Product(String id, String name, int verpackungsgroesse, double price) {
 		this.id = id;
@@ -48,6 +49,14 @@ public class Product {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public int getCalories() {
+		return calories;
+	}
+
+	public void setCalories(int calories) {
+		this.calories = calories;
 	}
 
 }

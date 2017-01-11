@@ -3,13 +3,14 @@ package repository;
 import java.util.HashSet;
 import java.util.Set;
 
-import domain.DatabaseProviderImpl;
 import org.bson.Document;
 
 import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 
+import domain.DatabaseProviderImpl;
 import model.ShoppingListItem;
 import util.ShoppingListHelper;
 
@@ -115,6 +116,19 @@ public class ShoppingListRepositoryMongoImpl implements ShoppingListRepository {
 		});
 
 		return freezerProducts;
+	}
+
+	@Override
+	public Boolean updateProduct(ShoppingListItem product) {
+		try {
+			UpdateResult ur = getShoppingListCollection().replaceOne(
+					new Document(ShoppingListHelper.documentShoppingListProductId, product.getId()),
+					ShoppingListHelper.convertProductToDatabaseItem(product));
+			return ur.wasAcknowledged() && ur.getMatchedCount() == 1;
+		} catch (Exception e) {
+			System.out.println("MongoConnection(insert): " + e.getMessage());
+			return false;
+		}
 	}
 
 	/**

@@ -1,10 +1,7 @@
 package domain;
 
-interface DatabaseProvider {
-
-	boolean init(String host, int port);
-
-	void setDatabaseName(String databaseName);
-
+public interface DatabaseProvider {
+	
 	boolean connect();
+	void setDatabaseName(String databaseName);
 }

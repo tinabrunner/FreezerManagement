@@ -53,7 +53,8 @@ public class InvoiceController {
 			String name = p.getName();
 			double price = p.getPrice();
 			int amount = entry.getValue();
-			InvoiceItem i = new InvoiceItem(id, name, price, amount);
+			int calories = p.getCalories();
+			InvoiceItem i = new InvoiceItem(id, name, price, calories, amount);
 			invoice.addItem(i);
 
 		}

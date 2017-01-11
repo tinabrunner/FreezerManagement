@@ -1,5 +1,8 @@
 package Model;
 
+import javax.persistence.Entity;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Marius Koch
  *
@@ -11,12 +14,15 @@ public class Product {
 	private int verpackungsgroesse;
 	private double price;
 	private int calories;
+	
+	public Product() { /* keep */ }
 
-	public Product(String id, String name, int verpackungsgroesse, double price) {
+	public Product(String id, String name, int verpackungsgroesse, double price, int calories) {
 		this.id = id;
 		this.name = name;
 		this.verpackungsgroesse = verpackungsgroesse;
 		this.price = price;
+		this.calories = calories;
 	}
 
 	public int getVerpackungsgroesse() {

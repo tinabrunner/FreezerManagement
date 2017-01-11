@@ -32,11 +32,11 @@ public class DB_ProductList {
 		db.setDatabaseName("supermarket");
 		db.connect();
 	}
-
+	
 	public List<Product> getAllProducts() {
 		
 		MongoCollection<Document> products = db.getCollection("productlist");
-
+		
 		// Create a list for all invoices and get a cursor to go through the
 		// DBCollection
 		List<Product> allProducts = new ArrayList<Product>();
@@ -54,8 +54,25 @@ public class DB_ProductList {
 			String name = doc.getString("name");
 			int verpackungsgroesse = doc.getInteger("verpackungsgroesse");
 			double price = doc.getDouble("price");
-			allProducts.add(new Product(id, name, verpackungsgroesse, price));
+			int calories = doc.getInteger("calories");
+			allProducts.add(new Product(id, name, verpackungsgroesse, price, calories));
 		};
 		return allProducts;
+	}
+	
+	public void addProducts( List<Product> products) {
+		
+		MongoCollection<Document> col = db.getCollection("productlist");
+	
+		List<Document> docs = new ArrayList<>();
+		for( Product prod : products ) {
+			Document doc =  new Document("name", prod.getName())
+					.append("verpackungsgroesse", prod.getVerpackungsgroesse())
+					.append("price", prod.getPrice())
+					.append("calories", prod.getCalories());
+			docs.add(doc);
+		};
+		
+		col.insertMany(docs);
 	}
 }

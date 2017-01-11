@@ -73,7 +73,11 @@ public class ShoppingListRepositoryStub implements ShoppingListRepository {
     }
     
     @Override
-    public Boolean updateProduct() {
-    	return true;
-    }
+    public Boolean updateProduct(ShoppingListItem product) {
+		this.getShoppingList().remove(
+				this.getShoppingList().stream().filter(map -> map.getId().equals(product.getId())).findFirst().get());
+
+		this.getShoppingList().add(product);
+		return true;
+	}
 }

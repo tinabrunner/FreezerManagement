@@ -4,24 +4,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
- * Frage: Warum wird die Summe vom "Besteller" übermittelt? Im Supermarkt läuft man auch nicht an die Kasse und sagt:
- * Hier, was im Einkaufswagen ist kostet 5 Euro.
- * 
- * Antwort: Im online Warenkorb aber schon. Dann kann man es auch direkt übermitteln...
- * 
- * Die Map muss durchiteriert  und mit den Produkten im Supermarkt abgeglichen werden. Was passiert, wenn ein Produkt gar 
- * nicht (mehr) im Supermakt vorhanden ist, weil es aus dem Sortiment gelöscht wurde
- * 
- * A: In der Bestellliste dürfen nur Produkte sein, die im Supermarkt noch vorhanden sind. Muss beim hinzufügen zum Warenkorb schon überprüft werden
- */
-
 /**
  * @author Marius Koch
  *
  */
 public class Order {
-	private String id; // wo gesetzt? -> noch garnicht
+	private String id = null;
 	private Date recieveDate;
 	private double totalPrice;
 	private String customerId;
@@ -58,5 +46,9 @@ public class Order {
 
 	public Map<Product, Integer> getOrder() {
 		return order;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

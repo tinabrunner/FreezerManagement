@@ -8,11 +8,13 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 
 import Model.Order;
 import Model.Product;
@@ -37,6 +39,14 @@ public class DB_Order {
 	public void insertOrderToDB(Order order) {
 
 		MongoCollection<Document> orders = db.getCollection("orders");
+
+		if (order.getId() == null) {
+			int id = Integer.parseInt(this.getLastId());
+			id = id + 1;
+			String newId = Integer.toString(id);
+
+			order.setId(newId);
+		}
 
 		if (!orderExist(order.getId())) {
 			Document doc = new Document("id", order.getId()).append("recieveDate", order.getRecieveDate())
@@ -84,5 +94,11 @@ public class DB_Order {
 			order = new Order(id, receiveDate, totalPrice, customerId, order1);
 		}
 		return order;
+	}
+
+	public String getLastId() {
+		Bson bson = Filters.eq("id", -1);
+		Document doc = (Document) db.getCollection("orders").find().sort(bson).limit(1);
+		return doc.getString("id");
 	}
 }

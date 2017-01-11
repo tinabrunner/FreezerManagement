@@ -1,5 +1,8 @@
 package queueConnection;
 
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.ejb.Stateless;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
@@ -13,6 +16,9 @@ import javax.naming.InitialContext;
  * @author Marius Koch
  *
  */
+@Singleton
+@Stateless
+@Startup
 public class OrderReceiver {
 
 	public OrderReceiver() throws JMSException {

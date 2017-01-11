@@ -23,8 +23,9 @@
 						password : $scope.password
 		        };
 				$http.post(URL_API+'login', objData).then((function(response){
-				alert("Passt: "+response.data);
-				
+					alert("Passt: "+response.data);
+					setCookie(response.data);
+					
 				}), 
 				function(response) { 
 					alert("Something went wrong: "+response.data);
@@ -32,6 +33,42 @@
 				
 			}
 	    }
+		
+		
+		// Funktions für Cookie Management
+		function setCookie(cname) {
+		    //var d = new Date();
+		    // d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+		    //var expires = "expires="+d.toUTCString();
+		    document.cookie = cname + ";path=/";  // + "=" + cvalue + ";" + expires 
+		}
+
+		function getCookie(cname) {
+		    var name = cname + "=";
+		    var ca = document.cookie.split(';');
+		    for(var i = 0; i < ca.length; i++) {
+		        var c = ca[i];
+		        while (c.charAt(0) == ' ') {
+		            c = c.substring(1);
+		        }
+		        if (c.indexOf(name) == 0) {
+		            return c.substring(name.length, c.length);
+		        }
+		    }
+		    return "";
+		}
+
+		function checkCookie() {
+		    var user = getCookie("username");
+		    if (user != "") {
+		        alert("Welcome again " + user);
+		    } else {
+		        user = prompt("Please enter your name:", "");
+		        if (user != "" && user != null) {
+		            setCookie("username", user, 365);
+		        }
+		    }
+		}
 	});
 	
 	
@@ -39,31 +76,3 @@
 
 })();
 	
-	/*
-	.controller('view_login1Ctrl', LoginCtrl);
-
-	LoginCtrl.$inject = ['$http'];
-
-	
-	function LoginCtrl($http) {
-		var vm = this;
-		
-		vm.btn_login = function() {
-			alert("test12");
-			
-			if ((vm.username=="") || (vm.password==""))
-				alert("please enter username and password!");
-			else {
-				var username = vm.username;
-				var password = vm.password;
-				
-				alert("login now"+username+", "+password); // +username+", "+password
-			}
-		};
-		
-	};
-	
-	
-
-
-})();  */

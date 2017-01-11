@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 
 import org.apache.commons.io.FileUtils;
@@ -106,7 +107,7 @@ public class InvoiceController {
 	}
 
 	// Jeden Tag um 8 werden REchnungen verschickt
-	
+	@Schedule(hour = "8", dayOfWeek = "*")
 	private void sendInvoices() {
 		List<Invoice> invoices = dbInvoice.getAllNotSendedInvoices();
 		for (Invoice i : invoices) {

@@ -26,7 +26,7 @@ import model.Invoice;
  * 
  */
 
-@Stateless
+@Stateless(name = "dbinvoices")
 public class DB_Invoices {
 
 	@EJB
@@ -81,7 +81,7 @@ public class DB_Invoices {
 
 	// Method to Get all Invoices
 	public List<Invoice> getAllInvoices() {
-		
+
 		// create a client and get the database and invoicesCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");

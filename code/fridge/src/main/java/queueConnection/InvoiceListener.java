@@ -1,22 +1,25 @@
 package queueConnection;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.annotation.Resource;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
+import javax.naming.NamingException;
 
 import com.google.gson.Gson;
 
 import db_communication.DB_Invoices;
 import model.Invoice;
 
-@Stateless
 public class InvoiceListener implements MessageListener {
 
-	@EJB
-	DB_Invoices db_invoices;
+	@Resource(name = "dbinvoices")
+	DB_Invoices dbinvoice;
+
+	public InvoiceListener() throws NamingException {
+
+	}
 
 	public void onMessage(Message m) {
 		try {
@@ -29,7 +32,7 @@ public class InvoiceListener implements MessageListener {
 			Invoice i = gson.fromJson(jsonInString, Invoice.class);
 			System.out.println(i.getId() + i.getName() + i.getBillingDate() + i.getOrderDate() + i.getTotalPrice()
 					+ i.getInvoiceURL());
-			db_invoices.insertInvoiceToDB(i);
+			dbinvoice.insertInvoiceToDB(i);
 
 		} catch (JMSException e) {
 			e.printStackTrace();

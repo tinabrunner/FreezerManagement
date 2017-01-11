@@ -1,5 +1,6 @@
 package controller;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -20,7 +21,8 @@ import db_communication.DB_ProductList;
 @Path("/productlist")
 public class ProductListController {
 
-	DB_ProductList db_productList;
+	@EJB
+	private DB_ProductList db_productList;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

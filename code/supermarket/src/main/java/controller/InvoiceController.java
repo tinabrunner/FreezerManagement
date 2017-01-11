@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 
 import org.apache.commons.io.FileUtils;
@@ -51,7 +50,7 @@ public class InvoiceController {
 			Product p = entry.getKey();
 			String id = p.getId();
 			String name = p.getName();
-			double price = p.getPrice();
+			double price = p.getPreis();
 			int amount = entry.getValue();
 			int calories = p.getCalories();
 			InvoiceItem i = new InvoiceItem(id, name, price, calories, amount);
@@ -72,7 +71,7 @@ public class InvoiceController {
 
 		for (InvoiceItem i : invoice.getItems()) {
 			String productName = i.getName();
-			String price = Double.toString(i.getPrice());
+			String price = Double.toString(i.getPreis());
 			String amount = Integer.toString(i.getAmount());
 			String totalItemPrice = Double.toString(i.getTotalPrice());
 
@@ -107,7 +106,7 @@ public class InvoiceController {
 	}
 
 	// Jeden Tag um 8 werden REchnungen verschickt
-	@Schedule(hour = "8", dayOfWeek = "*")
+	
 	private void sendInvoices() {
 		List<Invoice> invoices = dbInvoice.getAllNotSendedInvoices();
 		for (Invoice i : invoices) {

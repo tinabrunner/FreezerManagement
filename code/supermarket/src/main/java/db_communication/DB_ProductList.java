@@ -10,10 +10,7 @@ import javax.ejb.Stateless;
 import domain.DatabaseProviderImpl;
 import org.bson.Document;
 
-import com.mongodb.Block;
-import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 
 import Model.Product;
 import domain.MongoProvider;
@@ -68,7 +65,7 @@ public class DB_ProductList {
 		for( Product prod : products ) {
 			Document doc =  new Document("name", prod.getName())
 					.append("verpackungsgroesse", prod.getVerpackungsgroesse())
-					.append("price", prod.getPrice())
+					.append("price", prod.getPreis())
 					.append("calories", prod.getCalories());
 			docs.add(doc);
 		};

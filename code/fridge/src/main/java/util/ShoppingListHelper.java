@@ -32,6 +32,10 @@ public class ShoppingListHelper {
      * Identifiert for database column holding the amount
      */
     private static final String documentShoppingListProductRegelmaessig = "regelmaessig";
+    /**
+     * Identifiert for database column holding the amount
+     */
+    private static final String documentShoppingListProductPreis = "preis";
 
     /**
      * Converts a Product to a Document for saving in the database
@@ -43,6 +47,7 @@ public class ShoppingListHelper {
         return new Document(documentShoppingListProductId, product.getId())
                 .append(documentShoppingListProductName, product.getName())
                 
+                .append(documentShoppingListProductPreis, product.getPreis())
                 .append(documentShoppingListProductMindestBestand, product.getMindestBestand())
                 .append(documentShoppingListProductHoechstBestand, product.getHoechstBestand())
                 .append(documentShoppingListProductRegelmaessig, product.isRegelmaessig());
@@ -59,7 +64,8 @@ public class ShoppingListHelper {
         ShoppingListItem freezerProduct = new ShoppingListItem();
         freezerProduct.setId(document.getString(documentShoppingListProductId));
         freezerProduct.setName(document.getString(documentShoppingListProductName));
-        
+    
+        freezerProduct.setPreis(document.getDouble(documentShoppingListProductPreis));
         freezerProduct.setHoechstBestand(document.getInteger(documentShoppingListProductHoechstBestand));
         freezerProduct.setMindestBestand(document.getInteger(documentShoppingListProductMindestBestand));
         freezerProduct.setRegelmaessig(document.getBoolean(documentShoppingListProductRegelmaessig));

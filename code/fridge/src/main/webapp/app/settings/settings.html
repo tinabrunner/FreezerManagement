@@ -1,4 +1,39 @@
 <h2>Settings</h2>
-<div ng-controller="ShoppingCartCtrl as shoppingCart" class="content">
+<div ng-controller="SettingsCtrl as settings" class="content">
+	<div id="automatic_ordering">
+		<label>Automatic ordering
+			<input type="checkbox" ng-model="settings.config.auto"/>
+		</label>
+	</div>
 
+	<div id="ordering_interval">
+		<label>Day
+			<select ng-model="settings.config.ordering_interval_day">
+				<option value="1">Monday</option>
+				<option value="2">Tuesday</option>
+				<option value="3">Wednesday</option>
+				<option value="4">Thursday</option>
+				<option value="5">Friday</option>
+				<option value="6">Saturday</option>
+				<option value="7">Sunday</option>
+			</select>
+		</label>
+		<label>Every
+			<input type="number" step="1" min="1" max="58" ng-model="settings.config.order_interval_week" /> weeks
+		</label>
+	</div>
+
+	<div id="delivery">
+		<label>Day
+			<select ng-model="settings.config.delivery_day">
+				<option value="1">Monday</option>
+				<option value="2">Tuesday</option>
+				<option value="3">Wednesday</option>
+				<option value="4">Thursday</option>
+				<option value="5">Friday</option>
+				<option value="6">Saturday</option>
+				<option value="7">Sunday</option>
+			</select>
+		</label>
+	</div>
 </div>

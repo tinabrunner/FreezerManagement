@@ -23,6 +23,10 @@ public class ProductCategory {
 		this.verpackungsGroesse = verpackungsGroesse;
 	}
 	
+	protected ProductCategory(String id) {
+		this.id = id;
+	}
+	
 	public double getPreis() {
 		return preis;
 	}

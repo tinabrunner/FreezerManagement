@@ -15,9 +15,10 @@
 	ShoppingCartCtrl.$inject = ['$http'];
 
 	function ShoppingCartCtrl($http) {
-		/* --- SCOPE --- (worauf .html zugreifen kann) */
+
 		var vm = this;
 		vm.products = {};
+		vm.success = false;
 		vm.empty = empty;
 		vm.deleteProduct = deleteProduct;
 		vm.totalPrice = totalPrice;
@@ -52,10 +53,12 @@
 		}
 
 		function submitOrder() {
-			console.dir(vm.products); // todo trigger OrderSender
+			$http.post(URL_API+'shopping_cart', vm.products).then(function(resp) {
+				vm.success = true;
+			}, function(eror) {
+				console.dir(error);
+			})
 		}
-
-		/* --- --- */
 	}
 
 })();

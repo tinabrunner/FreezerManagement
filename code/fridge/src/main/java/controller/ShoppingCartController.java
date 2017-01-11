@@ -1,24 +1,18 @@
 package controller;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import javax.ejb.EJB;
-import javax.ejb.Singleton;
 import javax.ejb.Stateless;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import db_communication.DB_FridgeInventory;
 import db_communication.DB_ShoppingList;
-import domain.MongoProvider;
 import model.InventoryProduct;
 import model.ShoppingCartItem;
 import model.ShoppingListItem;
+import queueConnection.OrderSender;
 
 /**
  * Created by phi on 08.12.16.
@@ -34,12 +28,16 @@ public class ShoppingCartController {
 	
 	@EJB
 	private DB_FridgeInventory dbFridgeInventory;
-	
 	@EJB
 	private DB_ShoppingList db_shoppingList;
 	
+	@EJB
+	private OrderSender orderSender;
+	
 	@GET
-	/** Shopping carts (Warenkörbe): non-persistent */
+	/** Shopping carts (Warenkörbe): non-persistent.
+	 * Generate and return shopping cart
+	 */
 	public Set<ShoppingCartItem> createShoopingCart() {
 		
 		/* current items in inventory: <categoryId, inventoryProduct> */
@@ -52,6 +50,28 @@ public class ShoppingCartController {
 		Set<ShoppingCartItem> shoppingCartItems = this.fillShoppingCart( shoppingListProducts, inventoryProducts ); // new HashSet<>();
 		
 		return shoppingCartItems;
+	}
+	
+	@POST
+	/**
+	 * Submit order. todo: skip next delivery ?
+	 */
+	@Consumes(MediaType.APPLICATION_JSON)
+	public List<ShoppingCartItem> submitOrder(List<ShoppingCartItem> items) {
+		List<ShoppingCartItem> relevantData = new ArrayList<>();
+		for(ShoppingCartItem i : items ) {
+			relevantData.add(new ShoppingCartItem(
+					i.getId(),
+					i.getAmount()));
+		}
+		orderSender.sendInvoice(relevantData.toString()); // todo .. ?
+		/*
+	private String id = null;
+	private Date recieveDate;
+	private double totalPrice;
+	private String customerId;
+		 */
+		return items;
 	}
 	
 	/**

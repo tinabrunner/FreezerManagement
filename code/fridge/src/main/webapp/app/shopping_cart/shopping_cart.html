@@ -33,8 +33,13 @@
 			</tr>
 		</table>
 
+		<a href="#!/settings">
+			<button>Configure automatic ordering</button>
+		</a>
+
 		<div class="center">
-			<button ng-click="shoppingCart.submit()">Submit order</button>
+			<button ng-click="shoppingCart.submit()">BUY NOW</button>
+			<p ng-show="shoppingCart.success" class="success">Order submitted!</p>
 		</div>
 
 	</div>

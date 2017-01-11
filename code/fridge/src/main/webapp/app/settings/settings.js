@@ -19,17 +19,22 @@
 		}])
 		.controller('SettingsCtrl', SettingsCtrl);
 
-	SettingsCtrl.$inject = ['$http'];
+	SettingsCtrl.$inject = ['$http', '$scope'];
 
-	function SettingsCtrl($http) {
+	function SettingsCtrl($http, $scope) {
 		var vm = this;
-
+		vm.config = {};
 		vm.init = init;
 
 		init();
 
 		function init() {
+			/** deep watch config & PUT on change */
+			$scope.$watch(function() {
+				return vm.config;
+			}, function() {
 
+			}, true);
 		}
 	}
 

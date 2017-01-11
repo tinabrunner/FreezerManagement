@@ -3,7 +3,12 @@ package controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+
+import javax.ejb.EJB;
+import javax.ejb.Schedule;
+import javax.ejb.Stateless;
 
 import org.apache.commons.io.FileUtils;
 
@@ -13,18 +18,26 @@ import Model.Invoice;
 import Model.InvoiceItem;
 import Model.Order;
 import Model.Product;
+import db_communication.DB_Invoice;
 import pdfcreator.ParseHtml;
+import queueConnection.InvoiceSender;
 
 /**
  * @author
  *
  */
 
+@Stateless(name = "invoiceCon")
 public class InvoiceController {
+
+	@EJB
+	private InvoiceSender invoiceSender;
+	@EJB
+	private DB_Invoice dbInvoice;
 
 	ParseHtml htmlParser = new ParseHtml();
 
-	public void createInvoice(Order order) {
+	public Invoice createInvoice(Order order) {
 		String customerId = order.getCustomerId();
 		Date orderDate = order.getRecieveDate();
 		double totalPrice = order.getTotalPrice();
@@ -44,7 +57,7 @@ public class InvoiceController {
 			invoice.addItem(i);
 
 		}
-
+		return invoice;
 	}
 
 	public String InvoiceToHTML(Invoice invoice) throws IOException {
@@ -85,10 +98,22 @@ public class InvoiceController {
 
 	}
 
+	// Rechnung wird in String umgewandelt
 	public String invoiceToString(Invoice invoice) {
 		Gson gson = new Gson();
 		String jsonInString = gson.toJson(invoice);
 		return jsonInString;
+	}
+
+	// Jeden Tag um 8 werden REchnungen verschickt
+	@Schedule(hour = "8", dayOfWeek = "*")
+	private void sendInvoices() {
+		List<Invoice> invoices = dbInvoice.getAllNotSendedInvoices();
+		for (Invoice i : invoices) {
+			String in = this.invoiceToString(i);
+			invoiceSender.sendInvoice(in);
+			dbInvoice.setInvoiceToSended(i.getId());
+		}
 	}
 
 }

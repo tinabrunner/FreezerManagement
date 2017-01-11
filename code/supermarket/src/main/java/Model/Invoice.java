@@ -68,4 +68,8 @@ public class Invoice implements Serializable {
 		this.items = items;
 	}
 
+	public void setURL(String url) {
+		this.invoiceURL = url;
+	}
+
 }

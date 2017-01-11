@@ -6,47 +6,50 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
-import domain.DatabaseProviderImpl;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 import Model.Invoice;
 import Model.InvoiceItem;
+import domain.DatabaseProviderImpl;
 import domain.MongoProvider;
 
+@Stateless(name = "dbInvoice")
 public class DB_Invoice {
-	
+
 	@EJB
 	MongoProvider mongoProvider;
-	
+
 	DatabaseProviderImpl db;
-	
+
 	@PostConstruct
 	public void init() {
-		db = new DatabaseProviderImpl( this.mongoProvider );
+		db = new DatabaseProviderImpl(this.mongoProvider);
 		db.setDatabaseName("supermarket");
 		db.connect();
+
 	}
 
 	// Method to Insert an Invoice
 
 	public void insertInvoiceToDB(Invoice invoice) {
-		
+
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		if (!invoiceExists(invoice.getId())) {
 			Document doc = new Document("id", invoice.getId()).append("name", invoice.getName())
 					.append("billingDate", invoice.getBillingDate()).append("orderDate", invoice.getOrderDate())
 					.append("totalPrice", invoice.getTotalPrice()).append("invoiceURL", invoice.getInvoiceURL())
-					.append("items", invoice.getItems());
+					.append("items", invoice.getItems()).append("sended", false);
 			invoices.insertOne(doc);
 		} else
 			System.out.print("Invoice already exists!");
@@ -84,7 +87,7 @@ public class DB_Invoice {
 
 	// Method to Get all Invoices
 	public List<Invoice> getAllInvoices() {
-		
+
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		// Create a list for all invoices and get a cursor to go through the
@@ -106,7 +109,7 @@ public class DB_Invoice {
 	// Method to Check if a User exists
 	public boolean invoiceExists(String id) {
 		boolean ret = false;
-		
+
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		// create a query and check if there are more than 0 elements in the db
@@ -115,6 +118,34 @@ public class DB_Invoice {
 		if (invoices.count(checkInvoice) > 0)
 			ret = true;
 		return ret;
+	}
+
+	public List<Invoice> getAllNotSendedInvoices() {
+
+		MongoCollection<Document> invoices = db.getCollection("invoices");
+
+		// Create a list for all invoices and get a cursor to go through the
+		// DBCollection
+
+		List<Invoice> invoicesResult = new ArrayList<>();
+		invoices.find().forEach((Block<Document>) document -> {
+			if (!document.getBoolean("sended")) {
+				String id = document.getString("id");
+				String name = document.getString("name");
+				Date billingDate = document.getDate("billingDate");
+				Date orderDate = document.getDate("orderDate");
+				double totalPrice = document.getDouble("totalPrice");
+				String invoiceURL = document.getString("invoiceURL");
+				invoicesResult.add(new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL));
+			}
+		});
+		return invoicesResult;
+	}
+
+	public void setInvoiceToSended(String idString) {
+		Bson bson = Filters.eq("id", idString);
+		db.getCollection("invoices").updateOne(bson, new Document("sended", true));
+
 	}
 
 }

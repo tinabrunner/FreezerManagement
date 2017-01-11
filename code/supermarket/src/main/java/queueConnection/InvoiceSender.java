@@ -1,8 +1,5 @@
 package queueConnection;
 
-import java.util.Date;
-
-import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
@@ -13,10 +10,6 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 
-import com.google.gson.Gson;
-
-import Model.Invoice;
-
 /**
  * @author Marius Koch
  *
@@ -24,15 +17,9 @@ import Model.Invoice;
 @Stateless
 public class InvoiceSender {
 
-	@Schedule(minute = "*", hour = "*")
-	public void sendInvoice() {
-		System.out.println("Supermarket: Send Invoice started");
-		Gson gson = new Gson();
-		Date date = new Date();
-		Invoice invoice = new Invoice("FromServer", "Masdf", date, date, 19.99, "hasdfjhaksfh");
-		System.out.println(invoice);
-		String jsonInString = gson.toJson(invoice);
-		String message = jsonInString;
+	public void sendInvoice(String invoice) {
+
+		String message = invoice;
 		System.out.println("Nachricht: " + message);
 
 		try {

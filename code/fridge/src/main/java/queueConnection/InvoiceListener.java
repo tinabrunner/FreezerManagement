@@ -30,8 +30,6 @@ public class InvoiceListener implements MessageListener {
 			// 2. JSON to Java object, read it from a Json String.
 			String jsonInString = msg.getText();
 			Invoice i = gson.fromJson(jsonInString, Invoice.class);
-			System.out.println(i.getId() + i.getName() + i.getBillingDate() + i.getOrderDate() + i.getTotalPrice()
-					+ i.getInvoiceURL());
 			dbinvoice.insertInvoiceToDB(i);
 
 		} catch (JMSException e) {

@@ -13,6 +13,10 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 
+/**
+ * @author Marius Koch
+ *
+ */
 @Stateless
 public class OrderSender {
 	public void sendShoppingCart(Order order) {

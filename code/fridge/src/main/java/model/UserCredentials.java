@@ -1,10 +1,5 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
-@Entity
 public class UserCredentials {
 	private String username;
 	private String password;

@@ -1,8 +1,6 @@
-package pdfcreator;
+package Model;
 
 import java.util.Date;
-
-import Model.Product;
 
 /**
  * @author Marius Koch

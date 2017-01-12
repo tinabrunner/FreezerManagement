@@ -1,6 +1,12 @@
 package queueConnection;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.ejb.EJB;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.ejb.Stateless;
+import javax.jms.MessageListener;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
@@ -8,41 +14,51 @@ import javax.jms.QueueReceiver;
 import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.naming.InitialContext;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 
+/**
+ * @author Marius Koch
+ *
+ */
+@Startup
+@Singleton
 @Stateless
-@Path("/receiver")
 public class InvoiceReceiver {
 
-	@GET
-	@Path("/start")
+	@EJB(name = "invoiceListener")
+	private MessageListener listener;
+
+	private QueueConnection con;
+
+	@PostConstruct
 	public void run() {
 		System.out.println("Invoice Receiver started");
 		try {
-			// 1) Create and start connection
+			// Create and start connection
 
 			InitialContext ctx = new InitialContext();
 			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/fridgeConnectionFactory");
-			QueueConnection con = f.createQueueConnection();
+			con = f.createQueueConnection();
 			con.start();
 
-			// 2) create Queue session
+			// create Queue session
 			QueueSession ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
-			// 3) get the Queue object
+			// get the Queue object
 			Queue t = (Queue) ctx.lookup("jms/invoiceQueue");
-
-			InvoiceListener listener = new InvoiceListener();
-			// 4)create QueueReceiver
+			// create QueueReceiver
 			QueueReceiver receiver = ses.createReceiver(t);
-
-			// 5) register the listener object with receiver
+			// register the listener object with receiver
 			receiver.setMessageListener(listener);
 
-			while (true) {
-				Thread.sleep(1000);
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
 
+		}
+	}
+
+	@PreDestroy
+	public void stopConnection() {
+		try {
+			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 

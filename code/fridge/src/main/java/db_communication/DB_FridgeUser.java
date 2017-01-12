@@ -6,7 +6,6 @@ import javax.ejb.Stateless;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -30,12 +29,12 @@ public class DB_FridgeUser {
 
 	private static final String _fridge = "fridge";
 	private static final String _users = "users";
-	private static final String _username = "username";
-	private static final String _password = "password";
-	private static final String _firstName = "firstName";
-	private static final String _lastName = "lastName";
-	private static final String _email = "email";
-	private static final String _role = "role";
+	public static final String _username = "username";
+	public static final String _password = "password";
+	public static final String _firstName = "firstName";
+	public static final String _lastName = "lastName";
+	public static final String _email = "email";
+	public static final String _role = "role";
 
 	/*
 	 * STANDARDMETHODS FOR RE-USE
@@ -95,13 +94,13 @@ public class DB_FridgeUser {
 	// Method to Search for an User
 	public FridgeUser getUser(String username) {
 		MongoCollection<Document> users = getUsersCollection();
-		FridgeUser user = null;
 		Bson filter = Filters.eq(_username, username);
 		FindIterable<Document> result = users.find(filter);
-		for (Document current : result)
-			user = convertDocumentToUser(current);
-
-		return user;
+		Document doc = result.first();
+		if (doc != null)
+			return convertDocumentToUser(doc);
+		else
+			return null;
 	}
 
 	// Method to Update an User
@@ -127,25 +126,6 @@ public class DB_FridgeUser {
 			return true;
 		} else
 			return false;
-	}
-
-	// TODO: kann GELÖSCHT werden, wenn user via username ausgegeben wird ???
-	// Method to Check if username and password fits
-	public boolean check_UsernameAndPassword(String username, String password) {
-		boolean ret = false;
-		FridgeUser user;
-
-		MongoCollection<Document> users = getUsersCollection();
-
-		// create a query and check if the password matches
-		BasicDBObject checkUser = new BasicDBObject();
-		checkUser.put("username", username);
-		/*
-		 * if (users.getCount(checkUser) == 1) { user = getUserFromDB(username);
-		 * String userPassword = user.getPassword(); if
-		 * (userPassword.equals(password)) ret = true; }
-		 */
-		return ret;
 	}
 
 }

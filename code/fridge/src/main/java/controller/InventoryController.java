@@ -23,9 +23,6 @@ import model.InventoryProduct;
 @Path("/inventory")
 public class InventoryController {
 
-	// @Inject
-	// private SessionStore sessionStore;
-
 	@EJB
 	private DB_FridgeInventory dbFridgeInventory;
 

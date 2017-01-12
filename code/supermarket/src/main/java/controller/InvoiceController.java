@@ -20,7 +20,7 @@ import pdfcreator.ParseHtml;
 import queueConnection.InvoiceSender;
 
 /**
- * @author
+ * @author Marius Koch
  *
  */
 
@@ -88,9 +88,7 @@ public class InvoiceController {
 			destination = htmlParser.createPdf(htmlString);
 			return destination;
 		} catch (Exception e) {
-			// TODO: handle exception
-			// SO?
-			// System.out.println(e.getMessage());
+			System.out.println(e.getMessage());
 			return null;
 		}
 
@@ -104,14 +102,16 @@ public class InvoiceController {
 	}
 
 	// Jeden Tag um 8 werden REchnungen verschickt
-	@Schedule(hour = "8", dayOfWeek = "*")
+	// @Schedule(hour = "8", dayOfWeek = "*")
+	@Schedule(minute = "*", hour = "*")
 	private void sendInvoices() {
-		System.out.println("asdfasdfdsagfssadfdas");
 		List<Invoice> invoices = dbInvoice.getAllNotSendedInvoices();
 		for (Invoice i : invoices) {
 			String in = this.invoiceToString(i);
-			invoiceSender.sendInvoice(in);
-			dbInvoice.setInvoiceToSended(i.getId());
+			boolean sent = invoiceSender.sendInvoice(in);
+			if (sent) {
+				dbInvoice.setInvoiceToSended(i.getId());
+			}
 		}
 	}
 

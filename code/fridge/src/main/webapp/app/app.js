@@ -23,4 +23,4 @@ $routeProvider.otherwise({redirectTo: '/home'});
 }]);
 
 var URL_API = 'http://localhost:8080/fridge/api/';
-var URL_SUPERMARKET = 'http://localhost:8080/supermarket/api/';
+var URL_SUPERMARKET = 'http://localhost:38611/supermarket/api/';

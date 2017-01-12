@@ -22,6 +22,10 @@ import Model.Product;
 import domain.DatabaseProviderImpl;
 import domain.MongoProvider;
 
+/**
+ * @author Marius Koch
+ *
+ */
 @Stateless
 public class DB_Order {
 

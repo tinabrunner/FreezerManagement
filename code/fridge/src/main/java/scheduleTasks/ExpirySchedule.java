@@ -1,11 +1,18 @@
 package scheduleTasks;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 
+import db_communication.DB_FridgeInventory;
 import model.InventoryProduct;
 
 /**
@@ -16,37 +23,40 @@ import model.InventoryProduct;
 @Stateless
 public class ExpirySchedule {
 
-	// DB_FridgeInventory db_fridgeInventory;
+	@EJB
+	private DB_FridgeInventory db_fridgeInventory;
 
-	// dayOfWeek="*";
-	@Schedule(minute = "*", hour = "*")
+	@Schedule(hour = "8", dayOfWeek = "*")
 	private void run() {
-		System.out.println("Tina und Phil sind die coolsten Boys auf der ganzen Welt");
 
-		// LocalDate today = LocalDate.now();
-		// LocalDate inThreeDays = today.plusDays(3);
-		//
-		// List<InventoryProduct> inventoryProducts =
-		// db_fridgeInventory.getAllProducts();
-		// List<InventoryProduct> soonExpiredProducts = new ArrayList<>();
-		// List<InventoryProduct> expiredProducts = new ArrayList<>();
-		//
-		// for (InventoryProduct product : inventoryProducts) {
-		// Date input = product.getExpiryDate();
-		// LocalDate expiryDate =
-		// input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		//
-		// if (today.compareTo(expiryDate) > 0) {
-		// expiredProducts.add(product);
-		// } else if (inThreeDays.compareTo(expiryDate) > 0 &&
-		// today.compareTo(expiryDate) < 0) {
-		// soonExpiredProducts.add(product);
-		// }
-		// }
-		//
-		// if (!soonExpiredProducts.isEmpty() || !expiredProducts.isEmpty()) {
-		// sendMail(soonExpiredProducts, expiredProducts);
-		// }
+		LocalDate today = LocalDate.now();
+		LocalDate inThreeDays = today.plusDays(3);
+
+		Map<String, InventoryProduct> map = db_fridgeInventory.getAllProducts();
+
+		List<InventoryProduct> inventoryProducts = new ArrayList<>();
+
+		for (Map.Entry<String, InventoryProduct> entry : map.entrySet()) {
+			inventoryProducts.add(entry.getValue());
+		}
+
+		List<InventoryProduct> soonExpiredProducts = new ArrayList<>();
+		List<InventoryProduct> expiredProducts = new ArrayList<>();
+
+		for (InventoryProduct product : inventoryProducts) {
+			Date input = product.getExpiryDate();
+			LocalDate expiryDate = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+			if (today.compareTo(expiryDate) > 0) {
+				expiredProducts.add(product);
+			} else if (inThreeDays.compareTo(expiryDate) > 0 && today.compareTo(expiryDate) < 0) {
+				soonExpiredProducts.add(product);
+			}
+		}
+
+		if (!soonExpiredProducts.isEmpty() || !expiredProducts.isEmpty()) {
+			sendMail(soonExpiredProducts, expiredProducts);
+		}
 
 	}
 

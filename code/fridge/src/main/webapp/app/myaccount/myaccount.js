@@ -13,9 +13,24 @@
 			controller: 'myaccountCtrl'
 		});
 	}])
-	.controller('myaccountCtrl', function($scope, $http) {
+	.controller('myaccountCtrl', function($scope, $http, $cookies) {
 		$scope.MyText = "Edit Account";
 		$scope.checked =true;
+		
+		var vm = this;
+		vm.user = {};
+		
+		var token = $cookies.get('username');
+		$http.get(URL_API+'account'+'/'+token).then(function(response) {
+			if (!response.data) {
+					alert("Fehler: "+response.data);
+				}
+				else {
+					vm.user = response.data[0];
+				}
+		}, function(error) {
+			console.dir(error);
+		});
 		
 		$scope.EditAccount = function() {
 			if ($scope.MyText == "Edit Account") {

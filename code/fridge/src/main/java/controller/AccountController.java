@@ -6,14 +6,18 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import db_communication.DB_FridgeUser;
+import db_communication.DB_UserSessionStore;
 import model.FridgeUser;
 
 @Stateless
@@ -22,6 +26,9 @@ public class AccountController {
 
 	@EJB
 	private DB_FridgeUser db_fridgeUser;
+
+	@EJB
+	private DB_UserSessionStore db_UserSessionStore;
 
 	// Method to create an account and write the user to DB
 	@POST
@@ -58,10 +65,26 @@ public class AccountController {
 	}
 
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{token}")
 	// Method to create an account and write the user to DB
-	public FridgeUser getAccountDetails(@HeaderParam("username") String username) {
-		// TODO: irgendwie als JSON serialisieren?
-		return db_fridgeUser.getUser(username);
+	public JSONArray getAccountDetails(@PathParam("token") String token) {
+		String username = db_UserSessionStore.getUserSessionFromDB(token).getUsername();
+
+		JSONArray array = new JSONArray();
+		if (db_fridgeUser.getUser(username) != null) {
+			FridgeUser user = db_fridgeUser.getUser(username);
+
+			JSONObject json = new JSONObject();
+			json.put(db_fridgeUser._username, user.getUsername());
+			json.put(db_fridgeUser._password, user.getPassword());
+			json.put(db_fridgeUser._firstName, user.getFirstName());
+			json.put(db_fridgeUser._lastName, user.getLastName());
+			json.put(db_fridgeUser._email, user.getEmail());
+			array.add(json);
+		}
+		return array;
 	}
 
 }

@@ -47,10 +47,7 @@ public class OrderReceiver {
 			receiver.setMessageListener(listener);
 			
 			System.out.println("OrderReceiver: listening for Messages.");
-
-			while (true) {
-				Thread.sleep(1000);
-			}
+			
 		} catch (Exception e) {
 			System.out.println(e);
 		}

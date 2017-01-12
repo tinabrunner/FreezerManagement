@@ -1,6 +1,7 @@
 package db_communication;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -8,6 +9,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import Model.ProcessedOrder;
+import com.mongodb.BasicDBList;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -57,8 +59,17 @@ public class DB_Order {
 
 		if (!orderExist(order.getId())) {
 			Document doc = new Document("id", order.getId()).append("recieveDate", order.getRecieveDate())
-					.append("totalPrice", order.getTotalPrice()).append("customerId", order.getCustomerId())
-					.append("items", order.getItemsProcessed());
+					.append("totalPrice", order.getTotalPrice()).append("customerId", order.getCustomerId());
+			BasicDBList list = new BasicDBList();
+			for( Map.Entry<Product, Integer> item : order.getItemsProcessed().entrySet()) {
+				BasicDBObject dbItem = new BasicDBObject();
+				dbItem.append("amount", item.getValue());
+				dbItem.append("id", item.getKey().getId());
+				dbItem.append("preis", item.getKey().getPreis());
+				dbItem.append("name", item.getKey().getName());
+				list.add(dbItem);
+			}
+			doc.append("items", list);
 			orders.insertOne(doc);
 		} else
 			System.out.println("Order already existing!");
@@ -97,7 +108,17 @@ public class DB_Order {
 			Date receiveDate = doc.getDate("receiveDate");
 			double totalPrice = doc.getDouble("totalPrice");
 			String customerId = doc.getString("customerId");
-			Map<Product, Integer> items = (Map<Product, Integer>) doc.get("items");
+			
+			BasicDBList itemsDb = (BasicDBList) doc.get("items");
+			Map<Product,Integer> items = new HashMap<>();
+			for( BasicDBObject dbItem : itemsDb.toArray(new BasicDBObject[0]) ) {
+				Product prod = new Product();
+				prod.setId(dbItem.getString("id"));
+				prod.setPreis(dbItem.getDouble("preis"));
+				prod.setName(dbItem.getString("name"));
+				items.put(prod, dbItem.getInt("amount"));
+			}
+			
 			order = new ProcessedOrder(id, receiveDate, totalPrice, customerId, items);
 		}
 		return order;

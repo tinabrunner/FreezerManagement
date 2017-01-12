@@ -1,6 +1,6 @@
 package Model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * @author Marius Koch
@@ -8,11 +8,12 @@ import java.util.Date;
  */
 public class ExpiryProduct extends Product {
 
-	Date dateOfExpiry;
+	LocalDate dateOfExpiry;
 
-	public ExpiryProduct(String id, String name, int verpackungsgroesse, double price, int calories, Date dateOfExpiry) {
+	public ExpiryProduct(String id, String name, int verpackungsgroesse, double price, int calories,
+			LocalDate expiryDate) {
 		super(id, name, verpackungsgroesse, price, calories);
-		this.dateOfExpiry = dateOfExpiry;
+		this.dateOfExpiry = expiryDate;
 	}
 
 }

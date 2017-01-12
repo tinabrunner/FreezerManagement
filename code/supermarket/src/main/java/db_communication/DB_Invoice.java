@@ -135,7 +135,7 @@ public class DB_Invoice {
 		return invoicesResult;
 	}
 
-	public void setInvoiceToSended(String idString) {
+	public void setInvoiceToSent(String idString) {
 		Invoice invoice = this.getInvoice(idString);
 		Document doc = convertInvoiceToDocument(invoice);
 		doc.append("sent", true);

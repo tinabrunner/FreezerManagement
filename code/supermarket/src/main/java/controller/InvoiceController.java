@@ -110,7 +110,7 @@ public class InvoiceController {
 			String in = this.invoiceToString(i);
 			boolean sent = invoiceSender.sendInvoice(in);
 			if (sent) {
-				dbInvoice.setInvoiceToSended(i.getId());
+				dbInvoice.setInvoiceToSent(i.getId());
 			}
 		}
 	}

@@ -34,23 +34,24 @@ public class ProductListController {
 		try {
 			prods = this.db_productList.getAllProducts();
 		} catch (Exception e) {
-			if (prods.isEmpty()) {
+			
+		}
+		if (prods.isEmpty()) {
 				/*
 				 * OHNE Id kann in der DB keine CRUD-Operation gemacht werden
 				 * Also: ANGEBEN!
 				 */
-				List<Product> dummies = new ArrayList<>();
-				dummies.add(new Product("idEier", "Eier", 10, 2.99, 150));
-				dummies.add(new Product("idSchinken", "Schinken", 5, 3.56, 450));
-				dummies.add(new Product("idTomaten", "Tomaten", 8, 2.69, 80));
-				dummies.add(new Product("idJoghurt", "Joghurt", 1, 1.29, 0));
-				prods = dummies;
+			List<Product> dummies = new ArrayList<>();
+			dummies.add(new Product("idEier", "Eier", 10, 2.99, 150));
+			dummies.add(new Product("idSchinken", "Schinken", 5, 3.56, 450));
+			dummies.add(new Product("idTomaten", "Tomaten", 8, 2.69, 80));
+			dummies.add(new Product("idJoghurt", "Joghurt", 1, 1.29, 0));
+			prods = dummies;
+			
+			try {
+				this.db_productList.addProducts(dummies);
+			} catch(Exception e1) {
 				
-				try {
-					this.db_productList.addProducts(dummies);
-				} catch(Exception e1) {
-					
-				}
 			}
 		}
 		return new Gson().toJson(prods);

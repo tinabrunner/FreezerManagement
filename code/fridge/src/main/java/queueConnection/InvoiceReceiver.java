@@ -5,6 +5,7 @@ import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.Stateless;
 import javax.jms.MessageListener;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
@@ -14,13 +15,13 @@ import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.naming.InitialContext;
 
-@Startup
-@Singleton
-
 /**
  * @author Marius Koch
  *
  */
+@Startup
+@Singleton
+@Stateless
 public class InvoiceReceiver {
 
 	@EJB(name = "invoiceListener")
@@ -47,10 +48,6 @@ public class InvoiceReceiver {
 			QueueReceiver receiver = ses.createReceiver(t);
 			// register the listener object with receiver
 			receiver.setMessageListener(listener);
-
-			while (true) {
-				Thread.sleep(1000);
-			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

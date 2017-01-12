@@ -105,7 +105,8 @@ public class InvoiceController {
 	}
 
 	// Jeden Tag um 8 werden REchnungen verschickt
-	@Schedule(hour = "8", dayOfWeek = "*")
+	// @Schedule(hour = "8", dayOfWeek = "*")
+	@Schedule(minute = "*", hour = "*")
 	private void sendInvoices() {
 		List<Invoice> invoices = dbInvoice.getAllNotSendedInvoices();
 		for (Invoice i : invoices) {

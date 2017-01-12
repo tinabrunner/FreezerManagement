@@ -2,15 +2,38 @@ h2 {
   text-align:center;
   padding:2%;
 }
+h3 {
+  text-align:center;
+  padding: 1%;
+}
+label {
+  font-weight: 100;
+}
 
 .content {
   margin:2em;
   padding-left:5%;
   padding-right:5%;
 }
+.padding {
+  padding: 2em;
+}
 
 .hoverable:hover  {
   background-color: whitesmoke;
+}
+.center {
+  text-align:center;
+}
+.left {
+  text-align:left;
+}
+.success {
+  font-weight:bold;
+  text-transform: uppercase;
+  color: green;
+  padding: 1em;
+  font-size:0.8em;
 }
 
 .dummy {
@@ -32,4 +55,15 @@ h2 {
   padding-left:20%;
   padding-right:20%;
   padding-top:5%;
+}
+
+#shoppingCart .totalPrice {
+  font-weight: bold;
+}
+#shoppingCart .totalPrice td {
+  border: none;
+}
+
+#settings select {
+  margin-left: 2em;
 }

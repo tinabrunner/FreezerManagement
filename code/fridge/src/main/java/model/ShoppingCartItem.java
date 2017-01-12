@@ -17,6 +17,11 @@ public class ShoppingCartItem extends ProductCategory {
 		this.amount = amount;
 	}
 	
+	public ShoppingCartItem(String id, int amount) {
+		super(id);
+		this.amount = amount;
+	}
+	
 	public ShoppingCartItem(String id, double preis, String name, int verpackungsGroesse, int amount) {
 		super(id, preis, name, verpackungsGroesse);
 		this.amount = amount;

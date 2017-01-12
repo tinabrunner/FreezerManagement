@@ -106,4 +106,22 @@ public class ShoppingListRepositoryTest {
 
         Assert.assertTrue(repository.getProductCount() == 3);
     }
+    
+    @Test
+    public void shouldReturnAnUpdatedProduct(){
+    	ShoppingListItem itemToUpdate = getFreezerProductDummy("BMW 123d", "2312");
+    	ShoppingListItem itemToFind = getFreezerProductDummy("---", itemToUpdate.getId());
+    	repository.addProduct(itemToUpdate);
+    	repository.addProduct(getFreezerProductDummy("BMW 330d", "312"));
+        repository.addProduct(getFreezerProductDummy("BMW M4", "123"));
+        repository.addProduct(getFreezerProductDummy("BMW M135i", "789"));        
+        itemToUpdate.setName("Nissan");
+        
+        repository.updateProduct(itemToUpdate);
+        
+        itemToFind = repository.getProduct(itemToUpdate);
+        
+        Assert.assertEquals(itemToFind.getName(), itemToUpdate.getName());
+        
+    }
 }

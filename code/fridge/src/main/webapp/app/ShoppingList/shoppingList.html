@@ -1,7 +1,7 @@
 <div>
-	<p><b>Shopping List</b></p>
+	<h2>Shopping List</h2>
 </div>
-<div ng-controller="ShoppingListCtrl as shoppingList">
+<div ng-controller="ShoppingListCtrl as shoppingList" class="content">
 	<table class="table table-striped table-bordered" cellspacing="0">
 	        <tr>
 		        <th>Product</th>
@@ -14,12 +14,12 @@
 	        <tr ng-repeat="product in shoppingList.products">
 		        <td>{{ product.name }}</td>
 		        <td>
-		        	<input id="edt_bestandMin" type="number" min="0" max="{{ product.hoechstBestand }}" step="1" value="{{ product.mindestBestand }}" style="width: 40px">
-		        	<button ng-click="shoppingList.updateMindestBestand()">Update</button>
+		        	<input id="edt_bestandMin_{{product.id}}" type="number" min="0" max="{{ product.hoechstBestand }}" step="1" value="{{ product.mindestBestand }}" style="width: 40px">
+		        	<button ng-click="shoppingList.updateMindestBestand(product)">Update</button>
 		        </td>
 		        <td>
-		        	<input id="edt_bestandMax" type="number" min="0" step="1" value="{{ product.hoechstBestand }}" style="width: 40px">
-		        	<button ng-click="shoppingList.updateHoechstBestand()">Update</button>
+		        	<input id="edt_bestandMax_{{product.id}}" type="number" min="0" step="1" value="{{ product.hoechstBestand }}" style="width: 40px">
+		        	<button ng-click="shoppingList.updateHoechstBestand(product)">Update</button>
 		        </td>
 		        <td>
 		        	<input type="checkbox" id="cbox_regularly" ng-click="shoppingList.setRegulary(product, product.regelmaessig)" ng-checked="product.regelmaessig"></input>

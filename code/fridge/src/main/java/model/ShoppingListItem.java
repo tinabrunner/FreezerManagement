@@ -3,7 +3,7 @@ package model;
 /**
  * Created by JD on 08.12.2016.
  */
-public class ShoppingListItem extends ProductCategory { // todo id foreignkey ?
+public class ShoppingListItem extends ProductCategory {
 
 	public ShoppingListItem() {
 	} // keep
@@ -17,8 +17,6 @@ public class ShoppingListItem extends ProductCategory { // todo id foreignkey ?
 		this.hoechstBestand = hoechstBestand;
 		this.regelmaessig = regelmaessig;
 	}
-
-	// todo categoryId ? s.a. inventoryProduct
 
 	private int mindestBestand;
 	private int hoechstBestand;

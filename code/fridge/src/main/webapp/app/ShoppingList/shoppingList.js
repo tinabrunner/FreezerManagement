@@ -98,7 +98,7 @@
 			document.getElementById(id).value = value;
 		}
 		
-		vm.updateMindestBestand = function(product){			
+		vm.updateMindestBestand = function(product){
 			var value = getBestandById('edt_bestandMin_' + product.id);
 			product.mindestBestand = value;
 			addOrUpdateShoppingList(product);

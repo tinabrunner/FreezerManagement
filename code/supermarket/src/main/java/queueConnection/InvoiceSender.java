@@ -1,5 +1,7 @@
 package queueConnection;
 
+import java.io.Serializable;
+
 import javax.ejb.Stateless;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
@@ -15,7 +17,7 @@ import javax.naming.InitialContext;
  *
  */
 @Stateless
-public class InvoiceSender {
+public class InvoiceSender implements Serializable {
 
 	public void sendInvoice(String invoice) {
 

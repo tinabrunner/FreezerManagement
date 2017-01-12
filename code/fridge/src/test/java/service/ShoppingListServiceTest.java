@@ -43,14 +43,36 @@ public class ShoppingListServiceTest {
 
         Assert.assertTrue(shoppingListService.addProduct(ProductHelperTest.getProductDummy("", "")));
     }
-
+    
     @Test
-    public void shouldReturnFalseBecauseProductAlreadyExists(){
-
-        repository.addProduct(ProductHelperTest.getProductDummy("", ""));
-
-        Assert.assertFalse(shoppingListService.addProduct(ProductHelperTest.getProductDummy("", "")));
+    public void shouldReturnUpdatedProductWhenAddingWithSameId(){
+    	String id = "1202";
+    	ShoppingListItem itemToAdd = ProductHelperTest.getProductDummy("", id);
+    	ShoppingListItem itemUpdate = ProductHelperTest.getProductDummy("", id);
+        repository.addProduct(itemToAdd);
+        itemToAdd.setName("Hund");
+        repository.addProduct(itemToAdd);
+        
+        itemUpdate = repository.getProduct(itemToAdd);
+        
+        Assert.assertEquals(itemUpdate.getName(), itemToAdd.getName());        
     }
+    
+    @Test
+    public void shouldReturnUpdatedProductWhenUpdating(){
+    	String id = "1202";
+    	ShoppingListItem itemToAdd = ProductHelperTest.getProductDummy("", id);
+    	ShoppingListItem itemToCheck = ProductHelperTest.getProductDummy("", id);
+        repository.addProduct(itemToAdd);
+        itemToAdd.setName("Hund");
+        repository.updateProduct(itemToAdd);
+        
+        itemToCheck = repository.getProduct(itemToAdd);
+        
+        Assert.assertEquals(itemToCheck.getName(), itemToAdd.getName());        
+    }
+
+    
 
     @Test
     public void shouldReturnTrueBecauseAddingProductDoesNotExitsInList(){

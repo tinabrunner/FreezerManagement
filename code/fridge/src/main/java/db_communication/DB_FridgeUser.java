@@ -104,11 +104,11 @@ public class DB_FridgeUser {
 	// Method to Update an User
 	public boolean updateUserFromDB(FridgeUser user) {
 		MongoCollection<Document> users = getUsersCollection();
-
-		Document doc = convertUserToDocument(user);
-		Bson filter = Filters.eq(_username, user.getUsername());
-		if (getUser(user.getUsername()) != null) {
-			users.findOneAndUpdate(filter, doc);
+		if (userExists(user.getUsername())) {
+			Bson filter = Filters.eq(_username, user.getUsername());
+			Document doc = convertUserToDocument(user);
+			users.deleteOne(filter);
+			users.insertOne(doc);
 			return true;
 		} else
 			return false;
@@ -117,10 +117,9 @@ public class DB_FridgeUser {
 	// Method to Delete an User
 	public boolean deleteUserFromDB(String username) {
 		MongoCollection<Document> users = getUsersCollection();
-
-		if (getUser(username) != null) {
+		if (userExists(username)) {
 			Bson filter = Filters.eq(_username, username);
-			users.findOneAndDelete(filter);
+			users.deleteOne(filter);
 			return true;
 		} else
 			return false;

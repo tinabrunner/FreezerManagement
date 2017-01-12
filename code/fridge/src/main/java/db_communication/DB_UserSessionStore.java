@@ -81,8 +81,11 @@ public class DB_UserSessionStore {
 	public UserSessionData getUserSessionFromDB(String token) {
 		MongoCollection<Document> sessionStore = getSessionStore();
 		Bson filter = Filters.eq(_token, token);
-		FindIterable<Document> result = sessionStore.find(filter);
-		return convertDocumentToSessionData(result.first());
+		if (sessionStore.count(filter) > 0) {
+			FindIterable<Document> result = sessionStore.find(filter);
+			return convertDocumentToSessionData(result.first());
+		} else
+			return null;
 	}
 
 	// Check if Usernamealready exists

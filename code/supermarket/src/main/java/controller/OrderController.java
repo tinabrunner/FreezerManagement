@@ -31,7 +31,7 @@ public class OrderController {
 
 	@EJB
 	private DB_Order dborder;
-	
+
 	@EJB
 	private DB_ProductList dbProductList;
 
@@ -45,43 +45,46 @@ public class OrderController {
 		List<Product> PRODUCTS = dbProductList.getAllProducts();
 		Map<Product, Integer> processedItems = new HashMap<>();
 		double processedPrice = 0;
-		for( Map.Entry<String, Integer> i : order.getItems().entrySet()) {
+		for (Map.Entry<String, Integer> i : order.getItems().entrySet()) {
 			String desiredProductId = i.getKey();
 			int desiredAmount = i.getValue();
 			// check if products contains desired id
-			for( Product P : PRODUCTS ) {
-				if( P.getId() .equals( desiredProductId )) {
+			for (Product P : PRODUCTS) {
+				if (P.getId().equals(desiredProductId)) {
 					// vielfaches der verpackungsgröße
-					int actualAmount = amountByVerpackungsgroesse( desiredAmount, P.getVerpackungsGroesse() );
-					if(actualAmount > 0) {
+					int actualAmount = amountByVerpackungsgroesse(desiredAmount, P.getVerpackungsGroesse());
+					if (actualAmount > 0) {
 						// confirm item
-						processedItems.put( P, desiredAmount );
+						processedItems.put(P, desiredAmount);
 						processedPrice += P.getPreis() * desiredAmount / P.getVerpackungsGroesse();
 					}
 				}
 			}
 		}
-		processedOrder.setItemsProcessed(processedItems );
-		processedOrder.setTotalPrice( processedPrice );
+		processedOrder.setItemsProcessed(processedItems);
+		processedOrder.setTotalPrice(processedPrice);
 		/* ~ */
 		this.saveOrderToDB(processedOrder);
 		Invoice invoice = invoiceCtrl.createInvoice(processedOrder);
-		invoice.setURL(invoiceCtrl.InvoiceToHTML(invoice));
+		invoice.setURL(invoiceCtrl.invoiceToHTML(invoice));
 		dbInvoice.insertInvoiceToDB(invoice);
 	}
 
 	public String getLastId() {
 		return dborder.getLastId();
 	}
-	
+
 	/**
 	 * Verringert Bestellmenge auf ein Vielfaches der Verpackungsgröße.
-	 * @param amount Menge
-	 * @param packSize Packungsgröße
+	 * 
+	 * @param amount
+	 *            Menge
+	 * @param packSize
+	 *            Packungsgröße
 	 * @return Berechnete Menge oder amount falls packSize <= 1
 	 */
-	private static int amountByVerpackungsgroesse( int amount, int packSize) {
-		if( packSize > 1 ) {
+	private static int amountByVerpackungsgroesse(int amount, int packSize) {
+		if (packSize > 1) {
 			// kaufmenge = maximal mögliches vielfaches der verpackungsgröße:
 			int packs = amount / packSize; // abrunden
 			return packs * packSize;

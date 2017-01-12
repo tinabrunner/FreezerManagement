@@ -16,7 +16,7 @@ import controller.OrderController;
 
 @Stateless(name = "OrderListener")
 public class OrderListener implements MessageListener {
-	
+
 	@EJB
 	private OrderController orderCtrl;
 

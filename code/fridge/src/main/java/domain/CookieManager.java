@@ -10,6 +10,10 @@ import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+/**
+ * @author Christina Brunner
+ */
+
 public class CookieManager {
 
 	private CookieStore httpCookieStore;

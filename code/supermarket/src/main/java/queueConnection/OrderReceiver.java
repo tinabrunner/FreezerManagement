@@ -6,7 +6,13 @@ import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.Stateless;
-import javax.jms.*;
+import javax.jms.MessageListener;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueReceiver;
+import javax.jms.QueueSession;
+import javax.jms.Session;
 import javax.naming.InitialContext;
 
 /**
@@ -17,14 +23,15 @@ import javax.naming.InitialContext;
 @Startup
 @Stateless
 public class OrderReceiver {
-	
+
 	@EJB(name = "OrderListener")
 	MessageListener listener;
-	
+
 	private QueueConnection con;
 
-	public OrderReceiver() { /* keep */ }
-	
+	public OrderReceiver() {
+		/* keep */ }
+
 	@PostConstruct
 	public void setupConnection() {
 		try {
@@ -42,24 +49,24 @@ public class OrderReceiver {
 
 			// 4)create QueueReceiver
 			QueueReceiver receiver = ses.createReceiver(t);
-			
+
 			// 5) register the listener object with receiver
 			receiver.setMessageListener(listener);
-			
+
 			System.out.println("OrderReceiver: listening for Messages.");
-			
+
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
-	
+
 	@PreDestroy
 	public void stopConnection() {
 		try {
 			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 		}
 	}
 

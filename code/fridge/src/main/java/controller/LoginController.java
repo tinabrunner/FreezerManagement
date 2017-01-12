@@ -17,6 +17,10 @@ import model.FridgeUser;
 import model.UserCredentials;
 import model.UserSessionData;
 
+/**
+ * @author Christina Brunner
+ */
+
 @Stateless
 @Path("/login")
 public class LoginController {

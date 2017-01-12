@@ -8,6 +8,10 @@ import java.lang.annotation.Target;
 
 import javax.interceptor.InterceptorBinding;
 
+/**
+ * @author Christina Brunner
+ */
+
 @Inherited
 @InterceptorBinding
 @Retention(RetentionPolicy.RUNTIME)

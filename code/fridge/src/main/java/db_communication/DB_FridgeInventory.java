@@ -20,16 +20,8 @@ import com.mongodb.client.model.Filters;
 import domain.MongoProvider;
 import model.InventoryProduct;
 
-/* 
- * Die Klasse DB_FridgeInventory schreibt alle Produkte inkl. aller Attribute (Anzahl, ID, Name) in die Datenbank,
- * kann sie auch wieder auslesen, sowie editieren und löschen.
- * 
- */
-
-/*
- * 
- * Kleiner Tipp: NIEMALS, N I E M A L S auf "getippte" Zeichenketten gehen. Daf�r bitte eine �bersetzungstabelle anlegen.
- * siehe util.ShoppingListHelper (e.g. documentShoppingListProductId = "id", klar?)
+/**
+ * @author Christina Brunner
  */
 
 @Stateless
@@ -57,7 +49,7 @@ public class DB_FridgeInventory {
 
 		MongoCollection<Document> products = db.getCollection(_inventoryProducts);
 		// DBCollection users = (DBCollection) db.getCollection("users");
-		
+
 		return products;
 	}
 

@@ -21,6 +21,10 @@ import db_communication.DB_FridgeInventory;
 import domain.LoginInterceptor;
 import model.InventoryProduct;
 
+/**
+ * @author Christina Brunner
+ */
+
 @Stateless
 @Path("/inventory")
 public class InventoryController {

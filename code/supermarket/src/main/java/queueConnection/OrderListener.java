@@ -2,9 +2,7 @@ package queueConnection;
 
 import java.io.IOException;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -16,9 +14,9 @@ import com.google.gson.Gson;
 import Model.Order;
 import controller.OrderController;
 
-@Stateless
+@Stateless(name = "OrderListener")
 public class OrderListener implements MessageListener {
-	
+
 	@EJB
 	private OrderController orderCtrl;
 

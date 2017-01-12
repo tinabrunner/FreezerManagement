@@ -1,7 +1,5 @@
 package Model;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -9,46 +7,44 @@ import java.util.Map;
  *
  */
 public class Order {
-	private String id = null;
-	private Date recieveDate;
-	private double totalPrice;
+	
+	private Map<String,Integer> itemsUnchecked;
 	private String customerId;
-	private Map<Product, Integer> order = new HashMap<Product, Integer>();
-
-	public Order(Map<Product, Integer> order, double totalPrice, String customerId) {
+	private int deliveryDay;
+	
+	public Order() { /* keep */}
+	
+	public Order(String customerId ) {
 		this.customerId = customerId;
-		this.order = order;
-		this.totalPrice = totalPrice;
-		recieveDate = new Date();
 	}
-
-	public Order(String id, Date recieveDate, double totalPrice, String customerId, Map<Product, Integer> order) {
-		this(order, totalPrice, customerId);
-		this.id = id;
-		this.recieveDate = recieveDate;
+	
+	protected Order(Map<String, Integer> itemsUnchecked, String customerId, int deliveryDay) {
+		this.itemsUnchecked = itemsUnchecked;
+		this.customerId = customerId;
+		this.deliveryDay = deliveryDay;
 	}
-
-	public String getId() {
-		return id;
+	
+	public int getDeliveryDay() {
+		return deliveryDay;
 	}
-
-	public Date getRecieveDate() {
-		return recieveDate;
+	
+	public void setDeliveryDay(int deliveryDay) {
+		this.deliveryDay = deliveryDay;
 	}
-
-	public double getTotalPrice() {
-		return totalPrice;
+	
+	public Map<String, Integer> getItemsUnchecked() {
+		return itemsUnchecked;
 	}
-
+	
+	public void setItemsUnchecked(Map<String, Integer> itemsUnchecked) {
+		this.itemsUnchecked = itemsUnchecked;
+	}
+	
 	public String getCustomerId() {
 		return customerId;
 	}
-
-	public Map<Product, Integer> getOrder() {
-		return order;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+	
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 }

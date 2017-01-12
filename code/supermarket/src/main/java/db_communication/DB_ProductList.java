@@ -47,7 +47,7 @@ public class DB_ProductList {
 			allProducts.add(new Product(id, name, verpackungsgroesse, price));
 		}); */
 		for( Document doc: products.find() ) {
-			String id = doc.getObjectId ("_id").toHexString();
+			String id = doc.getString ("id");
 			String name = doc.getString("name");
 			int verpackungsgroesse = doc.getInteger("verpackungsgroesse");
 			double price = doc.getDouble("price");

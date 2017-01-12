@@ -1,5 +1,6 @@
 package queueConnection;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jms.JMSException;
 import javax.jms.Queue;
@@ -17,6 +18,9 @@ import javax.naming.InitialContext;
 
 @Stateless
 public class OrderReceiver {
+	
+	@EJB
+	OrderListener listener;
 
 	public OrderReceiver() throws JMSException {
 	}
@@ -37,8 +41,7 @@ public class OrderReceiver {
 
 			// 4)create QueueReceiver
 			QueueReceiver receiver = ses.createReceiver(t);
-
-			OrderListener listener = new OrderListener();
+			
 			// 5) register the listener object with receiver
 			receiver.setMessageListener(listener);
 

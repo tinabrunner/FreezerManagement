@@ -23,10 +23,10 @@ import db_communication.DB_ProductList;
 @Path("/productlist")
 @Produces(MediaType.APPLICATION_JSON)
 public class ProductListController {
-
+	
 	@EJB
 	private DB_ProductList db_productList;
-
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getProductList() {
@@ -45,6 +45,12 @@ public class ProductListController {
 				dummies.add(new Product("idTomaten", "Tomaten", 8, 2.69, 80));
 				dummies.add(new Product("idJoghurt", "Joghurt", 1, 1.29, 0));
 				prods = dummies;
+				
+				try {
+					this.db_productList.addProducts(dummies);
+				} catch(Exception e1) {
+					
+				}
 			}
 		}
 		return new Gson().toJson(prods);
@@ -68,5 +74,5 @@ public class ProductListController {
 	 * 
 	 * return new Gson().toJson(myDummyProducts); }
 	 */
-
+	
 }

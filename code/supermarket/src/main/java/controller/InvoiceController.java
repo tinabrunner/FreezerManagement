@@ -10,14 +10,11 @@ import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 
+import Model.*;
 import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
 
-import Model.Invoice;
-import Model.InvoiceItem;
-import Model.Order;
-import Model.Product;
 import db_communication.DB_Invoice;
 import pdfcreator.ParseHtml;
 import queueConnection.InvoiceSender;
@@ -37,14 +34,14 @@ public class InvoiceController {
 
 	ParseHtml htmlParser = new ParseHtml();
 
-	public Invoice createInvoice(Order order) {
+	public Invoice createInvoice(ProcessedOrder order) {
 		String customerId = order.getCustomerId();
 		Date orderDate = order.getRecieveDate();
 		double totalPrice = order.getTotalPrice();
 		Date billingDate = null;
 
 		Invoice invoice = new Invoice(null, customerId, billingDate, orderDate, totalPrice, "");
-		Map<Product, Integer> orders = order.getOrder();
+		Map<Product, Integer> orders = order.getItemsProcessed();
 
 		for (Map.Entry<Product, Integer> entry : orders.entrySet()) {
 			System.out.println(entry.getKey() + "/" + entry.getValue());

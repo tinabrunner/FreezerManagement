@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import Model.ProcessedOrder;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -36,7 +37,7 @@ public class DB_Order {
 		db.connect();
 	}
 
-	public void insertOrderToDB(Order order) {
+	public void insertOrderToDB(ProcessedOrder order) {
 
 		MongoCollection<Document> orders = db.getCollection("orders");
 
@@ -51,7 +52,7 @@ public class DB_Order {
 		if (!orderExist(order.getId())) {
 			Document doc = new Document("id", order.getId()).append("recieveDate", order.getRecieveDate())
 					.append("totalPrice", order.getTotalPrice()).append("customerId", order.getCustomerId())
-					.append("order", order.getOrder());
+					.append("items", order.getItemsProcessed());
 			orders.insertOne(doc);
 		} else
 			System.out.print("Invoice already exists!");
@@ -70,12 +71,12 @@ public class DB_Order {
 		return ret;
 	}
 
-	public Order getOrder(String id) {
+	public ProcessedOrder getOrder(String id) {
 
 		MongoCollection<Document> orders = db.getCollection("orders");
 
 		// Create Invoice-Element for return-statement
-		Order order = null;
+		ProcessedOrder order = null;
 
 		// create a query to search for the Invoice with the passed 'id'
 		BasicDBObject whereQuery = new BasicDBObject();
@@ -90,8 +91,8 @@ public class DB_Order {
 			Date receiveDate = doc.getDate("receiveDate");
 			double totalPrice = doc.getDouble("totalPrice");
 			String customerId = doc.getString("customerId");
-			Map<Product, Integer> order1 = (Map<Product, Integer>) doc.get("order");
-			order = new Order(id, receiveDate, totalPrice, customerId, order1);
+			Map<Product, Integer> items = (Map<Product, Integer>) doc.get("items");
+			order = new ProcessedOrder(id, receiveDate, totalPrice, customerId, items);
 		}
 		return order;
 	}

@@ -4,6 +4,7 @@ import db_communication.DB_FridgeInventory;
 import db_communication.DB_Settings;
 import db_communication.DB_ShoppingList;
 import model.InventoryProduct;
+import model.Order;
 import model.ShoppingCartItem;
 import model.ShoppingListItem;
 import queueConnection.OrderSender;
@@ -124,19 +125,14 @@ public class ShoppingCartService {
 		
 		int wantedDeliveryDay = db_settings.retrieveSettings().getDelivery_day();
 		
-		List<ShoppingCartItem> relevantData = new ArrayList<>();
+		Map<String, Integer> relevantData = new HashMap<>();
 		for (ShoppingCartItem i : shoppingCartItems) {
-			relevantData.add(new ShoppingCartItem(
-					i.getId(),
-					i.getAmount()));
+			relevantData.put(i.getId(), i.getAmount());
 		}
-		orderSender.sendInvoice(relevantData.toString()); // wantedDeliveryDay todo
-		
-			/*
-	private String id = null;
-	private Date recieveDate;
-	private double totalPrice;
-	private String customerId;
-		 */
+		Order order = new Order();
+		order.setItems( relevantData );
+		order.setCustomerId( "1" ); // todo
+		order.setDeliveryDay(wantedDeliveryDay);
+		orderSender.sendShoppingCart(order);
 	}
 }

@@ -59,7 +59,7 @@ public class OrderTimer {
 	}
 	
 	/**
-	 * check week counter and maybe call sendOrder
+	 * check week counter and maybe call sendShoppingCart
 	 */
 	@Timeout
 	private void timeout() {

@@ -1,5 +1,8 @@
 package queueConnection;
 
+import com.google.gson.Gson;
+import model.Order;
+
 import javax.ejb.Stateless;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
@@ -12,8 +15,9 @@ import javax.naming.InitialContext;
 
 @Stateless
 public class OrderSender {
-	public void sendInvoice(String order) {
-		String message = order;
+	public void sendShoppingCart(Order order) {
+		Gson gson = new Gson();
+		String message = gson.toJson( order );
 
 		try {
 			// 1) Create and start connection

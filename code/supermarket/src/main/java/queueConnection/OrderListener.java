@@ -3,6 +3,9 @@ package queueConnection;
 import java.io.IOException;
 
 import javax.annotation.Resource;
+import javax.ejb.EJB;
+import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -13,6 +16,8 @@ import com.google.gson.Gson;
 import Model.Order;
 import controller.OrderController;
 
+@Stateless
+@Singleton
 public class OrderListener implements MessageListener {
 
 	@Resource(name = "orderController")
@@ -30,9 +35,8 @@ public class OrderListener implements MessageListener {
 			orderCtrl.incomingOrder(order);
 
 		} catch (JMSException e) {
-			System.out.println(e);
+			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

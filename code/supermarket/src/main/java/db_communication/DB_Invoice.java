@@ -12,7 +12,6 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -38,6 +37,25 @@ public class DB_Invoice {
 
 	}
 
+	public Document convertInvoiceToDocument(Invoice invoice) {
+		Document doc = new Document("id", invoice.getId()).append("name", invoice.getName())
+				.append("billingDate", invoice.getBillingDate()).append("orderDate", invoice.getOrderDate())
+				.append("totalPrice", invoice.getTotalPrice()).append("invoiceURL", invoice.getInvoiceURL())
+				.append("items", invoice.getItems()).append("sent", false);
+		return doc;
+	}
+
+	public Invoice convertDocumentToInvoice(Document doc) {
+		String id = doc.getString("id");
+		String name = doc.getString("name");
+		Date billingDate = doc.getDate("billingDate");
+		Date orderDate = doc.getDate("orderDate");
+		double totalPrice = doc.getDouble("totalPrice");
+		String invoiceURL = doc.getString("invoiceURL");
+		List<InvoiceItem> items = (List<InvoiceItem>) doc.get("items");
+		return new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL, items);
+	}
+
 	// Method to Insert an Invoice
 
 	public void insertInvoiceToDB(Invoice invoice) {
@@ -45,10 +63,7 @@ public class DB_Invoice {
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		if (!invoiceExists(invoice.getId())) {
-			Document doc = new Document("id", invoice.getId()).append("name", invoice.getName())
-					.append("billingDate", invoice.getBillingDate()).append("orderDate", invoice.getOrderDate())
-					.append("totalPrice", invoice.getTotalPrice()).append("invoiceURL", invoice.getInvoiceURL())
-					.append("items", invoice.getItems()).append("sended", false);
+			Document doc = convertInvoiceToDocument(invoice);
 			invoices.insertOne(doc);
 		} else
 			System.out.print("Invoice already exists!");
@@ -58,29 +73,14 @@ public class DB_Invoice {
 	public Invoice getInvoice(String id) {
 
 		MongoCollection<Document> invoices = db.getCollection("invoices");
-
-		// Create Invoice-Element for return-statement
+		Bson filter = Filters.eq("id", id);
+		FindIterable<Document> result = invoices.find(filter);
 		Invoice invoice = null;
 
-		// create a query to search for the Invoice with the passed 'id'
-		BasicDBObject whereQuery = new BasicDBObject();
-		whereQuery.put("id", id);
-
-		FindIterable<Document> cursor = invoices.find(whereQuery);
-
-		// get the attributes for invoice
-		if (((DBCollection) cursor).count() != 1) {
-			System.out.print("Something went wrong! More than one invoice was found for the given id.");
-		} else {
-			Document doc = (Document) invoices.find(whereQuery);
-			String name = doc.getString("name");
-			Date billingDate = doc.getDate("billingDate");
-			Date orderDate = doc.getDate("orderDate");
-			double totalPrice = doc.getDouble("totalPrice");
-			String invoiceURL = doc.getString("invoiceURL");
-			List<InvoiceItem> items = (List<InvoiceItem>) doc.get("items");
-			invoice = new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL, items);
+		for (Document current : result) {
+			invoice = convertDocumentToInvoice(current);
 		}
+
 		return invoice;
 	}
 
@@ -94,14 +94,8 @@ public class DB_Invoice {
 
 		List<Invoice> invoicesResult = new ArrayList<>();
 
-		for (Document document : invoices.find()) {
-			String id = document.getString("id");
-			String name = document.getString("name");
-			Date billingDate = document.getDate("billingDate");
-			Date orderDate = document.getDate("orderDate");
-			double totalPrice = document.getDouble("totalPrice");
-			String invoiceURL = document.getString("invoiceURL");
-			invoicesResult.add(new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL));
+		for (Document doc : invoices.find()) {
+			invoicesResult.add(this.convertDocumentToInvoice(doc));
 		}
 		return invoicesResult;
 	}
@@ -129,23 +123,22 @@ public class DB_Invoice {
 
 		List<Invoice> invoicesResult = new ArrayList<>();
 
-		for (Document document : invoices.find()) {
-			if (!document.getBoolean("sended")) {
-				String id = document.getString("id");
-				String name = document.getString("name");
-				Date billingDate = document.getDate("billingDate");
-				Date orderDate = document.getDate("orderDate");
-				double totalPrice = document.getDouble("totalPrice");
-				String invoiceURL = document.getString("invoiceURL");
-				invoicesResult.add(new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL));
+		for (Document doc : invoices.find()) {
+			if (!doc.getBoolean("sent")) {
+				invoicesResult.add(this.convertDocumentToInvoice(doc));
 			}
 		}
 		return invoicesResult;
 	}
 
 	public void setInvoiceToSended(String idString) {
+		Invoice invoice = this.getInvoice(idString);
+		Document doc = convertInvoiceToDocument(invoice);
+		doc.append("sent", true);
+
 		Bson bson = Filters.eq("id", idString);
-		db.getCollection("invoices").updateOne(bson, new Document("sended", true));
+		db.getCollection("invoices").updateOne(bson, new Document("$set", new Document("sent", true)));
+		// db.getCollection("invoices").findOneAndUpdate(bson, doc);
 
 	}
 

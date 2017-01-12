@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -19,7 +20,8 @@ import db_communication.DB_ProductList;
  * @author JD - 10.01.2017 - Testdummy
  * @author phi mongo impl
  */
-// @Stateless
+
+@Stateless
 @Path("/productlist")
 @Produces(MediaType.APPLICATION_JSON)
 public class ProductListController {
@@ -34,7 +36,7 @@ public class ProductListController {
 		try {
 			prods = this.db_productList.getAllProducts();
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 		if (prods.isEmpty()) {
 				/*
@@ -51,7 +53,7 @@ public class ProductListController {
 			try {
 				this.db_productList.addProducts(dummies);
 			} catch(Exception e1) {
-				
+				e1.printStackTrace();
 			}
 		}
 		return new Gson().toJson(prods);

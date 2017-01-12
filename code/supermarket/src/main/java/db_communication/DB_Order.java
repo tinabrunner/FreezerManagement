@@ -22,6 +22,8 @@ import Model.Product;
 import domain.DatabaseProviderImpl;
 import domain.MongoProvider;
 
+import static com.mongodb.client.model.Aggregates.sort;
+
 /**
  * @author Marius Koch
  *
@@ -59,7 +61,7 @@ public class DB_Order {
 					.append("items", order.getItemsProcessed());
 			orders.insertOne(doc);
 		} else
-			System.out.print("Invoice already exists!");
+			System.out.println("Order already existing!");
 	}
 
 	public boolean orderExist(String id) {
@@ -102,12 +104,15 @@ public class DB_Order {
 	}
 
 	public String getLastId() {
-		Bson bson = Filters.eq("id", -1);
-		Document doc = db.getCollection("orders").find().sort(bson).limit(1).first();
-		if(doc.containsKey("id")) {
-			return doc.getString("id");
-		} else {
+		Document doc = db.getCollection("orders")
+				.find()
+				.sort(new BasicDBObject("id", -1))
+				.limit(1)
+				.first();
+		if( doc == null || ! doc.containsKey("id")) {
 			return "0";
+		} else {
+			return doc.getString("id");
 		}
 	}
 }

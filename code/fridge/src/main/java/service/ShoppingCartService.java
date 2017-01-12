@@ -130,6 +130,7 @@ public class ShoppingCartService {
 		
 		Map<String, Integer> relevantData = new HashMap<>();
 		for (ShoppingCartItem i : shoppingCartItems) {
+			System.out.println(i.getAmount()+"............");
 			relevantData.put(i.getId(), i.getAmount());
 		}
 		Order order = new Order();

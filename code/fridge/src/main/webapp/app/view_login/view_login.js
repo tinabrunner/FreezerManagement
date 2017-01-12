@@ -13,7 +13,7 @@
 			controller: 'view_login1Ctrl'
 		});
 	}])
-	.controller('view_login1Ctrl', function($scope, $http, $cookies) {
+	.controller('view_login1Ctrl', function($scope, $http, $cookies, $location) {
 		$scope.Login = function() {
 			if (!$scope.username || !$scope.password)
 				alert("Please enter username and password!");
@@ -25,6 +25,7 @@
 				$http.post(URL_API+'login', objData).then((function(response){
 					alert("Passt: "+response.data);
 					$cookies.put('username', response.data);
+					$location.path("/home");
 				}), 
 				function(response) { 
 					alert("Something went wrong: "+response.data);

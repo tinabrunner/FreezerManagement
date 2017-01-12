@@ -35,7 +35,7 @@ public class ShoppingCartController {
 	
 	@POST
 	/**
-	 * Submit order. todo: skip next delivery ?
+	 * Submit order.
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
 	public boolean submitOrder(List<ShoppingCartItem> items) {

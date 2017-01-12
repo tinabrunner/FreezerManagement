@@ -25,11 +25,14 @@ public class OrderListener implements MessageListener {
 		try {
 			TextMessage msg = (TextMessage) m;
 
+			
+			System.out.println("a");
 			Gson gson = new Gson();
 
 			// 2. JSON to Java object, read it from a Json String.
 			String jsonInString = msg.getText();
 			Order order = gson.fromJson(jsonInString, Order.class);
+			System.out.println("b");
 			orderCtrl.incomingOrder(order);
 
 		} catch (JMSException e) {

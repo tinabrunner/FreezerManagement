@@ -6,6 +6,7 @@ import javax.ws.rs.core.Application;
 
 import controller.*;
 import queueConnection.InvoiceReceiver;
+import scheduleTasks.OrderTimer;
 
 /**
  * User: phi Date: 04.01.17
@@ -29,6 +30,8 @@ public class ApplicationConfig extends Application {
 		classes.add(ShoppingListController.class);
 		classes.add(InvoiceReceiver.class);
 		classes.add(SettingsController.class);
+		
+		classes.add(OrderTimer.class); // todo
 
 		return classes;
 	}

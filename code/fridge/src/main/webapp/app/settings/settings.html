@@ -1,31 +1,37 @@
 <h2>Settings</h2>
-<div ng-controller="SettingsCtrl as settings" class="content">
-	<form form-change="settings.change()">
-		<div id="automatic_ordering">
-			<label>Automatic ordering
-				<input type="checkbox" ng-model="settings.config.auto"/>
+<div ng-controller="SettingsCtrl as settings" class="content center">
+	<form form-change="settings.change()" id="settings">
+		<div id="automatic_ordering" class="padding">
+			<label>Automatic ordering<br/>
+				<input class="switch" type="checkbox" ng-model="settings.config.auto">
 			</label>
 		</div>
 
-		<div id="ordering_interval">
-			<label>Day
-				<select ng-model="settings.config.ordering_interval_day">
-					<option ng-selected="settings.config.ordering_interval_day === day.id"
-							ng-repeat = "day in settings.days"
-							ng-value="day.id">
-						{{ day.name }}
-					</option>
-				</select>
-			</label>
-			<label>Every
-				<input type="number" step="1" min="1" max="58"
-					   ng-model="settings.config.ordering_interval_week" />
-				weeks
-			</label>
+		<div id="ordering_interval" class="padding">
+			<h3>Ordering interval</h3>
+			<p>
+				<label>Day<br/>
+					<select ng-model="settings.config.ordering_interval_day">
+						<option ng-selected="settings.config.ordering_interval_day === day.id"
+								ng-repeat = "day in settings.days"
+								ng-value="day.id">
+							{{ day.name }}
+						</option>
+					</select>
+				</label>
+			</p>
+			<p>
+				<label>Every<br/>
+					<input type="number" step="1" min="1" max="58"
+						   ng-model="settings.config.ordering_interval_week" />
+					<br/>weeks
+				</label>
+			</p>
 		</div>
 
-		<div id="delivery">
-			<label>Day
+		<div id="delivery" class="padding">
+			<h3>Delivering</h3>
+			<label>Day<br/>
 				<select ng-model="settings.config.delivery_day">
 					<option ng-selected="settings.config.delivery_day === day.id"
 							ng-repeat = "day in settings.days"
@@ -36,6 +42,12 @@
 			</label>
 		</div>
 
-		<div class="success" ng-show="settings.success">Settings saved.</div>
+		<div class="success" ng-show="settings.success" class="padding">Settings saved.</div>
 	</form>
 </div>
+
+<script>
+	$(function() {
+		$(".switchMMM").bootstrapSwitch();
+	});
+</script>

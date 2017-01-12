@@ -2,6 +2,7 @@ package controller;
 
 import db_communication.DB_Settings;
 import model.Settings;
+import scheduleTasks.OrderTimer;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -25,10 +26,19 @@ import javax.ws.rs.core.MediaType;
 public class SettingsController {
 	@EJB
 	DB_Settings db_settings;
+	@EJB
+	private OrderTimer orderTimer;
 	
 	@POST
-	public boolean storeSettings( Settings settings ) {
+	public boolean storeSettings( Settings settings ) throws Exception {
 		db_settings.storeSettings(settings);
+		if(settings.isAuto()) {
+			orderTimer.updateOrderTimer(
+					settings.getOrdering_interval_day(),
+					settings.getOrdering_interval_week());
+		} else {
+			orderTimer.stopOrderTimer();
+		}
 		return true;
 	}
 	

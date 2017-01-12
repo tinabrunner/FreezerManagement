@@ -64,6 +64,7 @@ public class DB_ProductList {
 		List<Document> docs = new ArrayList<>();
 		for( Product prod : products ) {
 			Document doc =  new Document("name", prod.getName())
+					.append("id", prod.getId())
 					.append("verpackungsgroesse", prod.getVerpackungsGroesse())
 					.append("price", prod.getPreis())
 					.append("calories", prod.getCalories());

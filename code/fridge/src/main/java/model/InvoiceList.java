@@ -2,9 +2,14 @@ package model;
 
 import java.util.ArrayList;
 
+/**
+ * @author Marius Koch
+ *
+ */
 public class InvoiceList {
-	
-	public InvoiceList() {} // keep
+
+	public InvoiceList() {
+	} // keep
 
 	private ArrayList<Invoice> list;
 

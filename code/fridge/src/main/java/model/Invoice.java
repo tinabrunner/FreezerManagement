@@ -2,6 +2,10 @@ package model;
 
 import java.util.Date;
 
+/**
+ * @author Marius Koch
+ *
+ */
 public class Invoice {
 	private String id;
 	private String name;
@@ -9,9 +13,10 @@ public class Invoice {
 	private Date orderDate;
 	private double totalPrice;
 	private String invoiceURL;
-	
-	public Invoice() {} // keep
-	
+
+	public Invoice() {
+	} // keep
+
 	public Invoice(String id, String name, Date billingDate, Date orderDate, double totalPrice, String invoiceURL) {
 		this.id = id;
 		this.name = name;
@@ -21,36 +26,28 @@ public class Invoice {
 		this.invoiceURL = invoiceURL;
 	}
 
-
 	public String getId() {
 		return id;
 	}
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	public Date getBillingDate() {
 		return billingDate;
 	}
-
 
 	public Date getOrderDate() {
 		return orderDate;
 	}
 
-
 	public double getTotalPrice() {
 		return totalPrice;
 	}
 
-
 	public String getInvoiceURL() {
 		return invoiceURL;
 	}
-	
-	
-	
+
 }

@@ -21,6 +21,10 @@ import Model.InvoiceItem;
 import domain.DatabaseProviderImpl;
 import domain.MongoProvider;
 
+/**
+ * @author Marius Koch
+ *
+ */
 @Stateless(name = "dbInvoice")
 public class DB_Invoice {
 

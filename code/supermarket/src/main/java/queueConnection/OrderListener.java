@@ -13,6 +13,10 @@ import com.google.gson.Gson;
 import Model.Order;
 import controller.OrderController;
 
+/**
+ * @author Marius Koch
+ *
+ */
 public class OrderListener implements MessageListener {
 
 	@Resource(name = "orderController")
@@ -32,7 +36,6 @@ public class OrderListener implements MessageListener {
 		} catch (JMSException e) {
 			System.out.println(e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

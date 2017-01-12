@@ -8,13 +8,13 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 import domain.MongoProvider;
 import model.Invoice;
@@ -25,14 +25,36 @@ import model.Invoice;
  * 
  */
 
+/**
+ * @author Marius Koch
+ *
+ */
 @Stateless(name = "dbinvoices")
 public class DB_Invoices {
 
 	@EJB
 	private MongoProvider mongoProvider;
 
+	public Document convertInvoiceToDocument(Invoice invoice) {
+		Document doc = new Document("id", invoice.getId()).append("name", invoice.getName())
+				.append("billingDate", invoice.getBillingDate()).append("orderDate", invoice.getOrderDate())
+				.append("totalPrice", invoice.getTotalPrice()).append("invoiceURL", invoice.getInvoiceURL());
+		return doc;
+	}
+
+	public Invoice convertDocumentToInvoice(Document doc) {
+		String id = doc.getString("id");
+		String name = doc.getString("name");
+		Date billingDate = doc.getDate("billingDate");
+		Date orderDate = doc.getDate("orderDate");
+		double totalPrice = doc.getDouble("totalPrice");
+		String invoiceURL = doc.getString("invoiceURL");
+		return new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL);
+	}
+
 	// Method to Insert an Invoice
 	public void insertInvoiceToDB(Invoice invoice) {
+		System.out.println("insert");
 		// create a client and get the database
 		MongoClient mongoClient = mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
@@ -40,9 +62,7 @@ public class DB_Invoices {
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		if (!invoiceExists(invoice.getId())) {
-			Document doc = new Document("id", invoice.getId()).append("name", invoice.getName())
-					.append("billingDate", invoice.getBillingDate()).append("orderDate", invoice.getOrderDate())
-					.append("totalPrice", invoice.getTotalPrice()).append("invoiceURL", invoice.getInvoiceURL());
+			Document doc = convertInvoiceToDocument(invoice);
 			invoices.insertOne(doc);
 		} else
 			System.out.print("Invoice already exists!");
@@ -53,28 +73,15 @@ public class DB_Invoices {
 		// create a client and get the database and invoicesCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection invoices = (DBCollection) db.getCollection("invoices");
-
-		// Create Invoice-Element for return-statement
+		MongoCollection<Document> invoices = db.getCollection("invoices");
+		Bson filter = Filters.eq("id", id);
+		FindIterable<Document> result = invoices.find(filter);
 		Invoice invoice = null;
 
-		// create a query to search for the Invoice with the passed 'id'
-		BasicDBObject whereQuery = new BasicDBObject();
-		whereQuery.put("id", id);
-		DBCursor cursor = invoices.find(whereQuery);
-
-		// get the attributes for invoice
-		if (cursor.count() != 1) {
-			System.out.print("Something went wrong! More than one invoice was found for the given id.");
-		} else {
-			BasicDBObject doc = (BasicDBObject) cursor.curr();
-			String name = doc.getString("name");
-			Date billingDate = doc.getDate("billingDate");
-			Date orderDate = doc.getDate("orderDate");
-			double totalPrice = doc.getDouble("totalPrice");
-			String invoiceURL = doc.getString("invoiceURL");
-			invoice = new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL);
+		for (Document current : result) {
+			invoice = convertDocumentToInvoice(current);
 		}
+
 		return invoice;
 	}
 
@@ -90,33 +97,25 @@ public class DB_Invoices {
 		// DBCollection
 
 		List<Invoice> invoicesResult = new ArrayList<>();
-		for (Document document : invoices.find()) {
-			String id = document.getString("id");
-			String name = document.getString("name");
-			Date billingDate = document.getDate("billingDate");
-			Date orderDate = document.getDate("orderDate");
-			double totalPrice = document.getDouble("totalPrice");
-			String invoiceURL = document.getString("invoiceURL");
-			invoicesResult.add(new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL));
+
+		for (Document doc : invoices.find()) {
+			invoicesResult.add(this.convertDocumentToInvoice(doc));
 		}
 		return invoicesResult;
 	}
 
 	// Method to Check if a User exists
 	public boolean invoiceExists(String id) {
-		boolean ret = false;
-
-		// create a client and get the database and invoicesCollection
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");
-		DBCollection invoices = (DBCollection) db.getCollection("invoices");
+		MongoCollection<Document> invoices = db.getCollection("invoices");
 
-		// create a query and check if there are more than 0 elements in the db
-		BasicDBObject checkInvoice = new BasicDBObject();
-		checkInvoice.put("id", id);
-		if (invoices.getCount(checkInvoice) > 0)
-			ret = true;
-		return ret;
+		Bson filter = Filters.eq("id", id);
+		if (invoices.count(filter) > 0)
+			return true;
+		else
+			return false;
+
 	}
 
 }

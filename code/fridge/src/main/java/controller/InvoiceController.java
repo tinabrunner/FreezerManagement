@@ -12,6 +12,10 @@ import org.json.simple.JSONArray;
 import db_communication.DB_Invoices;
 import model.Invoice;
 
+/**
+ * @author Marius Koch
+ *
+ */
 @Stateless
 @Path("/invoices")
 public class InvoiceController {

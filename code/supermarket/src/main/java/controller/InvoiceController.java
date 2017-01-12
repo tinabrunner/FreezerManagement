@@ -10,11 +10,14 @@ import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 
-import Model.*;
 import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
 
+import Model.Invoice;
+import Model.InvoiceItem;
+import Model.ProcessedOrder;
+import Model.Product;
 import db_communication.DB_Invoice;
 import pdfcreator.ParseHtml;
 import queueConnection.InvoiceSender;
@@ -58,9 +61,9 @@ public class InvoiceController {
 		return invoice;
 	}
 
-	public String InvoiceToHTML(Invoice invoice) throws IOException {
+	public String invoiceToHTML(Invoice invoice) throws IOException {
 		String destination;
-		File htmlTemplateFile = new File("src/main/webapp/app/invoice/invoice.html");
+		File htmlTemplateFile = new File("/webapp/app/invoice/invoice.html");
 		String htmlString = FileUtils.readFileToString(htmlTemplateFile);
 
 		String[] splitfile = htmlString.split("<!--splitpoint-->");
@@ -80,12 +83,14 @@ public class InvoiceController {
 		}
 
 		htmlString.concat(firstString).concat(secondString);
+		String fileDest = "/webapp/app/invoice/";
+		fileDest.concat(invoice.getId()).concat(".html");
 
-		File newHtmlFile = new File("src/main/webapp/app/invoice/new.html");
+		File newHtmlFile = new File(fileDest);
 		FileUtils.writeStringToFile(newHtmlFile, htmlString);
 
 		try {
-			destination = htmlParser.createPdf(htmlString);
+			destination = htmlParser.createPdf(fileDest, invoice.getId());
 			return destination;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -110,7 +115,7 @@ public class InvoiceController {
 			String in = this.invoiceToString(i);
 			boolean sent = invoiceSender.sendInvoice(in);
 			if (sent) {
-				dbInvoice.setInvoiceToSended(i.getId());
+				dbInvoice.setInvoiceToSent(i.getId());
 			}
 		}
 	}

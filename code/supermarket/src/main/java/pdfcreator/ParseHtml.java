@@ -16,15 +16,8 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
  */
 public class ParseHtml {
 	public static final String DEST = "results/xmlworker/invoice";
-	public static final String HTML = "src/main/webapp/app/invoice/invoice.html";
 
 	public ParseHtml() {
-		this.init();
-	}
-
-	public void init() {
-		File file = new File(DEST);
-		file.getParentFile().mkdirs();
 	}
 
 	/**
@@ -34,7 +27,12 @@ public class ParseHtml {
 	 * @throws IOException
 	 * @throws DocumentException
 	 */
-	public String createPdf(String file) throws IOException, DocumentException {
+
+	public String createPdf(String htmlFilePath, String invoiceId) throws IOException, DocumentException {
+		String dest = DEST.concat(invoiceId).concat(".pdf");
+		File file = new File(dest);
+		file.getParentFile().mkdirs();
+
 		// step 1
 		Document document = new Document();
 		// step 2
@@ -42,7 +40,7 @@ public class ParseHtml {
 		// step 3
 		document.open();
 		// step 4
-		XMLWorkerHelper.getInstance().parseXHtml(writer, document, new FileInputStream(HTML));
+		XMLWorkerHelper.getInstance().parseXHtml(writer, document, new FileInputStream(htmlFilePath));
 		// step 5
 		document.close();
 

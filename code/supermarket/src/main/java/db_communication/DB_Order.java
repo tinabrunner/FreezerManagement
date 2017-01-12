@@ -103,7 +103,11 @@ public class DB_Order {
 
 	public String getLastId() {
 		Bson bson = Filters.eq("id", -1);
-		Document doc = (Document) db.getCollection("orders").find().sort(bson).limit(1);
-		return doc.getString("id");
+		Document doc = db.getCollection("orders").find().sort(bson).limit(1).first();
+		if(doc.containsKey("id")) {
+			return doc.getString("id");
+		} else {
+			return "0";
+		}
 	}
 }

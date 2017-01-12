@@ -8,7 +8,8 @@ import java.util.Map;
  */
 public class Order {
 	
-	private Map<String,Integer> itemsUnchecked;
+	/** unchecked (unprocessed ) items */
+	private Map<String,Integer> items;
 	private String customerId;
 	private int deliveryDay;
 	
@@ -18,8 +19,8 @@ public class Order {
 		this.customerId = customerId;
 	}
 	
-	protected Order(Map<String, Integer> itemsUnchecked, String customerId, int deliveryDay) {
-		this.itemsUnchecked = itemsUnchecked;
+	protected Order(Map<String, Integer> items, String customerId, int deliveryDay) {
+		this.items = items;
 		this.customerId = customerId;
 		this.deliveryDay = deliveryDay;
 	}
@@ -32,12 +33,13 @@ public class Order {
 		this.deliveryDay = deliveryDay;
 	}
 	
-	public Map<String, Integer> getItemsUnchecked() {
-		return itemsUnchecked;
+	/** unchecked (unprocessed ) items */
+	public Map<String, Integer> getItems() {
+		return items;
 	}
 	
-	public void setItemsUnchecked(Map<String, Integer> itemsUnchecked) {
-		this.itemsUnchecked = itemsUnchecked;
+	public void setItems(Map<String, Integer> items) {
+		this.items = items;
 	}
 	
 	public String getCustomerId() {

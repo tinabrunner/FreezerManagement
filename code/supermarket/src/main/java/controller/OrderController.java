@@ -45,15 +45,18 @@ public class OrderController {
 		List<Product> PRODUCTS = dbProductList.getAllProducts();
 		Map<Product, Integer> processedItems = new HashMap<>();
 		double processedPrice = 0;
-		for( Map.Entry<String, Integer> i : order.getItemsUnchecked().entrySet()) {
+		for( Map.Entry<String, Integer> i : order.getItems().entrySet()) {
 			String desiredProductId = i.getKey();
 			int desiredAmount = i.getValue();
 			// check if products contains desired id
 			for( Product P : PRODUCTS ) {
+				System.out.println(3333333);
 				if( P.getId() .equals( desiredProductId )) {
+					System.out.println(4444444);
 					// vielfaches der verpackungsgröße
 					int actualAmount = amountByVerpackungsgroesse( desiredAmount, P.getVerpackungsGroesse() );
 					if(actualAmount > 0) {
+						System.out.println(555555555);
 						// confirm item
 						processedItems.put( P, desiredAmount );
 						processedPrice += P.getPreis() * desiredAmount / P.getVerpackungsGroesse();

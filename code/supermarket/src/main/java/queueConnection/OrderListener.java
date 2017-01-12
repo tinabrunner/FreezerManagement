@@ -2,9 +2,7 @@ package queueConnection;
 
 import java.io.IOException;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -26,15 +24,13 @@ public class OrderListener implements MessageListener {
 		System.out.println("OrderListener: Incoming Order");
 		try {
 			TextMessage msg = (TextMessage) m;
-
 			
-			System.out.println("a");
 			Gson gson = new Gson();
 
 			// 2. JSON to Java object, read it from a Json String.
 			String jsonInString = msg.getText();
 			Order order = gson.fromJson(jsonInString, Order.class);
-			System.out.println("b");
+			System.out.println(order.getItems().toString());
 			orderCtrl.incomingOrder(order);
 
 		} catch (JMSException e) {

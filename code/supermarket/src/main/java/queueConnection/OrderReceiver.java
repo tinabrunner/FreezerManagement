@@ -1,38 +1,37 @@
 package queueConnection;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.ejb.Stateless;
-import javax.interceptor.InvocationContext;
 import javax.jms.*;
 import javax.naming.InitialContext;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.client.Invocation;
 
 /**
  * @author Marius Koch
  *
  */
-
-@Path("/order")
+@Singleton
+@Startup
 @Stateless
 public class OrderReceiver {
 	
 	@EJB(name = "OrderListener")
 	MessageListener listener;
+	
+	private QueueConnection con;
 
 	public OrderReceiver() { /* keep */ }
 	
-	@Path("/start")
-	@PostConstruct // GEHT  NICHT FIXME
-	@GET
+	@PostConstruct
 	public void setupConnection() {
 		try {
 			// 1) Create and start connection
 			InitialContext ctx = new InitialContext();
 			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/orderConnectionFactory");
-			QueueConnection con = f.createQueueConnection();
+			con = f.createQueueConnection();
 			con.start();
 
 			// 2) create Queue session
@@ -54,6 +53,16 @@ public class OrderReceiver {
 			}
 		} catch (Exception e) {
 			System.out.println(e);
+		}
+	}
+	
+	@PreDestroy
+	public void stopConnection() {
+		try {
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			
 		}
 	}
 

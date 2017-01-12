@@ -17,7 +17,7 @@ public class ApplicationConfig extends Application {
 		Set<Class<?>> classes = new HashSet<Class<?>>();
 
 		classes.add(ProductListController.class);
-		classes.add(OrderReceiver.class);
+		classes.add(OrderReceiver.class); // todo
 		classes.add(CrossOriginFilter.class);
 
 		return classes;

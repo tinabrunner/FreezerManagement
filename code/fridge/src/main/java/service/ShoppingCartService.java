@@ -3,10 +3,7 @@ package service;
 import db_communication.DB_FridgeInventory;
 import db_communication.DB_Settings;
 import db_communication.DB_ShoppingList;
-import model.InventoryProduct;
-import model.Order;
-import model.ShoppingCartItem;
-import model.ShoppingListItem;
+import model.*;
 import queueConnection.OrderSender;
 
 import javax.ejb.EJB;
@@ -123,7 +120,13 @@ public class ShoppingCartService {
 		
 		Set<ShoppingCartItem> shoppingCartItems = this.getShoppingCart(); // new HashSet<>();
 		
-		int wantedDeliveryDay = db_settings.retrieveSettings().getDelivery_day();
+		Settings settings = null;
+		try {
+			settings = db_settings.retrieveSettings();
+		} catch(Exception e) {
+			settings = new Settings();
+		}
+		int wantedDeliveryDay = settings.getDelivery_day();
 		
 		Map<String, Integer> relevantData = new HashMap<>();
 		for (ShoppingCartItem i : shoppingCartItems) {

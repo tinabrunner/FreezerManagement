@@ -6,10 +6,10 @@ import javax.interceptor.InvocationContext;
 
 import db_communication.DB_UserSessionStore;
 
-// @WebService
-// @WebFilter("/*") 
+/**
+ * @author Christina Brunner
+ */
 
-// @Stateless
 @Interceptor
 @Logged
 public class LoginInterceptor {
@@ -18,6 +18,7 @@ public class LoginInterceptor {
 
 	@AroundInvoke
 	public Object invokeInterceptorMethod(InvocationContext ctx) throws Exception {
+
 		System.out.println("Test interceptor");
 		return ctx.proceed();
 	}

@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * @author Christina Brunner
+ */
+
 public class UserSessionData {
 
 	private String token;

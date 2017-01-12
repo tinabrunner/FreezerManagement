@@ -2,6 +2,10 @@ package model;
 
 import java.util.Date;
 
+/**
+ * @author Christina Brunner
+ */
+
 public class InventoryProduct {
 
 	private String prodCategoryId;
@@ -10,8 +14,8 @@ public class InventoryProduct {
 
 	public InventoryProduct() {
 	} // keep
-	
-	public InventoryProduct( String prodCategoryId, String name, Date expiryDate) {
+
+	public InventoryProduct(String prodCategoryId, String name, Date expiryDate) {
 		this.name = name;
 		this.prodCategoryId = prodCategoryId;
 		this.expiryDate = expiryDate;
@@ -24,7 +28,7 @@ public class InventoryProduct {
 	public void setProdCategoryId(String prodCategoryId) {
 		this.prodCategoryId = prodCategoryId;
 	}
-	
+
 	public Date getExpiryDate() {
 		return expiryDate;
 	}
@@ -32,11 +36,11 @@ public class InventoryProduct {
 	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}

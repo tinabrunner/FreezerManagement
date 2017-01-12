@@ -15,10 +15,8 @@ import com.mongodb.client.model.Filters;
 import domain.MongoProvider;
 import model.FridgeUser;
 
-/* 
- * Die Klasse DB_FridgeUser schreibt User inkl. aller Attribute (Name, Email,...) in die Datenbank,
- * kann sie auch wieder auslesen, sowie editieren und löschen.
- * 
+/**
+ * @author Christina Brunner
  */
 
 @Stateless

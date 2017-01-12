@@ -15,6 +15,10 @@ import com.mongodb.client.model.Filters;
 import domain.MongoProvider;
 import model.UserSessionData;
 
+/**
+ * @author Christina Brunner
+ */
+
 @Stateless
 public class DB_UserSessionStore {
 

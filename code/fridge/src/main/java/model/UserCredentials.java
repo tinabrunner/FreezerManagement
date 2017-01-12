@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * @author Christina Brunner
+ */
+
 public class UserCredentials {
 	private String username;
 	private String password;

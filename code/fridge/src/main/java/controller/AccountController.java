@@ -20,6 +20,10 @@ import db_communication.DB_FridgeUser;
 import db_communication.DB_UserSessionStore;
 import model.FridgeUser;
 
+/**
+ * @author Christina Brunner
+ */
+
 @Stateless
 @Path("/account")
 public class AccountController {

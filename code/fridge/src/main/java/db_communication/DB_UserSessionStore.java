@@ -59,8 +59,8 @@ public class DB_UserSessionStore {
 	public void insertUserSessionToDB(UserSessionData data) {
 		MongoCollection<Document> sessionStore = getSessionStore();
 		Document doc = convertSessionDataToDocument(data);
-		if (usernameExists(data)) {
-			Bson filter = Filters.eq(_token, data.getToken());
+		if (usernameExists(data.getUsername())) {
+			Bson filter = Filters.eq(_username, data.getUsername());
 			sessionStore.findOneAndDelete(filter);
 		}
 		sessionStore.insertOne(doc);
@@ -82,9 +82,9 @@ public class DB_UserSessionStore {
 	}
 
 	// Check if Usernamealready exists
-	public boolean usernameExists(UserSessionData data) {
+	public boolean usernameExists(String username) {
 		MongoCollection<Document> sessionStore = getSessionStore();
-		Bson filter = Filters.eq(_username, data.getUsername());
+		Bson filter = Filters.eq(_username, username);
 		if (sessionStore.count(filter) > 0)
 			return true;
 		else

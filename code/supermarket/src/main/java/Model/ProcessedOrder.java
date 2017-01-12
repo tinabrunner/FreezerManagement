@@ -19,6 +19,11 @@ public class ProcessedOrder extends Order {
 	
 	public ProcessedOrder() { /* keep */ }
 	
+	public ProcessedOrder( Order order ) {
+		this.setCustomerId(order.getCustomerId());
+		this.setDeliveryDay(order.getDeliveryDay());
+	}
+	
 	public ProcessedOrder(String id, Date receiveDate, double totalPrice, String customerId, Map<Product,Integer> items) {
 		super(customerId);
 		

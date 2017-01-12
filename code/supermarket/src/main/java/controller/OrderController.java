@@ -35,13 +35,13 @@ public class OrderController {
 	@EJB
 	private DB_ProductList dbProductList;
 
-	public void saveOrderToDB(ProcessedOrder order) {
+	private void saveOrderToDB(ProcessedOrder order) {
 		dborder.insertOrderToDB(order);
 	}
 
 	public void incomingOrder(Order order) throws IOException {
 		/* process order */
-		ProcessedOrder processedOrder = (ProcessedOrder) order;
+		ProcessedOrder processedOrder = new ProcessedOrder(order);
 		List<Product> PRODUCTS = dbProductList.getAllProducts();
 		Map<Product, Integer> processedItems = new HashMap<>();
 		double processedPrice = 0;

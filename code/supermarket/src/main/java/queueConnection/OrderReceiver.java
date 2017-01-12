@@ -1,30 +1,32 @@
 package queueConnection;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.jms.JMSException;
-import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueSession;
-import javax.jms.Session;
+import javax.interceptor.InvocationContext;
+import javax.jms.*;
 import javax.naming.InitialContext;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.client.Invocation;
 
 /**
  * @author Marius Koch
  *
  */
 
+@Path("/order")
 @Stateless
 public class OrderReceiver {
 	
-	@EJB
-	OrderListener listener;
+	@EJB(name = "OrderListener")
+	MessageListener listener;
 
-	public OrderReceiver() throws JMSException {
-	}
-
+	public OrderReceiver() { /* keep */ }
+	
+	@Path("/start")
+	@PostConstruct // GEHT  NICHT FIXME
+	@GET
 	public void setupConnection() {
 		try {
 			// 1) Create and start connection
@@ -44,6 +46,8 @@ public class OrderReceiver {
 			
 			// 5) register the listener object with receiver
 			receiver.setMessageListener(listener);
+			
+			System.out.println("OrderReceiver: listening for Messages.");
 
 			while (true) {
 				Thread.sleep(1000);

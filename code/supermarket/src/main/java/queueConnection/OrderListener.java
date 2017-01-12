@@ -17,13 +17,13 @@ import Model.Order;
 import controller.OrderController;
 
 @Stateless
-@Singleton
 public class OrderListener implements MessageListener {
-
-	@Resource(name = "orderController")
+	
+	@EJB
 	private OrderController orderCtrl;
 
 	public void onMessage(Message m) {
+		System.out.println("OrderListener: Incoming Order");
 		try {
 			TextMessage msg = (TextMessage) m;
 

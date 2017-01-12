@@ -41,9 +41,9 @@ public class InvoiceController {
 		Date billingDate = null;
 
 		Invoice invoice = new Invoice(null, customerId, billingDate, orderDate, totalPrice, "");
-		Map<Product, Integer> orders = order.getItemsProcessed();
+		Map<Product, Integer> items = order.getItemsProcessed();
 
-		for (Map.Entry<Product, Integer> entry : orders.entrySet()) {
+		for (Map.Entry<Product, Integer> entry : items.entrySet()) {
 			System.out.println(entry.getKey() + "/" + entry.getValue());
 			Product p = entry.getKey();
 			String id = p.getId();

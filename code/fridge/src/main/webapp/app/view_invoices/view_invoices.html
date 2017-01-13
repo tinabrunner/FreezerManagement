@@ -17,7 +17,7 @@
 				<td>{{ invoice.orderDate }}</td>
 				<td>{{ invoice.totalPrice }}</td>
 				<td>
-					<button type="submit" ng-click="invoiceCtrl.savePDF(invoice.id)">Download Invoice</button>
+					<a href={{invoice.invoiceURL}}>Download PDF</a>
 				</td>
 			</tr>
 		</tbody>

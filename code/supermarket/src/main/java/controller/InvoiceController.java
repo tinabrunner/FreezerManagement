@@ -35,7 +35,7 @@ public class InvoiceController {
 	@EJB
 	private DB_Invoice dbInvoice;
 
-	public static final String INVOICEURLPATH = "http://localhost:8129/invoices/";
+	public static final String INVOICEURLPATH = "http://localhost:8161/invoices/";
 	public static final String INVOICEHTMLPATH = "/webapp/app/invoice/";
 
 	ParseHtml htmlParser = new ParseHtml();

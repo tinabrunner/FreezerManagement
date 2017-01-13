@@ -33,7 +33,7 @@ public class DeliveryController {
 		LocalDate expiryDate = LocalDate.now();
 		expiryDate.plusDays(expiryTime);
 
-		List<ProcessedOrder> orders = dbOrder.getAllNotSendedOrders();
+		List<ProcessedOrder> orders = dbOrder.getAllNotSentOrders();
 		List<ExpiryProduct> delivery = new ArrayList<ExpiryProduct>();
 
 		for (ProcessedOrder or : orders) {

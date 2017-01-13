@@ -49,12 +49,11 @@ public class LoginController {
 				UserSessionData data = new UserSessionData(token, username);
 				dbUserSessionStore.insertUserSessionToDB(data);
 				return token;
-			} else {
-				return "Username and Password does not fit!";
-			}
-		} else {
-			return "User does not exists. Please register!";
-		}
+			} else
+				return "";
+		} else
+			return "";
+
 	}
 
 	public String buildToken() {

@@ -1,29 +1,39 @@
 package domain;
 
-import javax.ejb.Stateless;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import db_communication.DB_UserSessionStore;
+import javax.interceptor.Interceptor;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Christina Brunner
  */
 
-// @Interceptor
-// @Logged
-@Stateless
-@Path("/loginInterceptor")
+@Interceptor
+@Logged
 public class LoginInterceptor {
 
 	// @Inject
 	// HttpServletRequest request;
 
-	private DB_UserSessionStore db_UserSessionStore;
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
+
+		HttpSession session = request.getSession();
+
+		System.out.println("Interceptor!! - Token: " + session.getAttribute("token"));
+
+		// if displaying the home page, make sure the user is reloaded.
+		/*if (request.getRequestURI().endsWith("login.html")) {
+			session.removeAttribute("isUserLoggedIn");
+		}
+
+		if (session.getAttribute("token") == null && !request.getRequestURI().endsWith("login")) {
+			response.sendRedirect(request.getContextPath() + "/login.html");
+			return false;
+		}*/
+		return true;
+	}
 
 	// @AroundInvoke
 	// public Object invokeInterceptorMethod(InvocationContext ctx) throws
@@ -44,15 +54,5 @@ public class LoginInterceptor {
 	// return ctx.proceed();
 
 	// System.out.println("Test interceptor");
-
-	@POST
-	@Produces(MediaType.TEXT_PLAIN)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public String isUserLoggedIn(@PathParam("token") String token) {
-		if (db_UserSessionStore.getUserSessionFromDB(token).getUsername() != null)
-			return "";
-		else
-			return "could not find token in DB";
-	}
 
 }

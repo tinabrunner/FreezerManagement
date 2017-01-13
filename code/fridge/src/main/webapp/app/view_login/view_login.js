@@ -24,7 +24,7 @@
 		        };
 				$http.post(URL_API+'login', objData).then((function(response){
 					alert("Passt: "+response.data);
-					$cookies.put('username', response.data);
+					$cookies.put('token', response.data);
 					$location.path("/home");
 				}), 
 				function(response) { 

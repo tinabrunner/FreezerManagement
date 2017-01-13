@@ -34,7 +34,7 @@ public class LoginController {
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String Login(UserCredentials credentials) {
+	public String login(UserCredentials credentials) {
 
 		String username = credentials.getUsername();
 		String password = credentials.getPassword();

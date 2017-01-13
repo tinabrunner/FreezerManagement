@@ -13,56 +13,121 @@
 			controller: 'myaccountCtrl'
 		});
 	}])
-	.controller('myaccountCtrl', function($scope, $http, $cookies) {
-		$scope.MyText = "Edit Account";
-		$scope.checked =true;
+	
+	.controller('myaccountCtrl', MyAccountCtrl);
+	
+	MyAccountCtrl.$inject = ['$scope', '$http', '$cookies', '$window', '$route'];
+	
+	function MyAccountCtrl($scope, $http, $cookies, $window, $route) {
 		
 		var vm = this;
-		vm.user = {};
+		// Bind Functions to Buttons
+		vm.editAccount = editAccount;
+		vm.deleteAccount = deleteAccount;
+		vm.cancel = cancel;
+
+		init ();
 		
-		var token = $cookies.get('username');
-		$http.get(URL_API+'account'+'/'+token).then(function(response) {
-			if (!response.data) {
+		// Show field "password_confirmation" if password gets edited
+		$scope.passwordChanged = function() {
+			$scope.checked_PwConfirm = false;
+		};
+		
+		function init() {
+			$scope.textEditButton = "Edit Account";
+			$scope.checked = true;
+			$scope.checked_PwConfirm = true;
+			vm.user = {};
+			var token = $cookies.get('token');
+			$http.get(URL_API+'account'+'/'+token).then(function(response) {
+				if (!response.data) {
+						alert("Fehler: "+response.data);
+					}
+					else {
+						vm.user = response.data[0];
+					}
+			}, function(error) {
+				console.dir(error);
+			});
+		};
+		
+		function editAccount() {
+			if ($scope.textEditButton == "Edit Account") {
+				$scope.checked = false;
+				$scope.textEditButton = "Save Changes";
+			}
+			else if ($scope.textEditButton == "Save Changes") {
+				var newUserData = {
+						firstName : vm.user.firstName,
+						lastName : vm.user.lastName,
+						username : vm.user.username,
+						password : vm.user.password,
+						email : vm.user.email,
+						role : "user"
+				};
+				
+				if (!$scope.checked_PwConfirm) {
+					if (!(vm.user.password === vm.password_confirm)  || !vm.user.username || !vm.user.password || 
+							!vm.user.firstName || !vm.user.lastName || !vm.user.email) {
+						if (!(vm.user.password === vm.password_confirm))
+							alert("Confirmation of the password is wrong!");
+						else
+							alert("Please fill all fields!");
+					}
+					else
+						safeDataAndReset(newUserData);
+				}
+				else {
+					safeDataAndReset(newUserData);
+				}
+			}
+	    };
+		
+		function deleteAccount(username) {
+			// Show confirmation-alert
+			if ($window.confirm("Are you sure?"+username)) {
+                // Delete token
+				$cookies.remove("username");
+                // Delete User from DB
+				$http.delete(URL_API+'account'+'/'+username).then(function(response){
+			    	   if (!response.data) {
+			    		   $route.reload();
+						}
+						else {
+							alert("Fehler: "+response.data);
+						}
+			       }, 
+			       function(response){
+			         alert("Something went wrong - "+response.data);
+			       }
+			    );
+            } 
+			
+			
+		};
+		
+		function cancel() {
+			$scope.checked_PwConfirm = true;
+			$scope.checked = true;
+			$scope.textEditButton = "Edit Account";
+		};
+
+		var safeDataAndReset = function(newUserData) {
+			$http.put(URL_API+'account', newUserData).then((function(response){
+				if (response.data) {
 					alert("Fehler: "+response.data);
 				}
 				else {
-					vm.user = response.data[0];
+				// evtl einfach reload?
+					$scope.checked_PwConfirm = true;
+					$scope.checked = true;
+					$scope.textEditButton = "Edit Account";
 				}
-		}, function(error) {
-			console.dir(error);
-		});
-		
-		$scope.EditAccount = function() {
-			if ($scope.MyText == "Edit Account") {
-				$scope.checked =false;
-				$scope.MyText = "Save Changes";
-			}
-			else if ($scope.MyText == "Save Changes") {
-				$scope.checked =true;
-				$scope.MyText = "Edit Account";
-			}
-			else {
-				alert ("Value = "+$scope.MyText);
-			}
-			
-			/*else {
-				var dada = {
-						name : $scope.firstname, 
-						surname : $scope.lastname,
-						username : $scope.username,
-						password : $scope.password,
-						email : $scope.email,
-						userrole : $('input:checkbox[name="reg_usertype"]:checked')
-				}
-				$http.post(URL_API+"account", dada).then((function(response){
-					if (response.data)
-						redirectTo: '/home';
 				}), 
-				alert("Something went wrong"));
-				
-				
-			}*/
-	    }
-	});
+				function(response) { 
+					alert("Something went wrong: "+response.data);
+				});
+		};
+	}
 	
 })();

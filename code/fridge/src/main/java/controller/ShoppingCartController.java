@@ -38,8 +38,8 @@ public class ShoppingCartController {
 	 * Submit order.
 	 */
 	@Consumes(MediaType.APPLICATION_JSON)
-	public boolean submitOrder(List<ShoppingCartItem> items) {
-		shoppingCartHelper.sendOrder();
+	public boolean submitOrder(Set<ShoppingCartItem> items) {
+		shoppingCartHelper.sendOrder( items );
 		return true;
 	}
 }

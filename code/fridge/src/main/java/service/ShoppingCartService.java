@@ -116,9 +116,7 @@ public class ShoppingCartService {
 		}
 	}
 	
-	public void sendOrder() {
-		
-		Set<ShoppingCartItem> shoppingCartItems = this.getShoppingCart(); // new HashSet<>();
+	public void sendOrder(Set<ShoppingCartItem> shoppingCartItems) {
 		
 		Settings settings = null;
 		try {

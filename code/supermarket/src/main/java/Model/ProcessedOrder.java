@@ -1,5 +1,7 @@
 package Model;
 
+import org.bson.Document;
+
 import java.util.Date;
 import java.util.Map;
 

@@ -34,7 +34,6 @@
 					alert("Fehler: "+response.data);
 				}
 				else {
-					// TODO: Login !!!
 					$location.path("/home");
 				}
 				}), 

@@ -1,14 +1,15 @@
 package db_communication;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import Model.ProcessedOrder;
+import com.mongodb.BasicDBList;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -18,10 +19,12 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 
-import Model.ProcessedOrder;
+import Model.Order;
 import Model.Product;
 import domain.DatabaseProviderImpl;
 import domain.MongoProvider;
+
+import static com.mongodb.client.model.Aggregates.sort;
 
 /**
  * @author Marius Koch
@@ -42,22 +45,6 @@ public class DB_Order {
 		db.connect();
 	}
 
-	public Document convertOrderToDocument(ProcessedOrder order) {
-		Document doc = new Document("id", order.getId()).append("recieveDate", order.getRecieveDate())
-				.append("totalPrice", order.getTotalPrice()).append("customerId", order.getCustomerId())
-				.append("items", order.getItemsProcessed()).append("sent", false);
-		return doc;
-	}
-
-	public ProcessedOrder convertDocumentToOrder(Document doc) {
-		String id = doc.getString("id");
-		Date receiveDate = doc.getDate("receiveDate");
-		double totalPrice = doc.getDouble("totalPrice");
-		String customerId = doc.getString("customerId");
-		Map<Product, Integer> items = (Map<Product, Integer>) doc.get("items");
-		return new ProcessedOrder(id, receiveDate, totalPrice, customerId, items);
-	}
-
 	public void insertOrderToDB(ProcessedOrder order) {
 
 		MongoCollection<Document> orders = db.getCollection("orders");
@@ -72,8 +59,17 @@ public class DB_Order {
 
 		if (!orderExist(order.getId())) {
 			Document doc = new Document("id", order.getId()).append("recieveDate", order.getRecieveDate())
-					.append("totalPrice", order.getTotalPrice()).append("customerId", order.getCustomerId())
-					.append("items", order.getItemsProcessed());
+					.append("totalPrice", order.getTotalPrice()).append("customerId", order.getCustomerId());
+			BasicDBList list = new BasicDBList();
+			for( Map.Entry<Product, Integer> item : order.getItemsProcessed().entrySet()) {
+				BasicDBObject dbItem = new BasicDBObject();
+				dbItem.append("amount", item.getValue());
+				dbItem.append("id", item.getKey().getId());
+				dbItem.append("preis", item.getKey().getPreis());
+				dbItem.append("name", item.getKey().getName());
+				list.add(dbItem);
+			}
+			doc.append("items", list);
 			orders.insertOne(doc);
 		} else
 			System.out.println("Order already existing!");
@@ -112,47 +108,32 @@ public class DB_Order {
 			Date receiveDate = doc.getDate("receiveDate");
 			double totalPrice = doc.getDouble("totalPrice");
 			String customerId = doc.getString("customerId");
-			Map<Product, Integer> items = (Map<Product, Integer>) doc.get("items");
+			
+			BasicDBList itemsDb = (BasicDBList) doc.get("items");
+			Map<Product,Integer> items = new HashMap<>();
+			for( BasicDBObject dbItem : itemsDb.toArray(new BasicDBObject[0]) ) {
+				Product prod = new Product();
+				prod.setId(dbItem.getString("id"));
+				prod.setPreis(dbItem.getDouble("preis"));
+				prod.setName(dbItem.getString("name"));
+				items.put(prod, dbItem.getInt("amount"));
+			}
+			
 			order = new ProcessedOrder(id, receiveDate, totalPrice, customerId, items);
 		}
 		return order;
 	}
 
 	public String getLastId() {
-
-		Document doc = db.getCollection("orders").find().sort(new BasicDBObject("id", -1)).limit(1).first();
-		if (doc == null || !doc.containsKey("id")) {
+		Document doc = db.getCollection("orders")
+				.find()
+				.sort(new BasicDBObject("id", -1))
+				.limit(1)
+				.first();
+		if( doc == null || ! doc.containsKey("id")) {
 			return "0";
 		} else {
 			return doc.getString("id");
 		}
-	}
-
-	public List<ProcessedOrder> getAllNotSendedOrders() {
-
-		MongoCollection<Document> orders = db.getCollection("orders");
-
-		// Create a list for all invoices and get a cursor to go through the
-		// DBCollection
-
-		List<ProcessedOrder> orderResult = new ArrayList<>();
-
-		for (Document doc : orders.find()) {
-			if (!doc.getBoolean("sent")) {
-				orderResult.add(this.convertDocumentToOrder(doc));
-			}
-		}
-		return orderResult;
-	}
-
-	public void setOrderToSent(String idString) {
-		ProcessedOrder order = this.getOrder(idString);
-		Document doc = convertOrderToDocument(order);
-		doc.append("sent", true);
-
-		Bson bson = Filters.eq("id", idString);
-		db.getCollection("invoices").updateOne(bson, new Document("$set", new Document("sent", true)));
-		// db.getCollection("invoices").findOneAndUpdate(bson, doc);
-
 	}
 }

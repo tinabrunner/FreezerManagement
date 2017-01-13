@@ -1,9 +1,11 @@
 package scheduleTasks;
 
+import model.ShoppingCartItem;
 import service.ShoppingCartService;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
+import java.util.Set;
 
 /**
  * User: phi
@@ -71,6 +73,7 @@ public class OrderTimer {
 			// wait another (every_nth - counter) weeks
 			return;
 		}
-		shoppingCartHelper.sendOrder();
+		Set<ShoppingCartItem> shoppingCartItems = shoppingCartHelper.getShoppingCart();
+		shoppingCartHelper.sendOrder( shoppingCartItems );
 	}
 }

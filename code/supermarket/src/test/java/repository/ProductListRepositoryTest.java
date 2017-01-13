@@ -90,4 +90,22 @@ public class ProductListRepositoryTest {
 		Assert.assertTrue(repository.countProducts() == productCount);
 	}
 
+	@Test
+	public void shouldReturnAnUpdatedProduct() {
+		Product itemToUpdate = ProductListHelperTest.getProductListDummy("BMW 123d", "2312");
+		Product itemToFind = ProductListHelperTest.getProductListDummy("---", itemToUpdate.getId());
+		repository.addProduct(itemToUpdate);
+		repository.addProduct(ProductListHelperTest.getProductListDummy("BMW 330d", "312"));
+		repository.addProduct(ProductListHelperTest.getProductListDummy("BMW M4", "123"));
+		repository.addProduct(ProductListHelperTest.getProductListDummy("BMW M135i", "789"));
+		itemToUpdate.setName("Nissan");
+
+		repository.updateProduct(itemToUpdate);
+
+		itemToFind = repository.getProduct(itemToUpdate);
+
+		Assert.assertEquals(itemToFind.getName(), itemToUpdate.getName());
+
+	}
+
 }

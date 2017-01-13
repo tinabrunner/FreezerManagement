@@ -46,6 +46,15 @@ public interface ProductListRepository {
 	Boolean existsProduct(Product product);
 
 	/**
+	 * Get a product form the supermarket (by Id)
+	 * 
+	 * @param id
+	 *            for product to select
+	 * @return selected product
+	 */
+	Product getProduct(Product product);
+
+	/**
 	 * Returns all products from the supermarket
 	 * 
 	 * @return a list with all products

@@ -32,6 +32,12 @@ public class ProductListRepositoryStub implements ProductListRepository {
 	}
 
 	@Override
+	public Product getProduct(Product product) {
+		return this.getAllProducts().stream().filter(map -> map.getId().equals(product.getId())).findFirst()
+				.orElse(new Product());
+	}
+
+	@Override
 	public List<Product> getAllProducts() {
 		return productList;
 	}

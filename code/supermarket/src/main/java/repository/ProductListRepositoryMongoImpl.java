@@ -80,6 +80,22 @@ public class ProductListRepositoryMongoImpl implements ProductListRepository {
 	}
 
 	@Override
+	public Product getProduct(Product product) {
+		final Product[] findProduct = new Product[1];
+		try {
+			getProductListCollection().find(getFilterForId(product.getId())).forEach((Block<Document>) document -> {
+				Product p = ProductListHelper.convertDatabaseItemToProduct(document);
+				final Product f = (Product) p;
+				findProduct[0] = f;
+			});
+		} catch (Exception e) {
+			System.out.println("MongoConnection.ProductList(getProduct): " + e.getMessage());
+		}
+
+		return findProduct[0];
+	}
+
+	@Override
 	public List<Product> getAllProducts() {
 		List<Product> products = new ArrayList<>();
 		try {

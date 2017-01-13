@@ -4,22 +4,41 @@ import org.junit.Before;
 import org.junit.Test;
 
 import Model.Product;
+import domain.DatabaseProviderImpl;
+import domain.MongoProvider;
 import junit.framework.Assert;
-import repository.ProductListRepositoryStub;
+import repository.ProductListRepositoryMongoImpl;
+import util.ProductListHelper;
 import util.ProductListHelperTest;
 
 /*
  * @author: JD, 13.01.2017
  */
-public class ProductListServiceTest {
+public class ProductListServiceIntegrationTest {
 
-	private ProductListRepositoryStub repository;
+	private static final String databaseName = "supermarketIT";
+	private ProductListRepositoryMongoImpl productListRepository;
 	private ProductListServiceImpl productListService;
+	private MongoProvider mongoProvider;
+	private DatabaseProviderImpl mongoConnection;
+
+	private DatabaseProviderImpl getMongoConnection() {
+		DatabaseProviderImpl mongoDB = new DatabaseProviderImpl(this.mongoProvider);
+		mongoDB.setDatabaseName(databaseName);
+		mongoDB.connect();
+
+		return mongoDB;
+	}
 
 	@Before
 	public void setUp() {
-		repository = new ProductListRepositoryStub();
-		productListService = new ProductListServiceImpl(repository);
+		mongoProvider = new MongoProvider();
+		mongoProvider.init();
+		mongoConnection = new DatabaseProviderImpl(mongoProvider);
+
+		productListRepository = new ProductListRepositoryMongoImpl(getMongoConnection());
+		productListService = new ProductListServiceImpl(productListRepository);
+		getMongoConnection().getCollection(ProductListHelper.collectionName).drop();
 	}
 
 	@Test
@@ -31,14 +50,14 @@ public class ProductListServiceTest {
 	@Test
 	public void shouldDeleteProduct() {
 		Product productToDelete = ProductListHelperTest.getProductListDummy("", "");
-		repository.addProduct(productToDelete);
+		productListService.addProduct(productToDelete);
 		Assert.assertTrue(productListService.deleteProduct(productToDelete));
 	}
 
 	@Test
 	public void shouldReturnTrueForExistingProduct() {
 		Product productExists = ProductListHelperTest.getProductListDummy("", "");
-		repository.addProduct(productExists);
+		productListService.addProduct(productExists);
 		Assert.assertTrue(productListService.existsProduct(productExists));
 	}
 
@@ -48,11 +67,11 @@ public class ProductListServiceTest {
 		int productCount = 3;
 
 		Product productOne = ProductListHelperTest.getProductListDummy("IdProd1", "Tasse");
-		repository.addProduct(productOne);
+		productListService.addProduct(productOne);
 		Product productTwo = ProductListHelperTest.getProductListDummy("IdProd2", "Teller");
-		repository.addProduct(productTwo);
+		productListService.addProduct(productTwo);
 		Product productThree = ProductListHelperTest.getProductListDummy("IdProd3", "Teekanne");
-		repository.addProduct(productThree);
+		productListService.addProduct(productThree);
 
 		Assert.assertEquals(productCount, productListService.getAllProducts().size());
 	}
@@ -63,30 +82,13 @@ public class ProductListServiceTest {
 		int productCount = 3;
 
 		Product productOne = ProductListHelperTest.getProductListDummy("IdProd1", "Löffel");
-		repository.addProduct(productOne);
+		productListService.addProduct(productOne);
 		Product productTwo = ProductListHelperTest.getProductListDummy("IdProd2", "Laubbaum");
-		repository.addProduct(productTwo);
+		productListService.addProduct(productTwo);
 		Product productThree = ProductListHelperTest.getProductListDummy("IdProd3", "Baumstamm");
-		repository.addProduct(productThree);
+		productListService.addProduct(productThree);
 
 		Assert.assertEquals(productCount, productListService.countProducts());
-	}
-
-	@Test
-	public void shouldReturnAnUpdatedProduct() {
-		Product itemToUpdate = ProductListHelperTest.getProductListDummy("BMW 123d", "2312");
-		Product itemToFind = ProductListHelperTest.getProductListDummy("---", itemToUpdate.getId());
-		repository.addProduct(itemToUpdate);
-		repository.addProduct(ProductListHelperTest.getProductListDummy("BMW 330d", "312"));
-		repository.addProduct(ProductListHelperTest.getProductListDummy("BMW M4", "123"));
-		repository.addProduct(ProductListHelperTest.getProductListDummy("BMW M135i", "789"));
-		itemToUpdate.setName("Nissan");
-
-		repository.updateProduct(itemToUpdate);
-
-		itemToFind = repository.getProduct(itemToUpdate);
-
-		Assert.assertEquals(itemToFind.getName(), itemToUpdate.getName());
 	}
 
 }

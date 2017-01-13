@@ -1,27 +1,51 @@
 package service;
 
-import model.ShoppingListItem;
-import repository.ShoppingListRepositoryStub;
-import util.ProductHelperTest;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.After;
+import org.junit.Before;
 
-/**
- * Created by JD on 16.12.2016.
+import domain.DatabaseProviderImpl;
+import domain.MongoProvider;
+import model.ShoppingListItem;
+import repository.ShoppingListRepositoryMongoImpl;
+import repository.ShoppingListRepository;
+import util.ShoppingListHelper;
+import util.ProductHelperTest;
+
+/*
+ * @author: JD, 13.01.2017
  */
-public class ShoppingListServiceTest {
+public class ShoppingListServiceIntegrationTest {
+	
 
-    private ShoppingListRepositoryStub repository;
-    private ShoppingListServiceImpl shoppingListService;
+	private ShoppingListServiceImpl shoppingListService;
+	private ShoppingListRepository shoppingListRepository;
+	
+	private static final String databaseName = "fridgeIT";
+    private MongoProvider mongoProvider;
+    private DatabaseProviderImpl mongoConnection;
 
-    @Before
-    public void setUp(){
-        repository = new ShoppingListRepositoryStub();
-        shoppingListService = new ShoppingListServiceImpl(repository);
+    private DatabaseProviderImpl getMongoConnection() {
+        DatabaseProviderImpl mongoDB = new DatabaseProviderImpl(this.mongoProvider);
+        mongoDB.setDatabaseName(databaseName);
+        mongoDB.connect();
+
+        return mongoDB;
     }
+	
+	@Before
+	public void setUp(){
+		mongoProvider = new MongoProvider();
+        mongoProvider.init();
+        mongoConnection = new DatabaseProviderImpl(mongoProvider);
 
-    @Test
+        shoppingListRepository = new ShoppingListRepositoryMongoImpl(getMongoConnection());
+        shoppingListService = new ShoppingListServiceImpl(shoppingListRepository);
+        getMongoConnection().getCollection(ShoppingListHelper.collectionName).drop();
+	}
+	
+	@Test
     public void shouldReturnAnEmptyShoppingList(){
         Assert.assertTrue(shoppingListService.getAllProducts().isEmpty());
     }
@@ -33,7 +57,7 @@ public class ShoppingListServiceTest {
 
     @Test
     public void shouldReturnTrueWhenSearchingBecauseProductExists(){
-        repository.addProduct(ProductHelperTest.getProductDummy("", ""));
+        shoppingListRepository.addProduct(ProductHelperTest.getProductDummy("", ""));
 
         Assert.assertTrue(shoppingListService.existsProduct(ProductHelperTest.getProductDummy("", "")));
     }
@@ -49,9 +73,9 @@ public class ShoppingListServiceTest {
     	String id = "1202";
     	ShoppingListItem itemToAdd = ProductHelperTest.getProductDummy("", id);
     	ShoppingListItem itemUpdate = ProductHelperTest.getProductDummy("", id);
-        repository.addProduct(itemToAdd);
+        shoppingListRepository.addProduct(itemToAdd);
         itemToAdd.setName("Hund");
-        repository.addProduct(itemToAdd);
+        shoppingListRepository.addProduct(itemToAdd);
         
         itemUpdate = shoppingListService.getProduct(itemToAdd);
         
@@ -63,9 +87,9 @@ public class ShoppingListServiceTest {
     	String id = "1202";
     	ShoppingListItem itemToAdd = ProductHelperTest.getProductDummy("", id);
     	ShoppingListItem itemToCheck = ProductHelperTest.getProductDummy("", id);
-        repository.addProduct(itemToAdd);
+        shoppingListRepository.addProduct(itemToAdd);
         itemToAdd.setName("Hund");
-        repository.updateProduct(itemToAdd);
+        shoppingListRepository.updateProduct(itemToAdd);
         
         itemToCheck = shoppingListService.getProduct(itemToAdd);
         
@@ -76,16 +100,14 @@ public class ShoppingListServiceTest {
 
     @Test
     public void shouldReturnTrueBecauseAddingProductDoesNotExitsInList(){
-
-        repository.addProduct(ProductHelperTest.getProductDummy("BMW 123d", "123"));
-
+        shoppingListRepository.addProduct(ProductHelperTest.getProductDummy("BMW 123d", "123"));
         Assert.assertTrue(shoppingListService.addProduct(ProductHelperTest.getProductDummy("", "")));
     }
 
     @Test
     public void shouldReturnTrueIfDeletionOfProductWentWell(){
         ShoppingListItem product = ProductHelperTest.getProductDummy("", "");
-        repository.addProduct(product);
+        shoppingListRepository.addProduct(product);
 
         Assert.assertTrue(shoppingListService.deleteProduct(product));
     }
@@ -99,10 +121,10 @@ public class ShoppingListServiceTest {
     public void shouldReturnTheSameProductWeInsertedBefore(){
         String searchId = "id-to-search";
         ShoppingListItem searchProduct = ProductHelperTest.getProductDummy("BMW 0", searchId);
-        repository.addProduct(searchProduct);
-        repository.addProduct(ProductHelperTest.getProductDummy("BMW 1", "123"));
-        repository.addProduct(ProductHelperTest.getProductDummy("BMW 2", "456"));
-        repository.addProduct(ProductHelperTest.getProductDummy("BMW 3", "789"));
+        shoppingListRepository.addProduct(searchProduct);
+        shoppingListRepository.addProduct(ProductHelperTest.getProductDummy("BMW 1", "123"));
+        shoppingListRepository.addProduct(ProductHelperTest.getProductDummy("BMW 2", "456"));
+        shoppingListRepository.addProduct(ProductHelperTest.getProductDummy("BMW 3", "789"));
 
         Assert.assertEquals(searchProduct.getId(), shoppingListService.getProduct(ProductHelperTest.getProductDummy("some name", searchId)).getId());
     }
@@ -111,16 +133,17 @@ public class ShoppingListServiceTest {
     public void shouldReturnAnUpdatedProduct(){
         ShoppingListItem itemToUpdate = ProductHelperTest.getProductDummy("BMW 123d", "2312");
         ShoppingListItem itemToFind = ProductHelperTest.getProductDummy("---", itemToUpdate.getId());
-        repository.addProduct(itemToUpdate);
-        repository.addProduct(ProductHelperTest.getProductDummy("BMW 330d", "312"));
-        repository.addProduct(ProductHelperTest.getProductDummy("BMW M4", "123"));
-        repository.addProduct(ProductHelperTest.getProductDummy("BMW M135i", "789"));        
+        shoppingListRepository.addProduct(itemToUpdate);
+        shoppingListRepository.addProduct(ProductHelperTest.getProductDummy("BMW 330d", "312"));
+        shoppingListRepository.addProduct(ProductHelperTest.getProductDummy("BMW M4", "123"));
+        shoppingListRepository.addProduct(ProductHelperTest.getProductDummy("BMW M135i", "789"));        
         itemToUpdate.setName("Nissan");
         
-        repository.updateProduct(itemToUpdate);
+        shoppingListRepository.updateProduct(itemToUpdate);
         
-        itemToFind = repository.getProduct(itemToUpdate);
+        itemToFind = shoppingListRepository.getProduct(itemToUpdate);
         
         Assert.assertEquals(itemToFind.getName(), itemToUpdate.getName());
     }
+
 }

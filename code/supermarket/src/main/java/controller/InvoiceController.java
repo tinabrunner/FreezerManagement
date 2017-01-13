@@ -35,6 +35,9 @@ public class InvoiceController {
 	@EJB
 	private DB_Invoice dbInvoice;
 
+	public static final String INVOICEURLPATH = "http://localhost:8129/invoices/";
+	public static final String INVOICEHTMLPATH = "/webapp/app/invoice/";
+
 	ParseHtml htmlParser = new ParseHtml();
 
 	public Invoice createInvoice(ProcessedOrder order) {
@@ -83,15 +86,18 @@ public class InvoiceController {
 		}
 
 		htmlString.concat(firstString).concat(secondString);
-		String fileDest = "/webapp/app/invoice/";
+		String fileDest = INVOICEHTMLPATH;
 		fileDest.concat(invoice.getId()).concat(".html");
+
+		String invoiceURL = INVOICEURLPATH;
+		invoiceURL.concat(invoice.getId()).concat(".pdf");
 
 		File newHtmlFile = new File(fileDest);
 		FileUtils.writeStringToFile(newHtmlFile, htmlString);
 
 		try {
-			destination = htmlParser.createPdf(fileDest, invoice.getId());
-			return destination;
+			htmlParser.createPdf(fileDest, invoice.getId());
+			return invoiceURL;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return null;

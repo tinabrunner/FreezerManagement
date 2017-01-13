@@ -15,16 +15,12 @@ import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.naming.InitialContext;
 
-/**
- * @author Marius Koch
- *
- */
 @Startup
 @Singleton
 @Stateless
-public class InvoiceReceiver {
+public class DeliveryReceiver {
 
-	@EJB(name = "invoiceListener")
+	@EJB(name = "deliveryListener")
 	private MessageListener listener;
 
 	private QueueConnection con;
@@ -36,14 +32,14 @@ public class InvoiceReceiver {
 			// Create and start connection
 
 			InitialContext ctx = new InitialContext();
-			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/deliveryConnectionFactory");
+			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/fridgeConnectionFactory");
 			con = f.createQueueConnection();
 			con.start();
 
 			// create Queue session
 			QueueSession ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 			// get the Queue object
-			Queue t = (Queue) ctx.lookup("jms/deliveryQueue");
+			Queue t = (Queue) ctx.lookup("jms/invoiceQueue");
 			// create QueueReceiver
 			QueueReceiver receiver = ses.createReceiver(t);
 			// register the listener object with receiver

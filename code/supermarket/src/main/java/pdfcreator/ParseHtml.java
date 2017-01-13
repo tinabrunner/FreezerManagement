@@ -15,7 +15,7 @@ import com.itextpdf.tool.xml.XMLWorkerHelper;
  *
  */
 public class ParseHtml {
-	public static final String DEST = "results/xmlworker/invoice";
+	public static final String DEST = "C:/Program Files/glassfish4.0/glassfish4/glassfish/domains/supermarket/docroot/";
 
 	public ParseHtml() {
 	}
@@ -28,7 +28,7 @@ public class ParseHtml {
 	 * @throws DocumentException
 	 */
 
-	public String createPdf(String htmlFilePath, String invoiceId) throws IOException, DocumentException {
+	public void createPdf(String htmlFilePath, String invoiceId) throws IOException, DocumentException {
 		String dest = DEST.concat(invoiceId).concat(".pdf");
 		File file = new File(dest);
 		file.getParentFile().mkdirs();
@@ -44,6 +44,5 @@ public class ParseHtml {
 		// step 5
 		document.close();
 
-		return DEST;
 	}
 }

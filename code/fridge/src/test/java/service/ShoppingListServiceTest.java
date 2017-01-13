@@ -53,7 +53,7 @@ public class ShoppingListServiceTest {
         itemToAdd.setName("Hund");
         repository.addProduct(itemToAdd);
         
-        itemUpdate = repository.getProduct(itemToAdd);
+        itemUpdate = shoppingListService.getProduct(itemToAdd);
         
         Assert.assertEquals(itemUpdate.getName(), itemToAdd.getName());        
     }
@@ -67,7 +67,7 @@ public class ShoppingListServiceTest {
         itemToAdd.setName("Hund");
         repository.updateProduct(itemToAdd);
         
-        itemToCheck = repository.getProduct(itemToAdd);
+        itemToCheck = shoppingListService.getProduct(itemToAdd);
         
         Assert.assertEquals(itemToCheck.getName(), itemToAdd.getName());        
     }

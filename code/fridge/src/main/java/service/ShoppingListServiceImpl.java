@@ -1,6 +1,6 @@
 package service;
 
-import java.util.Set;
+import java.util.List;
 
 import model.ShoppingListItem;
 import repository.ShoppingListRepository;
@@ -60,7 +60,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 	 * @return
 	 */
 	@Override
-	public Set<ShoppingListItem> getAllProducts() {
+	public List<ShoppingListItem> getAllProducts() {
 		return this.shoppingListRepository.getAllProducts();
 	}
 

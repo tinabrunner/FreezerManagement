@@ -1,6 +1,6 @@
 package repository;
 
-import java.util.Set;
+import java.util.List;
 
 import model.ShoppingListItem;
 
@@ -43,7 +43,7 @@ public interface ShoppingListRepository {
 	 *
 	 * @return Map
 	 */
-	Set<ShoppingListItem> getAllProducts();
+	List<ShoppingListItem> getAllProducts();
 
 	/**
 	 * Returns a given product out of the shoppinglist (not really useful now,

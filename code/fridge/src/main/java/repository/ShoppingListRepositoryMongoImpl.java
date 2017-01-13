@@ -1,7 +1,7 @@
 package repository;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bson.Document;
 
@@ -108,12 +108,13 @@ public class ShoppingListRepositoryMongoImpl implements ShoppingListRepository {
 	 * @return a map
 	 */
 	@Override
-	public Set<ShoppingListItem> getAllProducts() {
-		Set<ShoppingListItem> freezerProducts = new HashSet<>();
-		getShoppingListCollection().find().forEach((Block<Document>) document -> {
-			ShoppingListItem s = ShoppingListHelper.convertDatabaseItemToProduct(document);
-			freezerProducts.add(s);
-		});
+	public List<ShoppingListItem> getAllProducts() {
+		List<ShoppingListItem> freezerProducts = new ArrayList<>();
+		getShoppingListCollection().find().sort(new Document(ShoppingListHelper.documentShoppingListProductName, 1))
+				.forEach((Block<Document>) document -> {
+					ShoppingListItem s = ShoppingListHelper.convertDatabaseItemToProduct(document);
+					freezerProducts.add(s);
+				});
 
 		return freezerProducts;
 	}

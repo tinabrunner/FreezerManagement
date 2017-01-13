@@ -1,7 +1,7 @@
 package controller;
 
 import java.text.ParseException;
-import java.util.Set;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -32,9 +32,9 @@ public class ShoppingListController {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getAllProductsFromShoppingList() throws ParseException {
-		Set<ShoppingListItem> shoppingListProducts = db_shoppingList.getAllProductsFromShoppingList();
-		return new Gson().toJson(shoppingListProducts);
+	public List<ShoppingListItem> getAllProductsFromShoppingList() throws ParseException {
+		List<ShoppingListItem> shoppingListProducts = db_shoppingList.getAllProductsFromShoppingList();
+		return shoppingListProducts;
 	}
 
 	@DELETE
@@ -47,6 +47,7 @@ public class ShoppingListController {
 	}
 
 	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
 	public Boolean addItem(String item) {
 		ShoppingListItem shoppingListItem = new Gson().fromJson(item, ShoppingListItem.class);
 		return db_shoppingList.addProductToShoppingList(shoppingListItem);

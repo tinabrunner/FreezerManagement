@@ -87,7 +87,7 @@
 			// Show confirmation-alert
 			if ($window.confirm("Are you sure?"+username)) {
                 // Delete token
-				$cookies.remove("username");
+				$cookies.remove("token");
                 // Delete User from DB
 				$http.delete(URL_API+'account'+'/'+username).then(function(response){
 			    	   if (!response.data) {

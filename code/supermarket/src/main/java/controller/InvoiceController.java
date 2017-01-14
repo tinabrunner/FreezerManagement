@@ -1,7 +1,10 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +39,7 @@ public class InvoiceController {
 	private DB_Invoice dbInvoice;
 
 	public static final String INVOICEURLPATH = "http://localhost:8161/invoices/";
-	public static final String INVOICEHTMLPATH = "/webapp/app/invoice/";
+	public static final String INVOICEHTMLPATH = "/webapp/app/htmlInvoices/";
 
 	ParseHtml htmlParser = new ParseHtml();
 
@@ -46,7 +49,8 @@ public class InvoiceController {
 		double totalPrice = order.getTotalPrice();
 		Date billingDate = null;
 
-		Invoice invoice = new Invoice(null, customerId, billingDate, orderDate, totalPrice, "");
+		Invoice invoice = new Invoice(null, customerId, billingDate, orderDate, totalPrice, "",
+				new ArrayList<InvoiceItem>());
 		Map<Product, Integer> items = order.getItemsProcessed();
 
 		for (Map.Entry<Product, Integer> entry : items.entrySet()) {
@@ -66,10 +70,16 @@ public class InvoiceController {
 
 	public String invoiceToHTML(Invoice invoice) throws IOException {
 		String destination;
-		File htmlTemplateFile = new File("/webapp/app/invoice/invoice.html");
-		String htmlString = FileUtils.readFileToString(htmlTemplateFile);
+		// ClassLoader classLoader = getClass().getClassLoader();
+		// File htmlTemplateFile = new File(
+		// classLoader.getResource("/src/main/webapp/app/invoice/invoice.html").getFile());
+		// File htmlTemplateFile = new
+		// File("supermarket/src/main/webapp/app/invoice/invoice.html");
+		// String s = Files.toString();
+		String htmlString = htmlToString();
+		System.out.println(htmlString);
 
-		String[] splitfile = htmlString.split("<!--splitpoint-->");
+		String[] splitfile = htmlString.split("splitpoint");
 		String firstString = splitfile[0];
 		String secondString = splitfile[1];
 
@@ -103,6 +113,20 @@ public class InvoiceController {
 			return null;
 		}
 
+	}
+
+	private String htmlToString() {
+		StringBuilder contentBuilder = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new FileReader("/src/main/webapp/app/invoice/invoice.html"));
+			String str;
+			while ((str = in.readLine()) != null) {
+				contentBuilder.append(str);
+			}
+			in.close();
+		} catch (IOException e) {
+		}
+		return contentBuilder.toString();
 	}
 
 	// Rechnung wird in String umgewandelt

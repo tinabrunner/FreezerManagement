@@ -58,7 +58,9 @@ public class DB_Order {
 
 		if (!orderExist(order.getId())) {
 			Document doc = new Document("id", order.getId()).append("recieveDate", order.getRecieveDate())
-					.append("totalPrice", order.getTotalPrice()).append("customerId", order.getCustomerId());
+					.append("totalPrice", order.getTotalPrice()).append("customerId", order.getCustomerId())
+					.append("sent", false);
+
 			BasicDBList list = new BasicDBList();
 			for (Map.Entry<Product, Integer> item : order.getItemsProcessed().entrySet()) {
 				BasicDBObject dbItem = new BasicDBObject();
@@ -135,16 +137,38 @@ public class DB_Order {
 	public Document convertOrderToDocument(ProcessedOrder order) {
 		Document doc = new Document("id", order.getId()).append("recieveDate", order.getRecieveDate())
 				.append("totalPrice", order.getTotalPrice()).append("customerId", order.getCustomerId())
-				.append("items", order.getItemsProcessed()).append("sent", false);
+				.append("sent", false);
+
+		BasicDBList list = new BasicDBList();
+		for (Map.Entry<Product, Integer> item : order.getItemsProcessed().entrySet()) {
+			BasicDBObject dbItem = new BasicDBObject();
+			dbItem.append("amount", item.getValue());
+			dbItem.append("id", item.getKey().getId());
+			dbItem.append("preis", item.getKey().getPreis());
+			dbItem.append("name", item.getKey().getName());
+			list.add(dbItem);
+		}
+		doc.append("items", list);
 		return doc;
 	}
 
 	public ProcessedOrder convertDocumentToOrder(Document doc) {
+		ProcessedOrder order = null;
 		String id = doc.getString("id");
 		Date receiveDate = doc.getDate("receiveDate");
 		double totalPrice = doc.getDouble("totalPrice");
 		String customerId = doc.getString("customerId");
-		Map<Product, Integer> items = (Map<Product, Integer>) doc.get("items");
+
+		BasicDBList itemsDb = (BasicDBList) doc.get("items");
+		Map<Product, Integer> items = new HashMap<>();
+		for (BasicDBObject dbItem : itemsDb.toArray(new BasicDBObject[0])) {
+			Product prod = new Product();
+			prod.setId(dbItem.getString("id"));
+			prod.setPreis(dbItem.getDouble("preis"));
+			prod.setName(dbItem.getString("name"));
+			items.put(prod, dbItem.getInt("amount"));
+		}
+
 		return new ProcessedOrder(id, receiveDate, totalPrice, customerId, items);
 	}
 

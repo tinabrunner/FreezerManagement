@@ -24,6 +24,7 @@
 		        };
 				$http.post(URL_API+'login', objData).then((function(response){
 					if (response.data) {
+						alert("token: "+response.data);
 						$cookies.put('token', response.data);
 						$location.path("/home");
 					}

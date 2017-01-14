@@ -13,7 +13,7 @@
 			controller: 'view_register1Ctrl'
 		});
 	}])
-	.controller('view_register1Ctrl', function($scope, $http, $location) {
+	.controller('view_register1Ctrl', function($scope, $http, $location, $cookies) {
 		$scope.Register = function() {
 			
 			if (!$scope.username || !$scope.password || !$scope.password_confirm || !$scope.firstName || !$scope.lastName || !$scope.email || !$scope.role)
@@ -30,11 +30,13 @@
 						role : $scope.role
 		        };
 				$http.post(URL_API+'account', objData).then((function(response){
-				if (response.data) {
-					alert("Fehler: "+response.data);
+				if (!response.data) {
+					alert("Error - User couldn't be registered"+response.data);
 				}
 				else {
 					$location.path("/home");
+					$cookies.put('token', response.data);
+					
 				}
 				}), 
 				function(response) { 

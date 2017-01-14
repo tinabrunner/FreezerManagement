@@ -34,6 +34,7 @@ public class AccountController {
 	@EJB
 	private DB_UserSessionStore db_UserSessionStore;
 
+	@EJB
 	private LoginController loginController;
 
 	// Method to create an account and write the user to DB
@@ -45,10 +46,9 @@ public class AccountController {
 		if (insertionTrue) {
 			// Login
 			UserCredentials credentials = new UserCredentials(user.getUsername(), user.getPassword());
-			loginController.login(credentials);
-			return "";
+			return loginController.login(credentials);
 		} else {
-			return "Username already exists - Please enter another username!";
+			return "";
 		}
 	}
 

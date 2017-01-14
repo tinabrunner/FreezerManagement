@@ -14,13 +14,26 @@ angular.module('fridge', [
 	'fridge.myaccount',
 	'fridge.shoppingList',
 	'fridge.settings',
-	'fridge.formChange'
+	'fridge.formChange',
+	'ngCookies'
 ]).
-config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+config(['$locationProvider', '$routeProvider', '$httpProvider', function($locationProvider, $routeProvider, $httpProvider) {
 $locationProvider.hashPrefix('!');
-
+$httpProvider.interceptors.push('authInterceptor');
 $routeProvider.otherwise({redirectTo: '/home'});
-}]);
+}])
+
+.factory('authInterceptor', function($cookies) {
+	return {
+    request: function(config) {
+        config.headers = config.headers || {};
+        
+        // config.headers.Authorization = $cookies.get('username');
+        config.headers['token'] = $cookies['token'];
+        return config;
+      }
+    };
+  });
 
 var URL_API = 'http://localhost:8080/fridge/api/';
 var URL_SUPERMARKET = 'http://localhost:8080/supermarket/api/';

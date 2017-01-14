@@ -37,6 +37,7 @@
 		}
 		
 		function deleteInventoryProduct(id) {
+			alert("id: "+id);
 			$http.delete(URL_API+'inventory'+'/'+id).then(function(response){
 			    	   if (!response.data) {
 			    		   $route.reload();

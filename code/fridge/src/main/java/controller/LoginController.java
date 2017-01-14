@@ -47,9 +47,11 @@ public class LoginController {
 
 				String token = buildToken();
 				UserSessionData data = new UserSessionData(token, username);
-				dbUserSessionStore.insertUserSessionToDB(data);
-				// TODO: schreibt token u username aktuell nicht in DB !!
-				return token;
+				boolean success = dbUserSessionStore.insertUserSessionToDB(data);
+				if (success)
+					return token;
+				else
+					return null;
 			} else
 				return null;
 		} else

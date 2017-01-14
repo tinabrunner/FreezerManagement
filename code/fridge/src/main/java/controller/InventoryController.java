@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.ejb.EJB;
@@ -41,7 +42,7 @@ public class InventoryController extends RestService {
 	public String deleteInventoryProduct(@PathParam("id") String id) {
 		boolean success = dbFridgeInventory.deleteProductFromDBInventory(id);
 		if (success)
-			return "";
+			return null;
 		else
 			return "Could not delete the product with id: " + id;
 	}
@@ -61,9 +62,11 @@ public class InventoryController extends RestService {
 			json.put(dbFridgeInventory._name, value.getName().toString());
 			json.put(dbFridgeInventory._prodCategoryId, value.getProdCategoryId().toString());
 
+			Date expiryDate = value.getExpiryDate();
+
 			String date = value.getExpiryDate().getYear() + "-" + value.getExpiryDate().getMonth() + "-"
 					+ value.getExpiryDate().getDay();
-			json.put(dbFridgeInventory._expiryDate, date);
+			json.put(dbFridgeInventory._expiryDate, expiryDate.toString());
 
 			arr.add(json);
 		}

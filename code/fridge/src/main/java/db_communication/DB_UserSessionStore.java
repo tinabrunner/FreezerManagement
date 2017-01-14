@@ -23,7 +23,7 @@ import model.UserSessionData;
 public class DB_UserSessionStore {
 
 	@EJB
-	private MongoProvider mongoProvider;
+	private MongoProvider mongoProvider = new MongoProvider();
 
 	private static final String _fridge = "fridge";
 	private static final String _userSessionStore = "userSessionStore";
@@ -60,14 +60,19 @@ public class DB_UserSessionStore {
 	 */
 
 	// Method to Insert a UserSession
-	public void insertUserSessionToDB(UserSessionData data) {
+	public boolean insertUserSessionToDB(UserSessionData data) {
 		MongoCollection<Document> sessionStore = getSessionStore();
 		Document doc = convertSessionDataToDocument(data);
+		Bson filter = Filters.eq(_username, data.getUsername());
 		if (usernameExists(data.getUsername())) {
-			Bson filter = Filters.eq(_username, data.getUsername());
-			sessionStore.findOneAndDelete(filter);
+			sessionStore.deleteOne(filter);
 		}
+		System.out.println(doc.toString());
 		sessionStore.insertOne(doc);
+		if (!usernameExists(data.getUsername()))
+			return false;
+		else
+			return true;
 	}
 
 	// Method to Delete a UserSession
@@ -93,7 +98,8 @@ public class DB_UserSessionStore {
 		MongoCollection<Document> sessionStore = getSessionStore();
 		Bson filter = Filters.eq(_username, username);
 		if (sessionStore.count(filter) > 0) {
-			System.out.println("sessionstore count > 0  --> user existiert schon");
+			FindIterable<Document> result = sessionStore.find(filter);
+			System.out.println("sessionstore count > 0  --> user existiert schon" + result.first().toString());
 			return true;
 		} else {
 			System.out.println("sessionstore count ist 0 --> user existiert noch nicht");

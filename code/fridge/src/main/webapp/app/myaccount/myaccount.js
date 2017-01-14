@@ -39,6 +39,9 @@
 			$scope.checked_PwConfirm = true;
 			vm.user = {};
 			var token = $cookies.get('token');
+			if (!token)
+				token = $window.localStorage.getItem('token');
+			alert ("token account: "+token);
 			$http.get(URL_API+'account'+'/'+token).then(function(response) {
 				if (!response.data) {
 						alert("Fehler: "+response.data);

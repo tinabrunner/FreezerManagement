@@ -14,22 +14,24 @@ angular.module('fridge', [
 	'fridge.myaccount',
 	'fridge.shoppingList',
 	'fridge.settings',
-	'fridge.formChange',
-	'ngCookies'
+	'fridge.formChange'
 ]).
 config(['$locationProvider', '$routeProvider', '$httpProvider', function($locationProvider, $routeProvider, $httpProvider) {
 $locationProvider.hashPrefix('!');
-$httpProvider.interceptors.push('authInterceptor');
 $routeProvider.otherwise({redirectTo: '/home'});
+$httpProvider.interceptors.push('authInterceptor');
 }])
 
-.factory('authInterceptor', function($cookies) {
+.factory('authInterceptor', function($cookies, $window) {
 	return {
     request: function(config) {
         config.headers = config.headers || {};
         
-        // config.headers.Authorization = $cookies.get('username');
-        config.headers['token'] = $cookies['token'];
+        var token = $cookies.get('token');
+        if (!token)
+			token = $window.localStorage.getItem('token');
+        config.headers.Authorization = token;
+        // config.headers['token'] = $cookies['token'];
         return config;
       }
     };

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 // TODO: kann gelöscht werden ??
 
-@SessionScoped
+/*@SessionScoped
 public class SessionStore implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -29,4 +29,4 @@ public class SessionStore implements Serializable {
 		this.fridgeUser = fridgeUser;
 	}
 
-}
+}*/

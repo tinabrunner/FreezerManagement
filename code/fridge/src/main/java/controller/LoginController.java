@@ -48,12 +48,12 @@ public class LoginController {
 				String token = buildToken();
 				UserSessionData data = new UserSessionData(token, username);
 				dbUserSessionStore.insertUserSessionToDB(data);
+				// TODO: schreibt token u username aktuell nicht in DB !!
 				return token;
 			} else
-				return "";
+				return null;
 		} else
-			return "";
-
+			return null;
 	}
 
 	public String buildToken() {

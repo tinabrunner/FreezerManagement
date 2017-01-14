@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,6 +18,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import db_communication.DB_FridgeInventory;
+import domain.LoginInterceptor;
+import domain.RestService;
 import model.InventoryProduct;
 
 /**
@@ -25,7 +28,8 @@ import model.InventoryProduct;
 
 @Stateless
 @Path("/inventory")
-public class InventoryController {
+@Interceptors(LoginInterceptor.class)
+public class InventoryController extends RestService {
 
 	@EJB
 	private DB_FridgeInventory dbFridgeInventory;
@@ -43,7 +47,6 @@ public class InventoryController {
 	}
 
 	@GET
-	// @Interceptors(LoginInterceptor.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public JSONArray getAllProducts() {
 		Map<String, InventoryProduct> inventory = dbFridgeInventory.getAllProducts();

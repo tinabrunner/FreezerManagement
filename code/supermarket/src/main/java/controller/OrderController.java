@@ -1,19 +1,12 @@
 package controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.ScheduleExpression;
 import javax.ejb.Stateless;
-import javax.ejb.TimerConfig;
-import javax.ejb.TimerService;
 
 import Model.Invoice;
 import Model.Order;
@@ -30,8 +23,11 @@ import db_communication.DB_ProductList;
 @Stateless(name = "orderController")
 public class OrderController {
 
-	@EJB
+	@EJB(name = "invoiceCtrl")
 	private InvoiceController invoiceCtrl;
+
+	@EJB(name = "deliveryCtrl")
+	private DeliveryController deliveryCtrl;
 
 	@EJB
 	private DB_Invoice dbInvoice;
@@ -41,9 +37,6 @@ public class OrderController {
 
 	@EJB
 	private DB_ProductList dbProductList;
-
-	@Resource
-	private TimerService timerService;
 
 	private void saveOrderToDB(ProcessedOrder order) {
 		dborder.insertOrderToDB(order);
@@ -70,25 +63,18 @@ public class OrderController {
 					}
 				}
 			}
+
 		}
 		processedOrder.setItemsProcessed(processedItems);
 		processedOrder.setTotalPrice(processedPrice);
 		/* ~ */
 		this.saveOrderToDB(processedOrder);
+
 		Invoice invoice = invoiceCtrl.createInvoice(processedOrder);
 		invoice.setURL(invoiceCtrl.invoiceToHTML(invoice));
 		dbInvoice.insertInvoiceToDB(invoice);
-		// this.createDeliveryTimer(processedOrder);
-	}
-
-	private void createDeliveryTimer(ProcessedOrder processedOrder) {
-		ScheduleExpression schedule = new ScheduleExpression();
-		LocalDate date = LocalDate.now();
-		date.plusDays(processedOrder.getDeliveryDay());
-		Date d = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		schedule.start(d);
-		TimerConfig timerConfig = new TimerConfig();
-		timerService.createCalendarTimer(schedule, timerConfig);
+		invoiceCtrl.sendInvoiceImmediatly(invoice);
+		deliveryCtrl.sendDeliveryImmediatly(processedOrder.getId());
 
 	}
 

@@ -15,7 +15,6 @@ import org.bson.conversions.Bson;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -57,20 +56,24 @@ public class DB_Order {
 		}
 
 		if (!orderExist(order.getId())) {
-			Document doc = new Document("id", order.getId()).append("recieveDate", order.getRecieveDate())
-					.append("totalPrice", order.getTotalPrice()).append("customerId", order.getCustomerId())
-					.append("sent", false);
-
-			BasicDBList list = new BasicDBList();
-			for (Map.Entry<Product, Integer> item : order.getItemsProcessed().entrySet()) {
-				BasicDBObject dbItem = new BasicDBObject();
-				dbItem.append("amount", item.getValue());
-				dbItem.append("id", item.getKey().getId());
-				dbItem.append("preis", item.getKey().getPreis());
-				dbItem.append("name", item.getKey().getName());
-				list.add(dbItem);
-			}
-			doc.append("items", list);
+			// Document doc = new Document("id",
+			// order.getId()).append("recieveDate", order.getRecieveDate())
+			// .append("totalPrice", order.getTotalPrice()).append("customerId",
+			// order.getCustomerId())
+			// .append("sent", false);
+			//
+			// BasicDBList list = new BasicDBList();
+			// for (Map.Entry<Product, Integer> item :
+			// order.getItemsProcessed().entrySet()) {
+			// BasicDBObject dbItem = new BasicDBObject();
+			// dbItem.append("amount", item.getValue());
+			// dbItem.append("id", item.getKey().getId());
+			// dbItem.append("preis", item.getKey().getPreis());
+			// dbItem.append("name", item.getKey().getName());
+			// list.add(dbItem);
+			// }
+			// doc.append("items", list);
+			Document doc = convertOrderToDocument(order);
 			orders.insertOne(doc);
 		} else
 			System.out.println("Order already existing!");
@@ -90,39 +93,50 @@ public class DB_Order {
 	}
 
 	public ProcessedOrder getOrder(String id) {
-
-		MongoCollection<Document> orders = db.getCollection("orders");
-
-		// Create Invoice-Element for return-statement
+		MongoCollection<Document> orders = db.getCollection("invoices");
+		Bson filter = Filters.eq("id", id);
+		FindIterable<Document> result = orders.find(filter);
 		ProcessedOrder order = null;
 
-		// create a query to search for the Invoice with the passed 'id'
-		BasicDBObject whereQuery = new BasicDBObject();
-		whereQuery.put("id", id);
-
-		FindIterable<Document> cursor = orders.find(whereQuery);
-		// get the attributes for invoice
-		if (((DBCollection) cursor).count() != 1) {
-			System.out.print("Something went wrong! More than one invoice was found for the given id.");
-		} else {
-			Document doc = (Document) orders.find(whereQuery);
-			Date receiveDate = doc.getDate("receiveDate");
-			double totalPrice = doc.getDouble("totalPrice");
-			String customerId = doc.getString("customerId");
-
-			BasicDBList itemsDb = (BasicDBList) doc.get("items");
-			Map<Product, Integer> items = new HashMap<>();
-			for (BasicDBObject dbItem : itemsDb.toArray(new BasicDBObject[0])) {
-				Product prod = new Product();
-				prod.setId(dbItem.getString("id"));
-				prod.setPreis(dbItem.getDouble("preis"));
-				prod.setName(dbItem.getString("name"));
-				items.put(prod, dbItem.getInt("amount"));
-			}
-
-			order = new ProcessedOrder(id, receiveDate, totalPrice, customerId, items);
+		for (Document current : result) {
+			order = convertDocumentToOrder(current);
 		}
+
 		return order;
+		// MongoCollection<Document> orders = db.getCollection("orders");
+		//
+		// // Create Invoice-Element for return-statement
+		// ProcessedOrder order = null;
+		//
+		// // create a query to search for the Invoice with the passed 'id'
+		// BasicDBObject whereQuery = new BasicDBObject();
+		// whereQuery.put("id", id);
+		//
+		// FindIterable<Document> cursor = orders.find(whereQuery);
+		// // get the attributes for invoice
+		// if (((DBCollection) cursor).count() != 1) {
+		// System.out.print("Something went wrong! More than one invoice was
+		// found for the given id.");
+		// } else {
+		// Document doc = (Document) orders.find(whereQuery);
+		// Date receiveDate = doc.getDate("receiveDate");
+		// double totalPrice = doc.getDouble("totalPrice");
+		// String customerId = doc.getString("customerId");
+		//
+		// BasicDBList itemsDb = (BasicDBList) doc.get("items");
+		// Map<Product, Integer> items = new HashMap<>();
+		// for (BasicDBObject dbItem : itemsDb.toArray(new BasicDBObject[0])) {
+		// Product prod = new Product();
+		// prod.setId(dbItem.getString("id"));
+		// prod.setPreis(dbItem.getDouble("preis"));
+		// prod.setName(dbItem.getString("name"));
+		// items.put(prod, dbItem.getInt("amount"));
+		// }
+		//
+		// order = new ProcessedOrder(id, receiveDate, totalPrice, customerId,
+		// items);
+		// }
+		// return order;
 	}
 
 	public String getLastId() {
@@ -153,23 +167,30 @@ public class DB_Order {
 	}
 
 	public ProcessedOrder convertDocumentToOrder(Document doc) {
-		ProcessedOrder order = null;
 		String id = doc.getString("id");
 		Date receiveDate = doc.getDate("receiveDate");
 		double totalPrice = doc.getDouble("totalPrice");
 		String customerId = doc.getString("customerId");
 
-		BasicDBList itemsDb = (BasicDBList) doc.get("items");
-		Map<Product, Integer> items = new HashMap<>();
-		for (BasicDBObject dbItem : itemsDb.toArray(new BasicDBObject[0])) {
+		List<Document> items = (List<Document>) doc.get("items");
+		Map<Product, Integer> orderItems = new HashMap<>();
+		for (Document dbItem : items) {
 			Product prod = new Product();
 			prod.setId(dbItem.getString("id"));
 			prod.setPreis(dbItem.getDouble("preis"));
 			prod.setName(dbItem.getString("name"));
-			items.put(prod, dbItem.getInt("amount"));
+			orderItems.put(prod, dbItem.getInteger("amount"));
 		}
+		// BasicDBList itemsDb = (BasicDBList) doc.get("items");
+		// for (BasicDBObject dbItem : itemsDb.toArray(new BasicDBObject[0])) {
+		// Product prod = new Product();
+		// prod.setId(dbItem.getString("id"));
+		// prod.setPreis(dbItem.getDouble("preis"));
+		// prod.setName(dbItem.getString("name"));
+		// items.put(prod, dbItem.getInt("amount"));
+		// }
 
-		return new ProcessedOrder(id, receiveDate, totalPrice, customerId, items);
+		return new ProcessedOrder(id, receiveDate, totalPrice, customerId, orderItems);
 	}
 
 	public List<ProcessedOrder> getAllNotSentOrders() {

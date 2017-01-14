@@ -60,10 +60,6 @@ public class Invoice implements Serializable {
 		return invoiceURL;
 	}
 
-	public void addItem(InvoiceItem item) {
-		items.add(item);
-	}
-
 	public List<InvoiceItem> getItems() {
 		return items;
 	}

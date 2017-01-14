@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 
 import org.apache.commons.io.FileUtils;
@@ -30,7 +29,7 @@ import queueConnection.InvoiceSender;
  *
  */
 
-@Stateless(name = "invoiceCon")
+@Stateless(name = "invoiceCtrl")
 public class InvoiceController {
 
 	@EJB
@@ -51,8 +50,9 @@ public class InvoiceController {
 
 		Invoice invoice = new Invoice(null, customerId, billingDate, orderDate, totalPrice, "",
 				new ArrayList<InvoiceItem>());
-		Map<Product, Integer> items = order.getItemsProcessed();
 
+		Map<Product, Integer> items = order.getItemsProcessed();
+		List<InvoiceItem> invoiceItems = new ArrayList<>();
 		for (Map.Entry<Product, Integer> entry : items.entrySet()) {
 			System.out.println(entry.getKey() + "/" + entry.getValue());
 			Product p = entry.getKey();
@@ -61,10 +61,10 @@ public class InvoiceController {
 			double price = p.getPreis();
 			int amount = entry.getValue();
 			int calories = p.getCalories();
-			InvoiceItem i = new InvoiceItem(id, name, price, calories, amount);
-			invoice.addItem(i);
-
+			InvoiceItem item = new InvoiceItem(id, name, price, calories, amount);
+			invoiceItems.add(item);
 		}
+		invoice.setItems(invoiceItems);
 
 		if (invoice.getId() == null) {
 			int id = Integer.parseInt(dbInvoice.getLastId());
@@ -90,11 +90,11 @@ public class InvoiceController {
 		String firstString = splitfile[0];
 		String secondString = splitfile[1];
 
-		for (InvoiceItem i : invoice.getItems()) {
-			String productName = i.getName();
-			String price = Double.toString(i.getPreis());
-			String amount = Integer.toString(i.getAmount());
-			String totalItemPrice = Double.toString(i.getTotalPrice());
+		for (InvoiceItem entry : invoice.getItems()) {
+			String productName = entry.getName();
+			String price = Double.toString(entry.getPreis());
+			String amount = Integer.toString(entry.getAmount());
+			String totalItemPrice = Double.toString(entry.getTotalPrice());
 
 			String newItem = "<tr>" + "<td>" + productName + "</td>" + "<td class=\"text-center\">" + price + "</td>"
 					+ "<td class=\"text-center\">" + amount + "</td>" + "<td class=\"text-right\">" + totalItemPrice
@@ -146,9 +146,9 @@ public class InvoiceController {
 		return jsonInString;
 	}
 
-	// Jeden Tag um 8 werden REchnungen verschickt
+	// Jeden Tag um 8 werden alle nicht verschickte Rechnungen verschickt
 	// @Schedule(hour = "8", dayOfWeek = "*")
-	@Schedule(minute = "*", hour = "*")
+	// @Schedule(minute = "*", hour = "*")
 	private void sendInvoices() {
 		List<Invoice> invoices = dbInvoice.getAllNotSentInvoices();
 		for (Invoice i : invoices) {
@@ -157,6 +157,14 @@ public class InvoiceController {
 			if (sent) {
 				dbInvoice.setInvoiceToSent(i.getId());
 			}
+		}
+	}
+
+	// Zur Demo werden Rechnugen direkt bei Eingang verschickt
+	public void sendInvoiceImmediatly(Invoice invoice) {
+		boolean sent = invoiceSender.sendInvoice(invoiceToString(invoice));
+		if (sent) {
+			dbInvoice.setInvoiceToSent(invoice.getId());
 		}
 	}
 

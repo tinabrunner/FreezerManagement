@@ -71,15 +71,17 @@ public class DB_Invoice {
 		Date orderDate = doc.getDate("orderDate");
 		double totalPrice = doc.getDouble("totalPrice");
 		String invoiceURL = doc.getString("invoiceURL");
+		List<Document> items = (List<Document>) doc.get("items");
 
-		BasicDBList itemsDb = (BasicDBList) doc.get("items");
-		List<InvoiceItem> items = new ArrayList<InvoiceItem>();
-		for (BasicDBObject dbItem : itemsDb.toArray(new BasicDBObject[0])) {
+		List<InvoiceItem> invoiceItems = new ArrayList<>();
+
+		for (Document dbItem : items) {
 			InvoiceItem item = new InvoiceItem(dbItem.getString("id"), dbItem.getString("name"),
-					dbItem.getDouble("price"), dbItem.getInt("calories"), dbItem.getInt("amount"));
-			items.add(item);
+					dbItem.getDouble("preis"), dbItem.getInteger("calories"), dbItem.getInteger("amount"));
+
+			invoiceItems.add(item);
 		}
-		return new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL, items);
+		return new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL, invoiceItems);
 	}
 
 	// Method to Insert an Invoice

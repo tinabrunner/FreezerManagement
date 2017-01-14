@@ -1,14 +1,12 @@
 package pdfcreator;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.XMLWorkerHelper;
+import org.xhtmlrenderer.pdf.ITextRenderer;
+
+import com.lowagie.text.DocumentException;
 
 /**
  * @author Marius Koch
@@ -28,23 +26,28 @@ public class ParseHtml {
 	 * @throws DocumentException
 	 */
 
-	public void createPdf(String htmlFilePath, String invoiceId) throws IOException, DocumentException {
+	public void createPdf(File newHtmlFile, String htmlFileAsString, String htmlFilePath, String invoiceId)
+			throws IOException, DocumentException {
 		try {
 			System.out.println("oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 			String dest = DEST.concat(invoiceId).concat(".pdf");
-			File file = new File(dest);
-			file.getParentFile().mkdirs();
+			
 
-			// step 1
-			Document document = new Document();
-			// step 2
-			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
-			// step 3
-			document.open();
-			// step 4
-			XMLWorkerHelper.getInstance().parseXHtml(writer, document, new FileInputStream(htmlFilePath));
-			// step 5
-			document.close();
+			
+			ITextRenderer renderer = new ITextRenderer();
+
+			// if you have html source in hand, use it to generate document
+			// object
+			renderer.setDocument(newHtmlFile);
+			renderer.layout();
+
+			String fileNameWithPath = dest;
+			FileOutputStream fos = new FileOutputStream(fileNameWithPath);
+			renderer.createPDF(fos);
+			fos.close();
+
+			System.out.println("File 2: '" + fileNameWithPath + "' created.");
+
 		} catch (Exception e) {
 			System.out.println("------------------------------------------------------");
 			e.printStackTrace();

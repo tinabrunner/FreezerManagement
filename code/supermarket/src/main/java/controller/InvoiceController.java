@@ -39,7 +39,7 @@ public class InvoiceController {
 	private DB_Invoice dbInvoice;
 
 	public static final String INVOICEURLPATH = "http://localhost:8161/invoices/";
-	public static final String INVOICEHTMLPATH = "/webapp/app/htmlInvoices/";
+	public static final String INVOICEHTMLPATH = "../docroot/htmlInvoice/";
 
 	ParseHtml htmlParser = new ParseHtml();
 
@@ -96,24 +96,24 @@ public class InvoiceController {
 			String amount = Integer.toString(i.getAmount());
 			String totalItemPrice = Double.toString(i.getTotalPrice());
 
-			String newItem = "<tr><td>" + productName + "</td><td class=\"text-center\">" + price
-					+ "</td><td class=\"text-center\">" + amount + "</td><td class=\"text-right\">" + totalItemPrice
-					+ "</td></tr>";
-			firstString.concat(newItem);
+			String newItem = "<tr>" + "<td>" + productName + "</td>" + "<td class=\"text-center\">" + price + "</td>"
+					+ "<td class=\"text-center\">" + amount + "</td>" + "<td class=\"text-right\">" + totalItemPrice
+					+ "</td>" + "</tr>";
+			firstString = firstString.concat(newItem);
 		}
-
-		htmlString.concat((firstString).concat(secondString));
+		htmlString = "";
+		htmlString = htmlString.concat((firstString).concat(secondString));
 		String fileDest = INVOICEHTMLPATH;
-		fileDest.concat(invoice.getId().concat(".html"));
+		fileDest = fileDest.concat(invoice.getId().concat(".html"));
 
 		String invoiceURL = INVOICEURLPATH;
-		invoiceURL.concat(invoice.getId().concat(".pdf"));
+		invoiceURL = invoiceURL.concat(invoice.getId().concat(".pdf"));
 
 		File newHtmlFile = new File(fileDest);
 		FileUtils.writeStringToFile(newHtmlFile, htmlString);
 
 		try {
-			htmlParser.createPdf(fileDest, invoice.getId());
+			htmlParser.createPdf(newHtmlFile, htmlString, fileDest, invoice.getId());
 			return invoiceURL;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -125,8 +125,6 @@ public class InvoiceController {
 	private String htmlToString() {
 		StringBuilder contentBuilder = new StringBuilder();
 		try {
-			String filePath = new File("").getAbsolutePath();
-			filePath.concat("/src/main/webapp/app/invoice/invoice.html");
 			BufferedReader in = new BufferedReader(new FileReader("../docroot/invoiceTemplate/invoice.html"));
 			String str;
 			while ((str = in.readLine()) != null) {

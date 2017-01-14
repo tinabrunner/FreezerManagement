@@ -32,7 +32,7 @@ import domain.MongoProvider;
 @Stateless
 public class DB_Order {
 
-	@EJB
+	@EJB(name = "mongoPro")
 	MongoProvider mongoProvider;
 
 	DatabaseProviderImpl db;

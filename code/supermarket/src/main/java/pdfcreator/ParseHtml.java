@@ -13,7 +13,9 @@ import com.lowagie.text.DocumentException;
  *
  */
 public class ParseHtml {
-	public static final String DEST = "C:/Program Files/glassfish4.0/glassfish4/glassfish/domains/supermarket/docroot/";
+	// public static final String DEST = "C:/Program
+	// Files/glassfish4.0/glassfish4/glassfish/domains/supermarket/docroot/";
+	public static final String DEST = "../docroot/invoices/";
 
 	public ParseHtml() {
 	}
@@ -31,9 +33,7 @@ public class ParseHtml {
 		try {
 			System.out.println("oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 			String dest = DEST.concat(invoiceId).concat(".pdf");
-			
 
-			
 			ITextRenderer renderer = new ITextRenderer();
 
 			// if you have html source in hand, use it to generate document

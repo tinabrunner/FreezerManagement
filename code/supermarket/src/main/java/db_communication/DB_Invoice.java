@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -45,7 +46,21 @@ public class DB_Invoice {
 		Document doc = new Document("id", invoice.getId()).append("name", invoice.getName())
 				.append("billingDate", invoice.getBillingDate()).append("orderDate", invoice.getOrderDate())
 				.append("totalPrice", invoice.getTotalPrice()).append("invoiceURL", invoice.getInvoiceURL())
-				.append("items", invoice.getItems()).append("sent", false);
+				.append("sent", false);
+
+		BasicDBList list = new BasicDBList();
+		for (InvoiceItem item : invoice.getItems()) {
+			BasicDBObject dbItem = new BasicDBObject();
+			dbItem.append("amount", item.getAmount());
+			dbItem.append("id", item.getId());
+			dbItem.append("preis", item.getPreis());
+			dbItem.append("name", item.getName());
+			dbItem.append("calories", item.getCalories());
+			dbItem.append("totalprice", item.getTotalPrice());
+
+			list.add(dbItem);
+		}
+		doc.append("items", list);
 		return doc;
 	}
 
@@ -56,7 +71,14 @@ public class DB_Invoice {
 		Date orderDate = doc.getDate("orderDate");
 		double totalPrice = doc.getDouble("totalPrice");
 		String invoiceURL = doc.getString("invoiceURL");
-		List<InvoiceItem> items = (List<InvoiceItem>) doc.get("items");
+
+		BasicDBList itemsDb = (BasicDBList) doc.get("items");
+		List<InvoiceItem> items = new ArrayList<InvoiceItem>();
+		for (BasicDBObject dbItem : itemsDb.toArray(new BasicDBObject[0])) {
+			InvoiceItem item = new InvoiceItem(dbItem.getString("id"), dbItem.getString("name"),
+					dbItem.getDouble("price"), dbItem.getInt("calories"), dbItem.getInt("amount"));
+			items.add(item);
+		}
 		return new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL, items);
 	}
 
@@ -118,7 +140,7 @@ public class DB_Invoice {
 		return ret;
 	}
 
-	public List<Invoice> getAllNotSendedInvoices() {
+	public List<Invoice> getAllNotSentInvoices() {
 
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 

@@ -78,7 +78,7 @@ public class OrderController {
 		Invoice invoice = invoiceCtrl.createInvoice(processedOrder);
 		invoice.setURL(invoiceCtrl.invoiceToHTML(invoice));
 		dbInvoice.insertInvoiceToDB(invoice);
-		this.createDeliveryTimer(processedOrder);
+		// this.createDeliveryTimer(processedOrder);
 	}
 
 	private void createDeliveryTimer(ProcessedOrder processedOrder) {

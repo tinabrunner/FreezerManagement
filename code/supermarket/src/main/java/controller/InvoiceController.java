@@ -101,6 +101,7 @@ public class InvoiceController {
 					+ "</td>" + "</tr>";
 			firstString = firstString.concat(newItem);
 		}
+
 		htmlString = "";
 		htmlString = htmlString.concat((firstString).concat(secondString));
 		String fileDest = INVOICEHTMLPATH;
@@ -149,7 +150,7 @@ public class InvoiceController {
 	// @Schedule(hour = "8", dayOfWeek = "*")
 	@Schedule(minute = "*", hour = "*")
 	private void sendInvoices() {
-		List<Invoice> invoices = dbInvoice.getAllNotSendedInvoices();
+		List<Invoice> invoices = dbInvoice.getAllNotSentInvoices();
 		for (Invoice i : invoices) {
 			String in = this.invoiceToString(i);
 			boolean sent = invoiceSender.sendInvoice(in);

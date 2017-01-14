@@ -92,10 +92,13 @@ public class DB_UserSessionStore {
 	public boolean usernameExists(String username) {
 		MongoCollection<Document> sessionStore = getSessionStore();
 		Bson filter = Filters.eq(_username, username);
-		if (sessionStore.count(filter) > 0)
+		if (sessionStore.count(filter) > 0) {
+			System.out.println("sessionstore count > 0  --> user existiert schon");
 			return true;
-		else
+		} else {
+			System.out.println("sessionstore count ist 0 --> user existiert noch nicht");
 			return false;
+		}
 	}
 
 	// Check if UserSession already exists

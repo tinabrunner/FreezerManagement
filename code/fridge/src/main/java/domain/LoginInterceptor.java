@@ -63,8 +63,9 @@ public class LoginInterceptor implements Serializable {
 		HttpServletRequest req = ((RestService) ctx.getTarget()).getHttpRequest();
 
 		// final Object[] params = ctx.getParameters();
-		System.out.println("!!! interceptor !!! - " + ", remAdr: " + req.getRemoteAddr() + ", Auth: "
-				+ req.getHeader("Authorization"));
+		System.out.println(
+				"!!! interceptor !!! - " + ", remAdr: " + req.getRemoteAddr() + ", Auth: " + req.getHeader("token")
+						+ ", Param: " + req.getParameter("token") + ", Attr: " + req.getAttribute("token"));
 		return ctx.proceed();
 
 	}

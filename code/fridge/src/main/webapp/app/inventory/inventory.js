@@ -31,7 +31,8 @@
 			$http.get(URL_API+'inventory').then(function(resp) {
 				vm.products = resp.data;
 			}, function(error) {
-				console.dir(error);
+				alert("You have no products in your inventory");
+				//console.dir(error);
 			});
 		}
 		

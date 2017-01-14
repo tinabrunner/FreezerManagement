@@ -46,10 +46,7 @@ public class DB_FridgeInventory {
 	private MongoCollection<Document> getProductsCollection() {
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase(_fridge);
-
 		MongoCollection<Document> products = db.getCollection(_inventoryProducts);
-		// DBCollection users = (DBCollection) db.getCollection("users");
-
 		return products;
 	}
 

@@ -33,6 +33,7 @@ public class DB_FridgeUser {
 	public static final String _lastName = "lastName";
 	public static final String _email = "email";
 	public static final String _role = "role";
+	private MongoClient mongoClient;
 
 	/*
 	 * STANDARDMETHODS FOR RE-USE
@@ -40,7 +41,7 @@ public class DB_FridgeUser {
 
 	// create a client and get the database and usersCollection
 	private MongoCollection<Document> getUsersCollection() {
-		MongoClient mongoClient = this.mongoProvider.getMongoClient();
+		mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase(_fridge);
 		MongoCollection<Document> users = db.getCollection(_users);
 		return users;
@@ -63,66 +64,69 @@ public class DB_FridgeUser {
 		return new FridgeUser(username, password, firstName, lastName, email, role);
 	}
 
+	// Method to Search for an User
+	private boolean userExists(String username, MongoCollection<Document> users) {
+		Bson filter = Filters.eq(_username, username);
+		if (users.count(filter) > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/*
 	 * METHODS TO COMMUNICATE WITH DB
 	 */
 
-	// Method to Insert an User
+	// INSERT an User
 	public boolean insertUserToDB(FridgeUser fridgeUser) {
 		MongoCollection<Document> users = getUsersCollection();
-
-		if (!userExists(fridgeUser.getUsername())) {
+		if (!userExists(fridgeUser.getUsername(), users)) {
 			Document doc = convertUserToDocument(fridgeUser);
 			users.insertOne(doc);
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 
-	// Method to Search for an User
-	public boolean userExists(String username) {
-		MongoCollection<Document> users = getUsersCollection();
-		Bson filter = Filters.eq(_username, username);
-		if (users.count(filter) > 0)
-			return true;
-		else
-			return false;
-	}
-
-	// Method to Search for an User
+	// GET an User
 	public FridgeUser getUser(String username) {
 		MongoCollection<Document> users = getUsersCollection();
 		Bson filter = Filters.eq(_username, username);
 		FindIterable<Document> result = users.find(filter);
 		Document doc = result.first();
-		if (doc != null)
+		if (doc != null) {
 			return convertDocumentToUser(doc);
-		else
+		} else {
 			return null;
+		}
 	}
 
-	// Method to Update an User
+	// UPDATE an User
 	public boolean updateUserFromDB(FridgeUser user) {
 		MongoCollection<Document> users = getUsersCollection();
-		if (userExists(user.getUsername())) {
+		if (userExists(user.getUsername(), users)) {
 			Bson filter = Filters.eq(_username, user.getUsername());
 			Document doc = convertUserToDocument(user);
 			users.deleteOne(filter);
 			users.insertOne(doc);
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 
-	// Method to Delete an User
+	// DELETE an User
 	public boolean deleteUserFromDB(String username) {
 		MongoCollection<Document> users = getUsersCollection();
-		if (userExists(username)) {
+		if (userExists(username, users)) {
 			Bson filter = Filters.eq(_username, username);
 			users.deleteOne(filter);
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 
 }

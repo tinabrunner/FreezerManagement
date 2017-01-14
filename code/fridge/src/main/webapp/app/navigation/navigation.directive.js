@@ -24,13 +24,14 @@ function NavigationController($scope, $location, $cookies, $http) {
 		return (subpath === path) ? 'active' : '';
 	};
 	
-	vm.logout = function () {
-		var token = $cookies.get("token")
+	$scope.logout = function () {
+		var token = $cookies.get("token");
 		// Check if user is logged in
 		if(token) {
 			// Delete token & username from UserSessionStore
 			$http.delete(URL_API+'login'+'/'+token).then(function(response){
 		    	   if (!response.data) {
+		    		   alert("Successfully logged out!");
 		    		   $location.path("/login");
 					}
 					else {

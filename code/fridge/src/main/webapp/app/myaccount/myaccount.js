@@ -16,15 +16,17 @@
 	
 	.controller('myaccountCtrl', MyAccountCtrl);
 	
-	MyAccountCtrl.$inject = ['$scope', '$http', '$cookies', '$window', '$route'];
+	MyAccountCtrl.$inject = ['$scope', '$http', '$cookies', '$route', '$window'];
 	
-	function MyAccountCtrl($scope, $http, $cookies, $window, $route) {
+	function MyAccountCtrl($scope, $http, $cookies, $route, $window) {
 		
 		var vm = this;
 		// Bind Functions to Buttons
 		vm.editAccount = editAccount;
 		vm.deleteAccount = deleteAccount;
 		vm.cancel = cancel;
+		vm.user = {};
+		var userdata;
 
 		init ();
 		
@@ -37,16 +39,13 @@
 			$scope.textEditButton = "Edit Account";
 			$scope.checked = true;
 			$scope.checked_PwConfirm = true;
-			vm.user = {};
 			var token = $cookies.get('token');
-			if (!token)
-				token = $window.localStorage.getItem('token');
-			alert ("token account: "+token);
 			$http.get(URL_API+'account'+'/'+token).then(function(response) {
 				if (!response.data) {
 						alert("Fehler: "+response.data);
 					}
 					else {
+						userdata = response.data[0];
 						vm.user = response.data[0];
 					}
 			}, function(error) {
@@ -88,7 +87,7 @@
 		
 		function deleteAccount(username) {
 			// Show confirmation-alert
-			if ($window.confirm("Are you sure?"+username)) {
+			if ($window.confirm("Are you sure?")) {
                 // Delete token
 				$cookies.remove("token");
                 // Delete User from DB
@@ -112,7 +111,9 @@
 		function cancel() {
 			$scope.checked_PwConfirm = true;
 			$scope.checked = true;
+			vm.user = userdata;
 			$scope.textEditButton = "Edit Account";
+			$route.reload()
 		};
 
 		var safeDataAndReset = function(newUserData) {

@@ -33,6 +33,7 @@ public class LoginController {
 	@EJB
 	private DB_UserSessionStore dbUserSessionStore;
 
+	// Method for LOGIN
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -41,10 +42,10 @@ public class LoginController {
 		String username = credentials.getUsername();
 		String password = credentials.getPassword();
 
-		if (dbFridgeUser.userExists(username)) {
-			FridgeUser user = dbFridgeUser.getUser(username);
-			if (user.getPassword().equals(password)) {
+		FridgeUser user = dbFridgeUser.getUser(username);
 
+		if (user != null) {
+			if (user.getPassword().equals(password)) {
 				String token = buildToken();
 				UserSessionData data = new UserSessionData(token, username);
 				boolean success = dbUserSessionStore.insertUserSessionToDB(data);
@@ -63,6 +64,7 @@ public class LoginController {
 		return new BigInteger(130, random).toString(32);
 	}
 
+	// Method for LOGOUT
 	@DELETE
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -72,7 +74,7 @@ public class LoginController {
 			dbUserSessionStore.deleteUserSessionFromDB(token);
 			return "";
 		} else
-			return "Userdata could not be deleted";
+			return "Logout failed, Userdata could not be deleted";
 	}
 
 }

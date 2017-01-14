@@ -81,7 +81,7 @@ public class AccountController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{token}")
-	// Method to create an account and write the user to DB
+	// Method to CREATE an ACCOUNT and write the user to DB
 	public JSONArray getAccountDetails(@PathParam("token") String token) {
 		String username = db_UserSessionStore.getUserSessionFromDB(token).getUsername();
 

@@ -63,9 +63,6 @@ public class InventoryController extends RestService {
 			json.put(dbFridgeInventory._prodCategoryId, value.getProdCategoryId().toString());
 
 			Date expiryDate = value.getExpiryDate();
-
-			String date = value.getExpiryDate().getYear() + "-" + value.getExpiryDate().getMonth() + "-"
-					+ value.getExpiryDate().getDay();
 			json.put(dbFridgeInventory._expiryDate, expiryDate.toString());
 
 			arr.add(json);
@@ -78,16 +75,13 @@ public class InventoryController extends RestService {
 	@Produces(MediaType.APPLICATION_JSON)
 	// @Consumes(MediaType.TEXT_PLAIN)
 	public boolean addInventoryProduct(InventoryProduct prod) {
-		// TODO: username noch mitgeben !!!
-		boolean ret;
 		try {
 			dbFridgeInventory.insertProductToDBInventory(prod);
-			ret = true;
+			return true;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			ret = false;
+			return false;
 		}
-		return ret;
 	}
 
 }

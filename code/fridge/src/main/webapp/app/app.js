@@ -22,20 +22,21 @@ $routeProvider.otherwise({redirectTo: '/home'});
 $httpProvider.interceptors.push('authInterceptor');
 }])
 
-.factory('authInterceptor', function($cookies, $window) {
+.factory('authInterceptor', function($cookies, $location) {
 	return {
     request: function(config) {
         config.headers = config.headers || {};
-        
         var token = $cookies.get('token');
         if (!token)
-			token = $window.localStorage.getItem('token');
-        config.headers.Authorization = token;
+        	$location.path("/view_login");
+        // config.headers.Authorization = token;
         // config.headers['token'] = $cookies['token'];
+        // TODO authorization checken
         return config;
       }
     };
   });
+
 
 var URL_API = 'http://localhost:8080/fridge/api/';
 var URL_SUPERMARKET = 'http://localhost:8161/supermarket/api/';

@@ -36,21 +36,23 @@
 		};
 		
 		function init() {
-			$scope.textEditButton = "Edit Account";
-			$scope.checked = true;
-			$scope.checked_PwConfirm = true;
 			var token = $cookies.get('token');
-			$http.get(URL_API+'account'+'/'+token).then(function(response) {
-				if (!response.data) {
-						alert("Fehler: "+response.data);
-					}
-					else {
-						userdata = response.data[0];
-						vm.user = response.data[0];
-					}
-			}, function(error) {
-				console.dir(error);
-			});
+			if (token) {
+				$scope.textEditButton = "Edit Account";
+				$scope.checked = true;
+				$scope.checked_PwConfirm = true;
+				$http.get(URL_API+'account'+'/'+token).then(function(response) {
+					if (!response.data) {
+							alert("Fehler: "+response.data);
+						}
+						else {
+							userdata = response.data[0];
+							vm.user = response.data[0];
+						}
+				}, function(error) {
+					console.dir(error);
+				});
+			}
 		};
 		
 		function editAccount() {

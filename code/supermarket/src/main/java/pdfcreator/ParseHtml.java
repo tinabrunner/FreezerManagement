@@ -29,20 +29,26 @@ public class ParseHtml {
 	 */
 
 	public void createPdf(String htmlFilePath, String invoiceId) throws IOException, DocumentException {
-		String dest = DEST.concat(invoiceId).concat(".pdf");
-		File file = new File(dest);
-		file.getParentFile().mkdirs();
+		try {
+			System.out.println("oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+			String dest = DEST.concat(invoiceId).concat(".pdf");
+			File file = new File(dest);
+			file.getParentFile().mkdirs();
 
-		// step 1
-		Document document = new Document();
-		// step 2
-		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
-		// step 3
-		document.open();
-		// step 4
-		XMLWorkerHelper.getInstance().parseXHtml(writer, document, new FileInputStream(htmlFilePath));
-		// step 5
-		document.close();
+			// step 1
+			Document document = new Document();
+			// step 2
+			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+			// step 3
+			document.open();
+			// step 4
+			XMLWorkerHelper.getInstance().parseXHtml(writer, document, new FileInputStream(htmlFilePath));
+			// step 5
+			document.close();
+		} catch (Exception e) {
+			System.out.println("------------------------------------------------------");
+			e.printStackTrace();
+		}
 
 	}
 }

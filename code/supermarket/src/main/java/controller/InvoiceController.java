@@ -65,6 +65,14 @@ public class InvoiceController {
 			invoice.addItem(i);
 
 		}
+
+		if (invoice.getId() == null) {
+			int id = Integer.parseInt(dbInvoice.getLastId());
+			id = id + 1;
+			String newId = Integer.toString(id);
+
+			invoice.setId(newId);
+		}
 		return invoice;
 	}
 
@@ -77,7 +85,6 @@ public class InvoiceController {
 		// File("supermarket/src/main/webapp/app/invoice/invoice.html");
 		// String s = Files.toString();
 		String htmlString = htmlToString();
-		System.out.println(htmlString);
 
 		String[] splitfile = htmlString.split("splitpoint");
 		String firstString = splitfile[0];
@@ -95,12 +102,12 @@ public class InvoiceController {
 			firstString.concat(newItem);
 		}
 
-		htmlString.concat(firstString).concat(secondString);
+		htmlString.concat((firstString).concat(secondString));
 		String fileDest = INVOICEHTMLPATH;
-		fileDest.concat(invoice.getId()).concat(".html");
+		fileDest.concat(invoice.getId().concat(".html"));
 
 		String invoiceURL = INVOICEURLPATH;
-		invoiceURL.concat(invoice.getId()).concat(".pdf");
+		invoiceURL.concat(invoice.getId().concat(".pdf"));
 
 		File newHtmlFile = new File(fileDest);
 		FileUtils.writeStringToFile(newHtmlFile, htmlString);
@@ -118,13 +125,17 @@ public class InvoiceController {
 	private String htmlToString() {
 		StringBuilder contentBuilder = new StringBuilder();
 		try {
-			BufferedReader in = new BufferedReader(new FileReader("/src/main/webapp/app/invoice/invoice.html"));
+			String filePath = new File("").getAbsolutePath();
+			filePath.concat("/src/main/webapp/app/invoice/invoice.html");
+			BufferedReader in = new BufferedReader(new FileReader("../docroot/invoiceTemplate/invoice.html"));
 			String str;
 			while ((str = in.readLine()) != null) {
 				contentBuilder.append(str);
 			}
 			in.close();
 		} catch (IOException e) {
+			System.out.println("error hmltostring");
+			e.printStackTrace();
 		}
 		return contentBuilder.toString();
 	}

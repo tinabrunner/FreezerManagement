@@ -36,6 +36,10 @@ public class Invoice implements Serializable {
 		return id;
 	}
 
+	public void setId(String newId) {
+		this.id = newId;
+	}
+
 	public String getName() {
 		return name;
 	}

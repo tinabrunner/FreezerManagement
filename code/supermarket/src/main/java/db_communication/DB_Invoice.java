@@ -146,4 +146,13 @@ public class DB_Invoice {
 
 	}
 
+	public String getLastId() {
+		Document doc = db.getCollection("invoices").find().sort(new BasicDBObject("id", -1)).limit(1).first();
+		if (doc == null || !doc.containsKey("id")) {
+			return "0";
+		} else {
+			return doc.getString("id");
+		}
+	}
+
 }

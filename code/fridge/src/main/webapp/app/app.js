@@ -24,12 +24,12 @@ $httpProvider.interceptors.push('authInterceptor');
 }])
 
 
-.factory('authInterceptor', function($cookies, $location) {
+.factory('authInterceptor', function($cookies, $location, $window) {
 	return {
     request: function(config) {
         // config.headers = config.headers || {};
         var token = $cookies.get('token');
-        if (!token)
+        if (!token && !angular.equals($location.path(), "/view_register"))
         	$location.path("/view_login");
          //config.headers['token'] = $cookies['token'];
         //$httpProvider.defaults.headers.common["token"] = token;

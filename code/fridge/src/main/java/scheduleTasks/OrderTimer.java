@@ -28,7 +28,7 @@ public class OrderTimer {
 	private int every_nth_week = 0;
 	
 	/**
-	 * Set a new Timer schedule for sending automatic orders. todo startup?
+	 * Set a new Timer schedule for sending automatic orders.
 	 * @param day Day of week: 1=Monday, 7=Sunday (http://docs.oracle.com/javaee/6/api/javax/ejb/Schedule.html)
 	 * @param weeks Execute every nth week (>1)
 	 * @throws Exception on invalid input

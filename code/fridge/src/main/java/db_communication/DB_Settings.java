@@ -68,27 +68,27 @@ public class DB_Settings {
 	}
 	
 	/**
-	 * Store settings (per user), todo
+	 * Store settings (per user)
 	 * @param settings
 	 */
 	public void storeSettings(Settings settings) {
 		this.getCollection()
 				.replaceOne(
-						eq(doc_user, 1), // todo
+						eq(doc_user, 1),
 						toDocument(settings)
-							.append(doc_user, 1), // todo
+							.append(doc_user, 1),
 						new UpdateOptions()
 							.upsert(true));
 	}
 	
 	/**
-	 * Retrieve settings (per user), todo
+	 * Retrieve settings (per user)
 	 */
 	public Settings retrieveSettings() {
 		return fromDocument(
 				this.getCollection()
 					.find(
-							eq(doc_user, 1)) // todo
+							eq(doc_user, 1))
 					.first());
 	}
 }

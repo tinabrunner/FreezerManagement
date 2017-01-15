@@ -135,7 +135,7 @@ public class ShoppingCartService {
 		}
 		Order order = new Order();
 		order.setItems(relevantData);
-		order.setCustomerId("1"); // todo
+		order.setCustomerId("1");
 		order.setDeliveryDay(wantedDeliveryDay);
 		orderSender.sendShoppingCart(order);
 	}

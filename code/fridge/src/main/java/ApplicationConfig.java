@@ -34,7 +34,7 @@ public class ApplicationConfig extends Application {
 		classes.add(InvoiceReceiver.class);
 		classes.add(SettingsController.class);
 
-		classes.add(OrderTimer.class); // todo
+		classes.add(OrderTimer.class);
 		classes.add(LoginInterceptor.class);
 
 		return classes;

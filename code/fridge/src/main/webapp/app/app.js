@@ -18,24 +18,26 @@ angular.module('fridge', [
 ]).
 config(['$locationProvider', '$routeProvider', '$httpProvider', function($locationProvider, $routeProvider, $httpProvider) {
 $locationProvider.hashPrefix('!');
+
 $routeProvider.otherwise({redirectTo: '/home'});
 $httpProvider.interceptors.push('authInterceptor');
 }])
 
+
 .factory('authInterceptor', function($cookies, $location) {
 	return {
     request: function(config) {
-        config.headers = config.headers || {};
+        // config.headers = config.headers || {};
         var token = $cookies.get('token');
         if (!token)
         	$location.path("/view_login");
-        // config.headers.Authorization = token;
-        // config.headers['token'] = $cookies['token'];
-        // TODO authorization checken
+         //config.headers['token'] = $cookies['token'];
+        //$httpProvider.defaults.headers.common["token"] = token;
         return config;
       }
     };
-  });
+  }
+);
 
 
 var URL_API = 'http://localhost:8080/fridge/api/';

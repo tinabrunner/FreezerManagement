@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Example To Convert HTML to PDF in Java iText</title>
+        <style type="text/css"> b { color: blue; } </style>
+    </head>
+    <body>        
+            <div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+    		<div class="invoice-title">
+    			<h2>Invoice</h2><h3 class="pull-right">Order  12345</h3>
+    		</div>
+    		
+    		
+    		<div class="row">
+    			<div class="col-xs-6">
+    				<div>
+    				<strong>Billed To:</strong><br />
+    					$name<br />
+    					$street<br />
+    					$plz $city<br />
+    					
+    				</div>
+    			</div>
+    			<div class="col-xs-6 text-right">
+    				<div>
+        			<strong>Shipped To:</strong><br />
+    					$name<br />
+    					$street<br />
+    					$plz $city<br />
+    					
+    				</div>
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="col-xs-6">
+    				<div>
+    					<strong>Payment Method:</strong><br />
+    					Visa ending **** 4242<br />
+    					jsmith@email.com<br />
+    				</div>
+    			</div>
+    			<div class="col-xs-6 text-right">
+    				<div>
+    					<strong>Order Date:</strong><br />
+    					$orderDate<br />
+    				</div>
+    			</div>
+    		</div>
+    	
+    	</div>
+    </div>
+    
+    <div class="row">
+    	<div class="col-md-12">
+    		<div class="panel panel-default">
+    			<div class="panel-heading">
+    				<h3 class="panel-title"><strong>Order summary</strong></h3>
+    			</div>
+    			<div class="panel-body">
+    				<div class="table-responsive">
+    					<table class="table table-condensed">
+    						<thead>
+                                <tr>
+        							<th><strong>Item</strong></th>
+        							<th class="text-center"><strong>Price</strong></th>
+        							<th class="text-center"><strong>Quantity</strong></th>
+        							<th class="text-right"><strong>Totals</strong></th>
+                                </tr>
+    						</thead>
+    						<tbody>
+    						splitpoint
+    							
+    							<tr>
+    								<td class="thick-line"></td>
+    								<td class="thick-line"></td>
+    								<td class="thick-line text-center"><strong>Subtotal</strong></td>
+    								<td class="thick-line text-right">$totalPrice</td>
+    							</tr>
+    							<tr>
+    								<td class="no-line"></td>
+    								<td class="no-line"></td>
+    								<td class="no-line text-center"><strong>Shipping</strong></td>
+    								<td class="no-line text-right">$15</td>
+    							</tr>
+    							<tr>
+    								<td class="no-line"></td>
+    								<td class="no-line"></td>
+    								<td class="no-line text-center"><strong>Total</strong></td>
+    								<td class="no-line text-right">$685.99</td>
+    							</tr>
+    						</tbody>
+    					</table>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+</div>
+            
+    </body>
+</html>

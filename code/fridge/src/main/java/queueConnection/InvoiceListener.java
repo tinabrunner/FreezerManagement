@@ -31,6 +31,7 @@ public class InvoiceListener implements MessageListener {
 		try {
 			TextMessage msg = (TextMessage) m;
 			Invoice i = messageToInvoice(msg.getText());
+			System.out.println(i.getInvoiceURL());
 			dbinvoice.insertInvoiceToDB(i);
 
 		} catch (JMSException e) {

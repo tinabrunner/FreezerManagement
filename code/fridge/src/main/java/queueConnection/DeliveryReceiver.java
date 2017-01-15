@@ -27,7 +27,7 @@ public class DeliveryReceiver {
 
 	@PostConstruct
 	public void run() {
-		System.out.println("Selivery Receiver started");
+		System.out.println("Delivery Receiver started");
 		try {
 			// Create and start connection
 
@@ -44,7 +44,6 @@ public class DeliveryReceiver {
 			QueueReceiver receiver = ses.createReceiver(t);
 			// register the listener object with receiver
 			receiver.setMessageListener(listener);
-			receiver.receive();
 
 		} catch (Exception e) {
 			e.printStackTrace();

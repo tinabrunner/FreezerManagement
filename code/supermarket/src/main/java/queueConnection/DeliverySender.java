@@ -18,7 +18,7 @@ public class DeliverySender {
 		String message = delivery;
 
 		try {
-			System.out.println("-----------send invoice------");
+			System.out.println("-----------send Delivery------");
 			// Create and start connection
 			InitialContext ctx = new InitialContext();
 			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/deliveryConnectionFactory");
@@ -38,7 +38,7 @@ public class DeliverySender {
 			sender.send(msg);
 			// connection close
 			con.close();
-			System.out.println("-----------send invoice------");
+			System.out.println("-----------send Delivery------");
 
 			return true;
 

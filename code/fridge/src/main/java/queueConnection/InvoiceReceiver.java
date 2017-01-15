@@ -36,7 +36,7 @@ public class InvoiceReceiver {
 			// Create and start connection
 
 			InitialContext ctx = new InitialContext();
-			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/fridgeConnectionFactory");
+			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/invoiceConnectionFactory");
 			con = f.createQueueConnection();
 			con.start();
 
@@ -48,7 +48,6 @@ public class InvoiceReceiver {
 			QueueReceiver receiver = ses.createReceiver(t);
 			// register the listener object with receiver
 			receiver.setMessageListener(listener);
-			receiver.receive();
 
 		} catch (Exception e) {
 			e.printStackTrace();

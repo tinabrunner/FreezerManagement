@@ -24,7 +24,7 @@ public class InvoiceSender {
 		try {
 			// Create and start connection
 			InitialContext ctx = new InitialContext();
-			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/fridgeConnectionFactory");
+			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/invoiceConnectionFactory");
 			QueueConnection con = f.createQueueConnection();
 			con.start();
 			// create queue session

@@ -20,7 +20,7 @@ import model.Invoice;
 @Stateless(name = "invoiceListener")
 public class InvoiceListener implements MessageListener {
 
-	@EJB
+	@EJB(name = "dbInvoices")
 	private DB_Invoices dbinvoice;
 
 	public InvoiceListener() throws NamingException {
@@ -35,6 +35,7 @@ public class InvoiceListener implements MessageListener {
 
 		} catch (JMSException e) {
 			e.printStackTrace();
+			System.out.println("Error Invoice Receiver");
 		}
 	}
 

@@ -3,7 +3,6 @@ package queueConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -12,14 +11,10 @@ import javax.naming.NamingException;
 
 import com.google.gson.Gson;
 
-import db_communication.DB_Invoices;
 import model.InventoryProduct;
 
 @Stateless(name = "deliveryListener")
 public class DeliveryListener {
-
-	@EJB
-	private DB_Invoices dbinvoice;
 
 	public DeliveryListener() throws NamingException {
 
@@ -30,10 +25,12 @@ public class DeliveryListener {
 			TextMessage msg = (TextMessage) m;
 			List<InventoryProduct> products = messageToList(msg.getText());
 			// do something with products
+			System.out.println("------------------------00000000 Delivery --------------------");
 			System.out.println(msg.getText());
 
 		} catch (JMSException e) {
 			e.printStackTrace();
+			System.out.println("Error Delivery");
 		}
 	}
 

@@ -11,12 +11,14 @@ import javax.ejb.Stateless;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 
 import Model.Invoice;
+import Model.InvoiceForPdf;
 import Model.InvoiceItem;
 import domain.DatabaseProviderImpl;
 import domain.MongoProvider;
@@ -41,28 +43,51 @@ public class DB_Invoice {
 
 	}
 
-	public Document convertInvoiceToDocument(Invoice invoice) {
+	public Document convertInvoiceToDocument(InvoiceForPdf invoice) {
 		Document doc = new Document("id", invoice.getId()).append("name", invoice.getName())
 				.append("billingDate", invoice.getBillingDate()).append("orderDate", invoice.getOrderDate())
 				.append("totalPrice", invoice.getTotalPrice()).append("invoiceURL", invoice.getInvoiceURL())
-				.append("items", invoice.getItems()).append("sent", false);
+				.append("sent", false);
+
+		BasicDBList list = new BasicDBList();
+		for (InvoiceItem item : invoice.getItems()) {
+			BasicDBObject dbItem = new BasicDBObject();
+			dbItem.append("amount", item.getAmount());
+			dbItem.append("id", item.getId());
+			dbItem.append("preis", item.getPreis());
+			dbItem.append("name", item.getName());
+			dbItem.append("calories", item.getCalories());
+			dbItem.append("totalprice", item.getTotalPrice());
+
+			list.add(dbItem);
+		}
+		doc.append("items", list);
 		return doc;
 	}
 
-	public Invoice convertDocumentToInvoice(Document doc) {
+	public InvoiceForPdf convertDocumentToInvoice(Document doc) {
 		String id = doc.getString("id");
 		String name = doc.getString("name");
 		Date billingDate = doc.getDate("billingDate");
 		Date orderDate = doc.getDate("orderDate");
 		double totalPrice = doc.getDouble("totalPrice");
 		String invoiceURL = doc.getString("invoiceURL");
-		List<InvoiceItem> items = (List<InvoiceItem>) doc.get("items");
-		return new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL, items);
+		List<Document> items = (List<Document>) doc.get("items");
+
+		List<InvoiceItem> invoiceItems = new ArrayList<>();
+
+		for (Document dbItem : items) {
+			InvoiceItem item = new InvoiceItem(dbItem.getString("id"), dbItem.getString("name"),
+					dbItem.getDouble("preis"), dbItem.getInteger("calories"), dbItem.getInteger("amount"));
+
+			invoiceItems.add(item);
+		}
+		return new InvoiceForPdf(id, name, billingDate, orderDate, totalPrice, invoiceURL, invoiceItems);
 	}
 
 	// Method to Insert an Invoice
 
-	public void insertInvoiceToDB(Invoice invoice) {
+	public void insertInvoiceToDB(InvoiceForPdf invoice) {
 
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
@@ -74,12 +99,12 @@ public class DB_Invoice {
 	}
 
 	// Method to Get one Invoice
-	public Invoice getInvoice(String id) {
+	public InvoiceForPdf getInvoice(String id) {
 
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 		Bson filter = Filters.eq("id", id);
 		FindIterable<Document> result = invoices.find(filter);
-		Invoice invoice = null;
+		InvoiceForPdf invoice = null;
 
 		for (Document current : result) {
 			invoice = convertDocumentToInvoice(current);
@@ -118,14 +143,14 @@ public class DB_Invoice {
 		return ret;
 	}
 
-	public List<Invoice> getAllNotSendedInvoices() {
+	public List<InvoiceForPdf> getAllNotSentInvoices() {
 
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		// Create a list for all invoices and get a cursor to go through the
 		// DBCollection
 
-		List<Invoice> invoicesResult = new ArrayList<>();
+		List<InvoiceForPdf> invoicesResult = new ArrayList<>();
 
 		for (Document doc : invoices.find()) {
 			if (!doc.getBoolean("sent")) {
@@ -136,7 +161,7 @@ public class DB_Invoice {
 	}
 
 	public void setInvoiceToSent(String idString) {
-		Invoice invoice = this.getInvoice(idString);
+		InvoiceForPdf invoice = this.getInvoice(idString);
 		Document doc = convertInvoiceToDocument(invoice);
 		doc.append("sent", true);
 
@@ -144,6 +169,15 @@ public class DB_Invoice {
 		db.getCollection("invoices").updateOne(bson, new Document("$set", new Document("sent", true)));
 		// db.getCollection("invoices").findOneAndUpdate(bson, doc);
 
+	}
+
+	public String getLastId() {
+		Document doc = db.getCollection("invoices").find().sort(new BasicDBObject("id", -1)).limit(1).first();
+		if (doc == null || !doc.containsKey("id")) {
+			return "0";
+		} else {
+			return doc.getString("id");
+		}
 	}
 
 }

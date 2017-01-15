@@ -2,7 +2,7 @@ package service;
 
 import model.ShoppingListItem;
 import repository.ShoppingListRepositoryStub;
-import utils.ProductHelperTest;
+import util.ProductHelperTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +53,7 @@ public class ShoppingListServiceTest {
         itemToAdd.setName("Hund");
         repository.addProduct(itemToAdd);
         
-        itemUpdate = repository.getProduct(itemToAdd);
+        itemUpdate = shoppingListService.getProduct(itemToAdd);
         
         Assert.assertEquals(itemUpdate.getName(), itemToAdd.getName());        
     }
@@ -67,7 +67,7 @@ public class ShoppingListServiceTest {
         itemToAdd.setName("Hund");
         repository.updateProduct(itemToAdd);
         
-        itemToCheck = repository.getProduct(itemToAdd);
+        itemToCheck = shoppingListService.getProduct(itemToAdd);
         
         Assert.assertEquals(itemToCheck.getName(), itemToAdd.getName());        
     }
@@ -106,5 +106,21 @@ public class ShoppingListServiceTest {
 
         Assert.assertEquals(searchProduct.getId(), shoppingListService.getProduct(ProductHelperTest.getProductDummy("some name", searchId)).getId());
     }
-
+    
+    @Test
+    public void shouldReturnAnUpdatedProduct(){
+        ShoppingListItem itemToUpdate = ProductHelperTest.getProductDummy("BMW 123d", "2312");
+        ShoppingListItem itemToFind = ProductHelperTest.getProductDummy("---", itemToUpdate.getId());
+        repository.addProduct(itemToUpdate);
+        repository.addProduct(ProductHelperTest.getProductDummy("BMW 330d", "312"));
+        repository.addProduct(ProductHelperTest.getProductDummy("BMW M4", "123"));
+        repository.addProduct(ProductHelperTest.getProductDummy("BMW M135i", "789"));        
+        itemToUpdate.setName("Nissan");
+        
+        repository.updateProduct(itemToUpdate);
+        
+        itemToFind = repository.getProduct(itemToUpdate);
+        
+        Assert.assertEquals(itemToFind.getName(), itemToUpdate.getName());
+    }
 }

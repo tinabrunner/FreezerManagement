@@ -23,7 +23,7 @@ import model.UserSessionData;
 public class DB_UserSessionStore {
 
 	@EJB
-	private MongoProvider mongoProvider;
+	private MongoProvider mongoProvider = new MongoProvider();
 
 	private static final String _fridge = "fridge";
 	private static final String _userSessionStore = "userSessionStore";
@@ -33,14 +33,11 @@ public class DB_UserSessionStore {
 	/*
 	 * STANDARDMETHODS FOR RE-USE
 	 */
-
 	// create a client and get the database and _userSessionStoreCollection
 	private MongoCollection<Document> getSessionStore() {
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase(_fridge);
-
 		MongoCollection<Document> sessionStore = db.getCollection(_userSessionStore);
-
 		return sessionStore;
 	}
 
@@ -59,55 +56,58 @@ public class DB_UserSessionStore {
 	 * METHODS TO COMMUNICATE WITH DB
 	 */
 
-	// Method to Insert a UserSession
-	public void insertUserSessionToDB(UserSessionData data) {
+	// INSERT a UserSession
+	public boolean insertUserSessionToDB(UserSessionData data) {
 		MongoCollection<Document> sessionStore = getSessionStore();
 		Document doc = convertSessionDataToDocument(data);
-		if (usernameExists(data.getUsername())) {
-			Bson filter = Filters.eq(_username, data.getUsername());
-			sessionStore.findOneAndDelete(filter);
+		Bson filter = Filters.eq(_username, data.getUsername());
+		// if the user already exists in sessionStore, delete the old
+		// usersessiondata
+		if (usernameExists(data.getUsername(), sessionStore)) {
+			sessionStore.deleteOne(filter);
 		}
 		sessionStore.insertOne(doc);
+
+		// Check if usersessiondata got inserted
+		if (!usernameExists(data.getUsername(), sessionStore))
+			return false;
+		else
+			return true;
 	}
 
-	// Method to Delete a UserSession
-	public void deleteUserSessionFromDB(String token) {
-		MongoCollection<Document> sessionStore = getSessionStore();
-		Bson filter = Filters.eq(_token, token);
-		sessionStore.findOneAndDelete(filter);
-	}
-
-	// Method to Get a UserSession
+	// GET a UserSession
 	public UserSessionData getUserSessionFromDB(String token) {
 		MongoCollection<Document> sessionStore = getSessionStore();
 		Bson filter = Filters.eq(_token, token);
-		FindIterable<Document> result = sessionStore.find(filter);
-		return convertDocumentToSessionData(result.first());
+		if (sessionStore.count(filter) > 0) {
+			FindIterable<Document> result = sessionStore.find(filter);
+			return convertDocumentToSessionData(result.first());
+		} else
+			return null;
 	}
 
-	// Check if Usernamealready exists
-	public boolean usernameExists(String username) {
+	// DELETE a UserSession
+	public void deleteUserSessionFromDB(String token) {
 		MongoCollection<Document> sessionStore = getSessionStore();
+		Bson filter = Filters.eq(_token, token);
+		sessionStore.deleteOne(filter);
+	}
+
+	/*
+	 * METHODS TO CHECK USERNAME / TOKEN
+	 */
+
+	// Check if USERNAME already exists
+	public boolean usernameExists(String username, MongoCollection<Document> sessionStore) {
 		Bson filter = Filters.eq(_username, username);
 		if (sessionStore.count(filter) > 0)
 			return true;
 		else
 			return false;
+
 	}
 
-	// Check if UserSession already exists
-	public boolean userSessionExists(UserSessionData data) {
-		MongoCollection<Document> sessionStore = getSessionStore();
-		Bson filter = Filters.eq(_username, data.getUsername());
-		FindIterable<Document> result = sessionStore.find(filter);
-		UserSessionData foundUser = convertDocumentToSessionData(result.first());
-		if (foundUser.getToken().equals(data.getToken()))
-			return true;
-		else
-			return false;
-	}
-
-	// Check if Token already exists
+	// Check if TOKEN already exists
 	public boolean tokenExists(String token) {
 		MongoCollection<Document> sessionStore = getSessionStore();
 		Bson filter = Filters.eq(_token, token);

@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import Model.Invoice;
+import Model.InvoiceForPdf;
 import Model.Order;
 import Model.ProcessedOrder;
 import Model.Product;
@@ -23,8 +23,11 @@ import db_communication.DB_ProductList;
 @Stateless(name = "orderController")
 public class OrderController {
 
-	@EJB
+	@EJB(name = "invoiceCtrl")
 	private InvoiceController invoiceCtrl;
+
+	@EJB(name = "deliveryCtrl")
+	private DeliveryController deliveryCtrl;
 
 	@EJB
 	private DB_Invoice dbInvoice;
@@ -60,14 +63,19 @@ public class OrderController {
 					}
 				}
 			}
+
 		}
 		processedOrder.setItemsProcessed(processedItems);
 		processedOrder.setTotalPrice(processedPrice);
 		/* ~ */
 		this.saveOrderToDB(processedOrder);
-		Invoice invoice = invoiceCtrl.createInvoice(processedOrder);
+
+		InvoiceForPdf invoice = invoiceCtrl.createInvoice(processedOrder);
 		invoice.setURL(invoiceCtrl.invoiceToHTML(invoice));
 		dbInvoice.insertInvoiceToDB(invoice);
+		invoiceCtrl.sendInvoiceImmediatly(invoice);
+		deliveryCtrl.sendDeliveryImmediatly(processedOrder.getId());
+
 	}
 
 	public String getLastId() {

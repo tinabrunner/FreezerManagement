@@ -2,15 +2,10 @@ package model;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * @author Christina Brunner
  */
 
-@XmlRootElement
-@Entity
 public class FridgeUser implements Serializable {
 
 	/**

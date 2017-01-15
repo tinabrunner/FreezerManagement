@@ -1,7 +1,7 @@
 package repository;
 
 import model.ShoppingListItem;
-import utils.ProductHelperTest;
+import util.ProductHelperTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -23,9 +23,12 @@
 						password : $scope.password
 		        };
 				$http.post(URL_API+'login', objData).then((function(response){
-					alert("Passt: "+response.data);
-					$cookies.put('username', response.data);
-					$location.path("/home");
+					if (response.data) {
+						$cookies.put('token', response.data);
+						$location.path("/home");
+					}
+					else
+						alert("Login failed");
 				}), 
 				function(response) { 
 					alert("Something went wrong: "+response.data);

@@ -1,10 +1,11 @@
 package domain;
 
+import java.io.Serializable;
+
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-
-import db_communication.DB_UserSessionStore;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Christina Brunner
@@ -12,15 +13,23 @@ import db_communication.DB_UserSessionStore;
 
 @Interceptor
 @Logged
-public class LoginInterceptor {
+public class LoginInterceptor implements Serializable {
 
-	private DB_UserSessionStore db_userSessionStore;
+	private static final long serialVersionUID = 1L;
+
+	// @Inject
+	// HttpServletRequest request;
 
 	@AroundInvoke
 	public Object invokeInterceptorMethod(InvocationContext ctx) throws Exception {
 
-		System.out.println("Test interceptor");
+		HttpServletRequest req = ((RestService) ctx.getTarget()).getHttpRequest();
+
+		System.out.println(
+				"!!! interceptor !!! " + ", remAdr: " + req.getRemoteAddr() + ", Auth: " + req.getHeader("token")
+						+ ", Param: " + req.getParameter("token") + ", Attr: " + req.getAttribute("token"));
 		return ctx.proceed();
+
 	}
 
 }

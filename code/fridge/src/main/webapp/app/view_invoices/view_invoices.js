@@ -19,7 +19,6 @@
 		var vm = this;
 		vm.invoices = {};
 		vm.init = init;
-		vm.savePDF = savePDF;
 
 		init();
 
@@ -31,15 +30,15 @@
 			});
 
 		}
-		function savePDF(id) {
-			alert("save pdf with id "+id);
+//		function savePDF(id) {
+//			alert("save pdf with id "+id);
 //			$http.get(URL_API + 'invoices/' + invoiceId).then(function(resp) {
 //				
 //		
 //			});
 //
 //			/* --- --- */
-		}
+//		}
 	}
 
 })();

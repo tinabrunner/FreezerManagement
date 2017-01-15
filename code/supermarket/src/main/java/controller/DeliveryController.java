@@ -1,13 +1,19 @@
 package controller;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.Schedule;
+import javax.ejb.ScheduleExpression;
 import javax.ejb.Stateless;
+import javax.ejb.Timer;
+import javax.ejb.TimerConfig;
+import javax.ejb.TimerService;
 
 import com.google.gson.Gson;
 
@@ -22,36 +28,79 @@ public class DeliveryController {
 
 	@EJB
 	private DB_Order dbOrder;
-
 	@EJB
 	private DeliverySender deliverySender;
+	@Resource
+	private TimerService timerService;
 
 	private static int expiryTime = 10;
 
-	@Schedule(minute = "*", hour = "*")
-	private void sendProducts() {
+	// Zur Demo wird direkt die Bestellung übermittelt
+	public void sendDeliveryImmediatly(String id) {
 		LocalDate expiryDate = LocalDate.now();
 		expiryDate.plusDays(expiryTime);
 
-		List<ProcessedOrder> orders = dbOrder.getAllNotSendedOrders();
+		ProcessedOrder order = dbOrder.getOrder(id);
 		List<ExpiryProduct> delivery = new ArrayList<ExpiryProduct>();
 
-		for (ProcessedOrder or : orders) {
-
-			ProcessedOrder o = or;
-			Map<Product, Integer> items = o.getItemsProcessed();
-			for (Map.Entry<Product, Integer> entry : items.entrySet()) {
-
-				Product p = entry.getKey();
-				ExpiryProduct e = new ExpiryProduct(p.getId(), p.getName(), p.getVerpackungsGroesse(), p.getPreis(),
-						p.getCalories(), expiryDate);
+		Map<Product, Integer> items = order.getItemsProcessed();
+		for (Map.Entry<Product, Integer> entry : items.entrySet()) {
+			Product p = entry.getKey();
+			int anzahl = p.getVerpackungsGroesse() * entry.getValue();
+			for (int i = 0; i < anzahl; i++) {
+				ExpiryProduct e = new ExpiryProduct(p.getId(), p.getName(), expiryDate);
 				delivery.add(e);
 			}
-			boolean sent = deliverySender.sendDelivery(deliveryToString(delivery));
-			if (sent) {
-				dbOrder.setOrderToSent(o.getId());
-			}
 		}
+
+		boolean sent = deliverySender.sendDelivery(deliveryToString(delivery));
+		if (sent) {
+			dbOrder.setOrderToSent(id);
+			System.out.println("Order sent");
+		}
+	}
+
+	// Zur übermittlung mit Timer
+	public void sendDelivery(List<ExpiryProduct> delivery, String id) {
+
+		boolean sent = deliverySender.sendDelivery(deliveryToString(delivery));
+		if (sent) {
+			dbOrder.setOrderToSent(id);
+		}
+	}
+
+	// @Timeout
+	// public void sendDeliveryAfterTimeout(Timer timer, ProcessedOrder
+	// processedOrder) {
+	// LocalDate expiryDate = LocalDate.now();
+	// expiryDate.plusDays(expiryTime);
+	//
+	// List<ExpiryProduct> delivery = new ArrayList<ExpiryProduct>();
+	//
+	// ProcessedOrder o = processedOrder;
+	// Map<Product, Integer> items = o.getItemsProcessed();
+	// for (Map.Entry<Product, Integer> entry : items.entrySet()) {
+	//
+	// Product p = entry.getKey();
+	// ExpiryProduct e = new ExpiryProduct(p.getId(), p.getName(),
+	// p.getVerpackungsGroesse(), p.getPreis(),
+	// p.getCalories(), expiryDate);
+	// delivery.add(e);
+	// }
+	// String orderId = o.getId();
+	// this.sendDelivery(delivery, orderId);
+	//
+	// }
+
+	public Timer createDeliveryTimer(ProcessedOrder processedOrder) {
+		ScheduleExpression schedule = new ScheduleExpression();
+		LocalDate date = LocalDate.now();
+		date.plusDays(processedOrder.getDeliveryDay());
+		Date d = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		schedule.start(d);
+		TimerConfig timerConfig = new TimerConfig();
+		return timerService.createCalendarTimer(schedule, timerConfig);
+
 	}
 
 	public String deliveryToString(List<ExpiryProduct> delivery) {

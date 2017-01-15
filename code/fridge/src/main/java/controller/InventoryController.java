@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.ejb.EJB;
@@ -19,6 +20,7 @@ import org.json.simple.JSONObject;
 
 import db_communication.DB_FridgeInventory;
 import domain.LoginInterceptor;
+import domain.RestService;
 import model.InventoryProduct;
 
 /**
@@ -27,7 +29,8 @@ import model.InventoryProduct;
 
 @Stateless
 @Path("/inventory")
-public class InventoryController {
+@Interceptors(LoginInterceptor.class)
+public class InventoryController extends RestService {
 
 	@EJB
 	private DB_FridgeInventory dbFridgeInventory;
@@ -39,13 +42,12 @@ public class InventoryController {
 	public String deleteInventoryProduct(@PathParam("id") String id) {
 		boolean success = dbFridgeInventory.deleteProductFromDBInventory(id);
 		if (success)
-			return "";
+			return null;
 		else
 			return "Could not delete the product with id: " + id;
 	}
 
 	@GET
-	@Interceptors(LoginInterceptor.class)
 	@Produces(MediaType.APPLICATION_JSON)
 	public JSONArray getAllProducts() {
 		Map<String, InventoryProduct> inventory = dbFridgeInventory.getAllProducts();
@@ -60,9 +62,8 @@ public class InventoryController {
 			json.put(dbFridgeInventory._name, value.getName().toString());
 			json.put(dbFridgeInventory._prodCategoryId, value.getProdCategoryId().toString());
 
-			String date = value.getExpiryDate().getYear() + "-" + value.getExpiryDate().getMonth() + "-"
-					+ value.getExpiryDate().getDay();
-			json.put(dbFridgeInventory._expiryDate, date);
+			Date expiryDate = value.getExpiryDate();
+			json.put(dbFridgeInventory._expiryDate, expiryDate.toString());
 
 			arr.add(json);
 		}
@@ -74,16 +75,13 @@ public class InventoryController {
 	@Produces(MediaType.APPLICATION_JSON)
 	// @Consumes(MediaType.TEXT_PLAIN)
 	public boolean addInventoryProduct(InventoryProduct prod) {
-		// TODO: username noch mitgeben !!!
-		boolean ret;
 		try {
 			dbFridgeInventory.insertProductToDBInventory(prod);
-			ret = true;
+			return true;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			ret = false;
+			return false;
 		}
-		return ret;
 	}
 
 }

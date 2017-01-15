@@ -16,11 +16,29 @@ angular.module('fridge', [
 	'fridge.settings',
 	'fridge.formChange'
 ]).
-config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+config(['$locationProvider', '$routeProvider', '$httpProvider', function($locationProvider, $routeProvider, $httpProvider) {
 $locationProvider.hashPrefix('!');
 
 $routeProvider.otherwise({redirectTo: '/home'});
-}]);
+$httpProvider.interceptors.push('authInterceptor');
+}])
+
+
+.factory('authInterceptor', function($cookies, $location) {
+	return {
+    request: function(config) {
+        // config.headers = config.headers || {};
+        var token = $cookies.get('token');
+        if (!token)
+        	$location.path("/view_login");
+         //config.headers['token'] = $cookies['token'];
+        //$httpProvider.defaults.headers.common["token"] = token;
+        return config;
+      }
+    };
+  }
+);
+
 
 var URL_API = 'http://localhost:8080/fridge/api/';
-var URL_SUPERMARKET = 'http://localhost:38611/supermarket/api/';
+var URL_SUPERMARKET = 'http://localhost:8080/supermarket/api/';

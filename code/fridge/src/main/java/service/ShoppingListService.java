@@ -1,6 +1,6 @@
 package service;
 
-import java.util.Set;
+import java.util.List;
 
 import model.ShoppingListItem;
 
@@ -15,7 +15,7 @@ interface ShoppingListService {
 
 	boolean deleteProduct(ShoppingListItem product);
 
-	Set<ShoppingListItem> getAllProducts();
+	List<ShoppingListItem> getAllProducts();
 
 	ShoppingListItem getProduct(ShoppingListItem product);
 

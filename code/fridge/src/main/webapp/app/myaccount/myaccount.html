@@ -16,15 +16,16 @@
 					<div class="form-group">
 						<label for="reg_username" class="sr-only">Username</label>
 						<label hidden="true"> <input type="checkbox" ng-model="checked"></label>
-						<input type="text" ng-readonly="checked" class="form-control" id="reg_username" name="reg_username" ng-model="myData.user.username" placeholder="username">
+						<input type="text" readonly="true" class="form-control" id="reg_username" name="reg_username" ng-model="myData.user.username" placeholder="username">
 					</div>
 					<div class="form-group">
 						<label for="reg_password" class="sr-only">Password</label>
-						<input type="password" ng-readonly="checked" class="form-control" id="reg_password" name="reg_password" ng-model="myData.user.password" placeholder="password">
+						<input type="password" ng-readonly="checked" ng-change="passwordChanged()" class="form-control" id="reg_password" name="reg_password" ng-model="myData.user.password" placeholder="password">
 					</div>
 					<div class="form-group">
+						<label hidden="true"> <input type="checkbox" ng-model="checked_PwConfirm"></label>
 						<label for="reg_password_confirm" class="sr-only">Password Confirm</label>
-						<input type="password" ng-hide="checked" class="form-control" id="reg_password_confirm" name="reg_password_confirm" ng-model="myData.password_confirm" placeholder="confirm password">
+						<input type="password" ng-hide="checked_PwConfirm" class="form-control" name="reg_password_confirm" ng-model="myData.password_confirm" placeholder="confirm password">
 					</div>
 					<div class="form-group">
 						<label for="reg_firstname" class="sr-only">First Name</label>
@@ -41,17 +42,18 @@
 					
 					
 					<div ng-hide="checked" class="form-group login-group-checkbox">
-						<input type="radio" class="" name="reg_usertype" id="admin" ng-model="usertype_admin" placeholder="admin">
+						<input type="radio" class="" name="reg_usertype" id="admin" ng-model="myData.role" placeholder="admin">
 						<label for="admin">admin</label>
 						
-						<input type="radio" class="" name="reg_usertype" id="user" ng-model="usertype_user" placeholder="user">
+						<input type="radio" class="" name="reg_usertype" id="user" ng-model="myData.role" placeholder="user">
 						<label for="user">user</label>
 					</div>
 					
 				</div>
 				<div class="text-right">
-					<button type="button" class="btn btn-secondary"" id="btn_edit" ng-click="EditAccount()"> {{ MyText }} </button>
-					<button type="button" class="btn btn-danger" id="btn_delete" ng-click="DeleteAccount()">Delete Account</button>
+					<button type="button" class="btn btn-secondary" id="btn_cancel" ng-hide="checked" ng-click="myData.cancel()"> Cancel </button>
+					<button type="button" class="btn btn-secondary" id="btn_edit" ng-click="myData.editAccount()"> {{ textEditButton }} </button>
+					<button type="button" class="btn btn-danger" id="btn_delete" ng-hide="!checked" ng-click="myData.deleteAccount(myData.user.username)">Delete Account</button>
 				</div>
 			</div>
 		</form>

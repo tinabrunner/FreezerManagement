@@ -21,7 +21,7 @@ import javax.naming.InitialContext;
  */
 @Singleton
 @Startup
-@Stateless
+@Stateless(name = "orderController")
 public class OrderReceiver {
 
 	@EJB(name = "OrderListener")

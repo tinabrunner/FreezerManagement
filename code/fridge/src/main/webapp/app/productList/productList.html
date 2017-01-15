@@ -1,3 +1,12 @@
+<!-- 
+	@author: JD, 13.01.2017
+ -->
+<style>
+	.red{
+		background-color: red;
+	}
+</style>
+
 <div>
 	<h2>Product list</h2>
 </div>
@@ -8,17 +17,68 @@
 	        	<th>Size</th>
 	            <th>Price</th>
 	            <th>Calories</th>
-	            <th></th>
+	            <th><button class="btn btn-warning btn-sm" ng-click="productList.switchUserRole()")>Switch UserRole</button></th>
 	        </tr>
-	         
+	      	         
 	        <tr ng-repeat="product in productList.products">
 		        <td>{{ product.name }}</td>
 		        <td>{{ product.verpackungsGroesse }}</td>
 		        <td>{{ product.preis }}</td>
 		        <td>{{ product.calories }} kcal</td>	
-		        <td>
-					<button type="submit" class="btn_add" ng-click="productList.addToShoppingList(product)">Add</button>
+		        <td ng-if="!productList.isUserAdmin">
+					<button type="submit" class="btn btn-success btn-sm" ng-click="productList.addToShoppingList(product)">Add</button>
+		        </td>
+		        <td ng-if="productList.isUserAdmin">
+		        	<button ng-click="productList.editProduct(product)" 
+		        	        class="btn btn-info btn-sm"
+		        	        ng-disabled="productList.isEditing">Edit</button>
+		        	<button ng-click="productList.deleteFromStore(product.id)"
+		        	        class="btn btn-danger btn-sm"
+		        	        ng-disabled="productList.isEditing">Delete</button>		        	
 		        </td>
 	        </tr>	        
-	</table>	
+	</table>
+	
+	<div ng-if="productList.isUserAdmin">
+		<h3>Add or edit a product</h3>
+		<table class="table table-striped table-bordered" cellspacing="0">
+			<tr>
+				<th>Id</th>	
+		        <th>Name</th>
+	        	<th>Size</th>
+	            <th>Price</th>	            
+	            <th>Calories</th>
+	            <th></th>
+	        </tr>
+	        <tr>
+	        	<form class="productAddForm">
+		        	<td><input 	id="newProductId" type="text" 
+		        				ng-keyup="productList.checkId()" 
+		        				ng-disabled="productList.isEditing"></td>
+			        <td><input ng-disabled="productList.isIdError()" 
+			        		   id="newProductName" 
+			        		   type="text required"
+			        		   ng-model="product.name"
+			        		   name="productName">
+		        	<td><input ng-disabled="productList.isIdError()" 
+		        			   id="newProductSize" 
+		        			   type="number" step="1" value="1"></td>
+		            <td><input ng-disabled="productList.isIdError()" 
+		                       id="newProductPrice" 
+		                       type="number" step="0.01" min="0.00" value="0.00"></td>	            
+		            <td><input ng-disabled="productList.isIdError()" 
+		                       id="newProductCalories" type="number" min="0" value="0"></td>
+		            <td><button ng-disabled="productList.isIdError()" 
+		            			ng-click="productList.addProductToSupermarket()"
+		            			class="btn btn-success btn-sm">save</button>
+		            <button ng-click="productList.abortEditing()" 
+		                    class="btn btn-secondary">cancel</button></td>	 
+		    	</form>           
+	        </tr>
+		</table>
+		   
+	    <div ng-show="productList.isIdError() || productList.isValidationError" class="alert alert-danger" role="alert">
+	    	{{productList.errorText}}
+	    </div> 
+	</div>		
 </div>

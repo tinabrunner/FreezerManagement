@@ -1,6 +1,6 @@
 package db_communication;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -12,6 +12,11 @@ import model.ShoppingListItem;
 import repository.ShoppingListRepositoryMongoImpl;
 import service.ShoppingListServiceImpl;
 
+/**
+ * 
+ * @author JD
+ *
+ */
 @Stateless
 public class DB_ShoppingList {
 
@@ -36,15 +41,14 @@ public class DB_ShoppingList {
 	}
 
 	// GET
-	public Set<ShoppingListItem> getAllProductsFromShoppingList() {
+	public List<ShoppingListItem> getAllProductsFromShoppingList() {
 
 		ShoppingListRepositoryMongoImpl shoppingListRepositoryMongo = new ShoppingListRepositoryMongoImpl(
 				this.mongoConnection);
 		ShoppingListServiceImpl shoppingListService = new ShoppingListServiceImpl(shoppingListRepositoryMongo);
 
-		Set<ShoppingListItem> result = shoppingListService.getAllProducts();
+		return shoppingListService.getAllProducts();
 
-		return result;
 	}
 
 	// DELETE

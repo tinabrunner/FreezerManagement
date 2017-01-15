@@ -4,7 +4,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -19,6 +18,7 @@ import org.json.simple.JSONObject;
 import db_communication.DB_FridgeUser;
 import db_communication.DB_UserSessionStore;
 import model.FridgeUser;
+import model.UserCredentials;
 
 /**
  * @author Christina Brunner
@@ -34,45 +34,54 @@ public class AccountController {
 	@EJB
 	private DB_UserSessionStore db_UserSessionStore;
 
+	@EJB
+	private LoginController loginController;
+
 	// Method to create an account and write the user to DB
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String createAccount(FridgeUser user) {
 		boolean insertionTrue = db_fridgeUser.insertUserToDB(user);
-		if (insertionTrue)
+		if (insertionTrue) {
+			// Login
+			UserCredentials credentials = new UserCredentials(user.getUsername(), user.getPassword());
+			return loginController.login(credentials);
+		} else {
 			return "";
-		else {
-			return "Username already exists - Please enter another username!";
 		}
 	}
 
 	@PUT
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
 	// Method to edit an Account and write the changes to the DB
-	public boolean editAccount(FridgeUser fridgeUser) {
-
-		// TODO: Checken ob überhaupt Attribut-Werte verändert wurde !?
-
-		db_fridgeUser.updateUserFromDB(fridgeUser);
-		return true;
+	public String editAccount(FridgeUser fridgeUser) {
+		boolean success = db_fridgeUser.updateUserFromDB(fridgeUser);
+		if (success)
+			return "";
+		else
+			return "Userdata could not be updated!";
 	}
 
 	@DELETE
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("{username}")
 	// Method to delete an Account
-	public boolean deleteAccount(@FormParam("username") String username) {
-		if (db_fridgeUser.deleteUserFromDB(username))
-			return true;
-		else {
-			System.out.println("The User with the Username: " + username + " could not be deleted!");
-			return false;
-		}
+	public String deleteAccount(@PathParam("username") String username) {
+		boolean success = db_fridgeUser.deleteUserFromDB(username);
+		if (success)
+			return "";
+		else
+			return "User could not be deleted!";
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{token}")
-	// Method to create an account and write the user to DB
+	// Method to CREATE an ACCOUNT and write the user to DB
 	public JSONArray getAccountDetails(@PathParam("token") String token) {
 		String username = db_UserSessionStore.getUserSessionFromDB(token).getUsername();
 

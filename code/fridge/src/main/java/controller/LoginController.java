@@ -6,8 +6,10 @@ import java.security.SecureRandom;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -31,33 +33,48 @@ public class LoginController {
 	@EJB
 	private DB_UserSessionStore dbUserSessionStore;
 
+	// Method for LOGIN
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String Login(UserCredentials credentials) {
+	public String login(UserCredentials credentials) {
 
 		String username = credentials.getUsername();
 		String password = credentials.getPassword();
 
-		if (dbFridgeUser.userExists(username)) {
-			FridgeUser user = dbFridgeUser.getUser(username);
-			if (user.getPassword().equals(password)) {
+		FridgeUser user = dbFridgeUser.getUser(username);
 
+		if (user != null) {
+			if (user.getPassword().equals(password)) {
 				String token = buildToken();
 				UserSessionData data = new UserSessionData(token, username);
-				dbUserSessionStore.insertUserSessionToDB(data);
-				return token;
-			} else {
-				return "Username and Password does not fit!";
-			}
-		} else {
-			return "User does not exists. Please register!";
-		}
+				boolean success = dbUserSessionStore.insertUserSessionToDB(data);
+				if (success)
+					return token;
+				else
+					return null;
+			} else
+				return null;
+		} else
+			return null;
 	}
 
 	public String buildToken() {
 		SecureRandom random = new SecureRandom();
 		return new BigInteger(130, random).toString(32);
+	}
+
+	// Method for LOGOUT
+	@DELETE
+	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{token}")
+	public String logout(@PathParam("token") String token) {
+		if (dbUserSessionStore.tokenExists(token)) {
+			dbUserSessionStore.deleteUserSessionFromDB(token);
+			return "";
+		} else
+			return "Logout failed, Userdata could not be deleted";
 	}
 
 }

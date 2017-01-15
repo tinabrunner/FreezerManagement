@@ -46,18 +46,13 @@ public class DB_FridgeInventory {
 	private MongoCollection<Document> getProductsCollection() {
 		MongoClient mongoClient = this.mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase(_fridge);
-
 		MongoCollection<Document> products = db.getCollection(_inventoryProducts);
-		// DBCollection users = (DBCollection) db.getCollection("users");
-
 		return products;
 	}
 
 	private Document convertInventoryProdToDocument(InventoryProduct product) {
 		Document doc = new Document(_prodCategoryId, product.getProdCategoryId()).append(_name, product.getName())
 				.append(_expiryDate, product.getExpiryDate());
-		// TODO: Hier noch den Username aus HTTP-Header auslesen und der DB
-		// mitgeben !!!
 		return doc;
 	}
 
@@ -90,7 +85,7 @@ public class DB_FridgeInventory {
 		if (productExists(id)) {
 			ObjectId objId = new ObjectId(id);
 			Bson filter = Filters.eq(_id, objId);
-			products.findOneAndDelete(filter);
+			products.deleteOne(filter);
 			return true;
 		} else
 			return false;
@@ -116,7 +111,6 @@ public class DB_FridgeInventory {
 		for (Document current : search) {
 			allProducts.putAll(convertDocumentToInventoryProd(current));
 		}
-
 		return allProducts;
 	}
 

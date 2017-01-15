@@ -1,25 +1,22 @@
 package repository;
 
 import model.ShoppingListItem;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by JD on 16.12.2016.
  */
 public class ShoppingListRepositoryStub implements ShoppingListRepository {
 
-    private final Set<ShoppingListItem> shoppingList;
+    private final List<ShoppingListItem> shoppingList;
 
-    private Set<ShoppingListItem> getShoppingList(){
+    private List<ShoppingListItem> getShoppingList(){
         return this.shoppingList;
     }
 
     public ShoppingListRepositoryStub(){
-        this.shoppingList = new HashSet<>();
+        this.shoppingList = new ArrayList<>();
     }
 
     @Override
@@ -52,7 +49,7 @@ public class ShoppingListRepositoryStub implements ShoppingListRepository {
     }
 
     @Override
-    public Set<ShoppingListItem> getAllProducts() {
+    public List<ShoppingListItem> getAllProducts() {
         return this.getShoppingList();
     }
 

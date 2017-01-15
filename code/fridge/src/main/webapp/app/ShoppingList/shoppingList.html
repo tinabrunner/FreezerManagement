@@ -1,3 +1,6 @@
+<!--
+	@author: JD, 10.01.2017 
+ -->
 <div>
 	<h2>Shopping List</h2>
 </div>
@@ -15,24 +18,24 @@
 		        <td>{{ product.name }}</td>
 		        <td>
 		        	<input id="edt_bestandMin_{{product.id}}" type="number" min="0" max="{{ product.hoechstBestand }}" step="1" value="{{ product.mindestBestand }}" style="width: 40px">
-		        	<button ng-click="shoppingList.updateMindestBestand(product)">Update</button>
+		        	<button class="btn btn-info btn-sm" ng-click="shoppingList.updateMindestBestand(product)">Update</button>
 		        </td>
 		        <td>
 		        	<input id="edt_bestandMax_{{product.id}}" type="number" min="0" step="1" value="{{ product.hoechstBestand }}" style="width: 40px">
-		        	<button ng-click="shoppingList.updateHoechstBestand(product)">Update</button>
+		        	<button class="btn btn-info btn-sm" ng-click="shoppingList.updateHoechstBestand(product)">Update</button>
 		        </td>
 		        <td>
 		        	<input type="checkbox" id="cbox_regularly" ng-click="shoppingList.setRegulary(product, product.regelmaessig)" ng-checked="product.regelmaessig"></input>
 		        </td>
 		        <td>
-					<button type="submit" class="btn_delete" ng-click="shoppingList.deleteProduct(product.id)">Delete</button>
+					<button type="submit" class="btn btn-danger btn-sm" ng-click="shoppingList.deleteProduct(product.id)">Delete</button>
 		        </td>
 	        </tr>	        
 	</table>
 	<a href="#!/productlist">
-		<button>Add Product</button>
+		<button class="btn btn-success btn-sm">Add Product</button>
 	</a>	
 	<a href="#!/shoppingcart">
-		<button>Create Order</button>
+		<button class="btn btn-primary btn-sm">Create Order</button>
 	</a>
 </div>

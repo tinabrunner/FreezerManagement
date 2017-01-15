@@ -55,4 +55,8 @@ public class Invoice {
 		this.invoiceURL = url;
 	}
 
+	public void setBillingDate(Date date) {
+		this.billingDate = date;
+	}
+
 }

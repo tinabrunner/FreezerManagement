@@ -41,6 +41,7 @@ public class InvoiceListener implements MessageListener {
 	public Invoice messageToInvoice(String m) {
 		Gson gson = new Gson();
 		String jsonInString = m;
+		System.out.println(jsonInString);
 		Invoice i = gson.fromJson(jsonInString, Invoice.class);
 		return i;
 	}

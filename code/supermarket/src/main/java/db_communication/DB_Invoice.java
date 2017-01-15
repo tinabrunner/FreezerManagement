@@ -85,6 +85,17 @@ public class DB_Invoice {
 		return new InvoiceForPdf(id, name, billingDate, orderDate, totalPrice, invoiceURL, invoiceItems);
 	}
 
+	public Invoice convertDocumentToInvoiceSend(Document doc) {
+		String id = doc.getString("id");
+		String name = doc.getString("name");
+		Date billingDate = doc.getDate("billingDate");
+		Date orderDate = doc.getDate("orderDate");
+		double totalPrice = doc.getDouble("totalPrice");
+		String invoiceURL = doc.getString("invoiceURL");
+
+		return new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL);
+	}
+
 	// Method to Insert an Invoice
 
 	public void insertInvoiceToDB(InvoiceForPdf invoice) {
@@ -108,6 +119,21 @@ public class DB_Invoice {
 
 		for (Document current : result) {
 			invoice = convertDocumentToInvoice(current);
+		}
+
+		return invoice;
+	}
+
+	// Method to Get one Invoice
+	public Invoice getInvoiceForSend(String id) {
+
+		MongoCollection<Document> invoices = db.getCollection("invoices");
+		Bson filter = Filters.eq("id", id);
+		FindIterable<Document> result = invoices.find(filter);
+		Invoice invoice = null;
+
+		for (Document current : result) {
+			invoice = convertDocumentToInvoiceSend(current);
 		}
 
 		return invoice;

@@ -41,4 +41,4 @@ $httpProvider.interceptors.push('authInterceptor');
 
 
 var URL_API = 'http://localhost:8080/fridge/api/';
-var URL_SUPERMARKET = 'http://localhost:8080/supermarket/api/';
+var URL_SUPERMARKET = 'http://localhost:8161/supermarket/api/';

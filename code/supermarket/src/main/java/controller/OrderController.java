@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import Model.Invoice;
+import Model.InvoiceForPdf;
 import Model.Order;
 import Model.ProcessedOrder;
 import Model.Product;
@@ -70,7 +70,7 @@ public class OrderController {
 		/* ~ */
 		this.saveOrderToDB(processedOrder);
 
-		Invoice invoice = invoiceCtrl.createInvoice(processedOrder);
+		InvoiceForPdf invoice = invoiceCtrl.createInvoice(processedOrder);
 		invoice.setURL(invoiceCtrl.invoiceToHTML(invoice));
 		dbInvoice.insertInvoiceToDB(invoice);
 		invoiceCtrl.sendInvoiceImmediatly(invoice);

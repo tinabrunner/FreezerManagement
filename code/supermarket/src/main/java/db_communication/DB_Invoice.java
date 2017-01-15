@@ -18,6 +18,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 
 import Model.Invoice;
+import Model.InvoiceForPdf;
 import Model.InvoiceItem;
 import domain.DatabaseProviderImpl;
 import domain.MongoProvider;
@@ -42,7 +43,7 @@ public class DB_Invoice {
 
 	}
 
-	public Document convertInvoiceToDocument(Invoice invoice) {
+	public Document convertInvoiceToDocument(InvoiceForPdf invoice) {
 		Document doc = new Document("id", invoice.getId()).append("name", invoice.getName())
 				.append("billingDate", invoice.getBillingDate()).append("orderDate", invoice.getOrderDate())
 				.append("totalPrice", invoice.getTotalPrice()).append("invoiceURL", invoice.getInvoiceURL())
@@ -64,7 +65,7 @@ public class DB_Invoice {
 		return doc;
 	}
 
-	public Invoice convertDocumentToInvoice(Document doc) {
+	public InvoiceForPdf convertDocumentToInvoice(Document doc) {
 		String id = doc.getString("id");
 		String name = doc.getString("name");
 		Date billingDate = doc.getDate("billingDate");
@@ -81,12 +82,12 @@ public class DB_Invoice {
 
 			invoiceItems.add(item);
 		}
-		return new Invoice(id, name, billingDate, orderDate, totalPrice, invoiceURL, invoiceItems);
+		return new InvoiceForPdf(id, name, billingDate, orderDate, totalPrice, invoiceURL, invoiceItems);
 	}
 
 	// Method to Insert an Invoice
 
-	public void insertInvoiceToDB(Invoice invoice) {
+	public void insertInvoiceToDB(InvoiceForPdf invoice) {
 
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
@@ -98,12 +99,12 @@ public class DB_Invoice {
 	}
 
 	// Method to Get one Invoice
-	public Invoice getInvoice(String id) {
+	public InvoiceForPdf getInvoice(String id) {
 
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 		Bson filter = Filters.eq("id", id);
 		FindIterable<Document> result = invoices.find(filter);
-		Invoice invoice = null;
+		InvoiceForPdf invoice = null;
 
 		for (Document current : result) {
 			invoice = convertDocumentToInvoice(current);
@@ -142,14 +143,14 @@ public class DB_Invoice {
 		return ret;
 	}
 
-	public List<Invoice> getAllNotSentInvoices() {
+	public List<InvoiceForPdf> getAllNotSentInvoices() {
 
 		MongoCollection<Document> invoices = db.getCollection("invoices");
 
 		// Create a list for all invoices and get a cursor to go through the
 		// DBCollection
 
-		List<Invoice> invoicesResult = new ArrayList<>();
+		List<InvoiceForPdf> invoicesResult = new ArrayList<>();
 
 		for (Document doc : invoices.find()) {
 			if (!doc.getBoolean("sent")) {
@@ -160,7 +161,7 @@ public class DB_Invoice {
 	}
 
 	public void setInvoiceToSent(String idString) {
-		Invoice invoice = this.getInvoice(idString);
+		InvoiceForPdf invoice = this.getInvoice(idString);
 		Document doc = convertInvoiceToDocument(invoice);
 		doc.append("sent", true);
 

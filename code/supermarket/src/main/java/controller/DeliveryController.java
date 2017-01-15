@@ -46,14 +46,17 @@ public class DeliveryController {
 		Map<Product, Integer> items = order.getItemsProcessed();
 		for (Map.Entry<Product, Integer> entry : items.entrySet()) {
 			Product p = entry.getKey();
-			ExpiryProduct e = new ExpiryProduct(p.getId(), p.getName(), p.getVerpackungsGroesse(), p.getPreis(),
-					p.getCalories(), expiryDate);
-			delivery.add(e);
+			int anzahl = p.getVerpackungsGroesse() * entry.getValue();
+			for (int i = 0; i < anzahl; i++) {
+				ExpiryProduct e = new ExpiryProduct(p.getId(), p.getName(), expiryDate);
+				delivery.add(e);
+			}
 		}
 
 		boolean sent = deliverySender.sendDelivery(deliveryToString(delivery));
 		if (sent) {
 			dbOrder.setOrderToSent(id);
+			System.out.println("Order sent");
 		}
 	}
 

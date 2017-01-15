@@ -17,6 +17,7 @@ import org.apache.commons.io.FileUtils;
 import com.google.gson.Gson;
 
 import Model.Invoice;
+import Model.InvoiceForPdf;
 import Model.InvoiceItem;
 import Model.ProcessedOrder;
 import Model.Product;
@@ -42,13 +43,13 @@ public class InvoiceController {
 
 	ParseHtml htmlParser = new ParseHtml();
 
-	public Invoice createInvoice(ProcessedOrder order) {
+	public InvoiceForPdf createInvoice(ProcessedOrder order) {
 		String customerId = order.getCustomerId();
 		Date orderDate = order.getRecieveDate();
 		double totalPrice = order.getTotalPrice();
 		Date billingDate = null;
 
-		Invoice invoice = new Invoice(null, customerId, billingDate, orderDate, totalPrice, "",
+		InvoiceForPdf invoice = new InvoiceForPdf(null, customerId, billingDate, orderDate, totalPrice, "",
 				new ArrayList<InvoiceItem>());
 
 		Map<Product, Integer> items = order.getItemsProcessed();
@@ -76,7 +77,7 @@ public class InvoiceController {
 		return invoice;
 	}
 
-	public String invoiceToHTML(Invoice invoice) throws IOException {
+	public String invoiceToHTML(InvoiceForPdf invoice) throws IOException {
 		String destination;
 		// ClassLoader classLoader = getClass().getClassLoader();
 		// File htmlTemplateFile = new File(
@@ -150,7 +151,7 @@ public class InvoiceController {
 	// @Schedule(hour = "8", dayOfWeek = "*")
 	// @Schedule(minute = "*", hour = "*")
 	private void sendInvoices() {
-		List<Invoice> invoices = dbInvoice.getAllNotSentInvoices();
+		List<InvoiceForPdf> invoices = dbInvoice.getAllNotSentInvoices();
 		for (Invoice i : invoices) {
 			String in = this.invoiceToString(i);
 			boolean sent = invoiceSender.sendInvoice(in);

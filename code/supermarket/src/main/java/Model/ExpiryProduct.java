@@ -1,19 +1,23 @@
 package Model;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 /**
  * @author Marius Koch
  *
  */
-public class ExpiryProduct extends Product {
+public class ExpiryProduct {
 
-	LocalDate dateOfExpiry;
+	private Date dateOfExpiry;
+	private String prodCategoryId;
+	private String name;
 
-	public ExpiryProduct(String id, String name, int verpackungsgroesse, double price, int calories,
-			LocalDate expiryDate) {
-		super(id, name, verpackungsgroesse, price, calories);
-		this.dateOfExpiry = expiryDate;
+	public ExpiryProduct(String id, String name, LocalDate expiryDate) {
+		this.name = name;
+		this.prodCategoryId = id;
+		this.dateOfExpiry = Date.from(expiryDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 	}
 
 }

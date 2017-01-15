@@ -54,7 +54,6 @@ public class DB_Invoices {
 
 	// Method to Insert an Invoice
 	public void insertInvoiceToDB(Invoice invoice) {
-		System.out.println("insert");
 		// create a client and get the database
 		MongoClient mongoClient = mongoProvider.getMongoClient();
 		MongoDatabase db = mongoClient.getDatabase("fridge");

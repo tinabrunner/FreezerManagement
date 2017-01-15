@@ -31,7 +31,6 @@ public class ParseHtml {
 	public void createPdf(File newHtmlFile, String htmlFileAsString, String htmlFilePath, String invoiceId)
 			throws IOException, DocumentException {
 		try {
-			System.out.println("oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 			String dest = DEST.concat(invoiceId).concat(".pdf");
 
 			ITextRenderer renderer = new ITextRenderer();
@@ -49,7 +48,6 @@ public class ParseHtml {
 			System.out.println("File 2: '" + fileNameWithPath + "' created.");
 
 		} catch (Exception e) {
-			System.out.println("------------------------------------------------------");
 			e.printStackTrace();
 		}
 

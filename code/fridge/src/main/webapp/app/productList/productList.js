@@ -40,7 +40,7 @@
 		getAllProductsFromSupermarket();
 		
 		function getAllProductsFromSupermarket(){
-			$http.get(URL_SUPERMARKET+'productlist').then(function(resp) {				
+			$http.get(URL_SUPERMARKET_API+'productlist').then(function(resp) {
 				vm.products = resp.data;
 			}, function(error) {
 				console.dir(error);
@@ -131,25 +131,27 @@
 			product.preis = getValueFromField(namingProductPrice);
 			product.preis = product.preis.replace(",", ".");
 			product.calories = getValueFromField(namingProductCalories);
-			
+
 			$http({
-				url: URL_SUPERMARKET + 'productlist/',
+				url: URL_SUPERMARKET_API + 'productlist/',
 				data: product,
 				method: "PUT",
 				headers: {
 					'Content-type': 'application/json',
 					'Accept': 'application/json'
 				}
-			}).then(function(resp){				
+			}).then(function(resp){
 				getAllProductsFromSupermarket();
 				vm.isEditing = false;
+			}, function(error) {
+				console.dir(error);
 			});
 					
 			clearInputFields();			
 		}
 			
 		vm.deleteFromStore = function(prodId){
-			$http.delete(URL_SUPERMARKET+'productlist/' + prodId).then(function(resp){
+			$http.delete(URL_SUPERMARKET_API+'productlist/' + prodId).then(function(resp){
 				if (resp.data == true){
 					getAllProductsFromSupermarket();					
 				} 
@@ -163,7 +165,7 @@
 			var productId = getValueFromField(namingProductId);
 			productId = productId.trim();		
 			if (productId.trim() != ''){
-				$http.get(URL_SUPERMARKET + 'productlist/checkId/' + productId).then(function(resp){
+				$http.get(URL_SUPERMARKET_API + 'productlist/checkId/' + productId).then(function(resp){
 					vm.idError = resp.data;
 					if (vm.idError){
 						vm.errorText = "Id already exists. Please enter a new one.";

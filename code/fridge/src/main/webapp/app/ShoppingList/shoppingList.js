@@ -50,7 +50,7 @@
 		 */
 		function deleteProduct(prodId) {
 								
-			$http.delete(URL_API+'shoppinglist/' + prodId).then(function(resp){				
+			$http.delete(URL_API+'shoppinglist/' + prodId).then(function(resp){
 				if (resp.data == true){
 					getAllProductsFromShoppingList();					
 				} 

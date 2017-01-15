@@ -35,7 +35,7 @@ public class DeliveryController {
 
 	private static int expiryTime = 10;
 
-	// Zur Demo wird direkt die Bestellung übermittelt
+	// Zur Demo wird direkt die Bestellung ï¿½bermittelt
 	public void sendDeliveryImmediatly(String id) {
 		LocalDate expiryDate = LocalDate.now();
 		expiryDate.plusDays(expiryTime);
@@ -56,11 +56,11 @@ public class DeliveryController {
 		boolean sent = deliverySender.sendDelivery(deliveryToString(delivery));
 		if (sent) {
 			dbOrder.setOrderToSent(id);
-			System.out.println("Order sent");
+			System.out.println("Delivery sent");
 		}
 	}
 
-	// Zur übermittlung mit Timer
+	// Zur ï¿½bermittlung mit Timer
 	public void sendDelivery(List<ExpiryProduct> delivery, String id) {
 
 		boolean sent = deliverySender.sendDelivery(deliveryToString(delivery));

@@ -13,7 +13,7 @@
 			controller: 'view_login1Ctrl'
 		});
 	}])
-	.controller('view_login1Ctrl', function($scope, $http, $cookies, $location) {
+	.controller('view_login1Ctrl', function($scope, $http, $cookies, $location, $window) {
 		$scope.Login = function() {
 			if (!$scope.username || !$scope.password)
 				alert("Please enter username and password!");
@@ -32,9 +32,12 @@
 				}), 
 				function(response) { 
 					alert("Something went wrong: "+response.data);
-				});
-				
+				});	
 			}
+	    };
+	    
+	    $scope.Register = function() {
+	    	$location.path("/view_register");
 	    }
 		
 	});

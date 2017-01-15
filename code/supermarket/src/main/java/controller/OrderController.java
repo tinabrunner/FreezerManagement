@@ -73,9 +73,8 @@ public class OrderController {
 		InvoiceForPdf invoice = invoiceCtrl.createInvoice(processedOrder);
 		invoice.setURL(invoiceCtrl.invoiceToHTML(invoice));
 		dbInvoice.insertInvoiceToDB(invoice);
-		invoiceCtrl.sendInvoiceImmediatly(invoice);
+		invoiceCtrl.sendInvoiceImmediatly(invoice.getId());
 		deliveryCtrl.sendDeliveryImmediatly(processedOrder.getId());
-
 	}
 
 	public String getLastId() {

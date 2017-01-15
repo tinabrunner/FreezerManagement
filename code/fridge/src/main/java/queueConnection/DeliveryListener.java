@@ -40,6 +40,7 @@ public class DeliveryListener {
 	public List<InventoryProduct> messageToList(String m) {
 		Gson gson = new Gson();
 		String jsonInString = m;
+		System.out.println(jsonInString);
 		List<InventoryProduct> products = gson.fromJson(jsonInString, ArrayList.class);
 		return products;
 	}

@@ -162,10 +162,12 @@ public class InvoiceController {
 	}
 
 	// Zur Demo werden Rechnugen direkt bei Eingang verschickt
-	public void sendInvoiceImmediatly(Invoice invoice) {
-		boolean sent = invoiceSender.sendInvoice(invoiceToString(invoice));
+	public void sendInvoiceImmediatly(String invoiceId) {
+		Invoice i = dbInvoice.getInvoiceForSend(invoiceId);
+		i.setBillingDate(new Date());
+		boolean sent = invoiceSender.sendInvoice(invoiceToString(i));
 		if (sent) {
-			dbInvoice.setInvoiceToSent(invoice.getId());
+			dbInvoice.setInvoiceToSent(i.getId());
 		}
 	}
 

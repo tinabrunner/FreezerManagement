@@ -36,18 +36,19 @@ public class InvoiceReceiver {
 			// Create and start connection
 
 			InitialContext ctx = new InitialContext();
-			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/deliveryConnectionFactory");
+			QueueConnectionFactory f = (QueueConnectionFactory) ctx.lookup("jms/fridgeConnectionFactory");
 			con = f.createQueueConnection();
 			con.start();
 
 			// create Queue session
 			QueueSession ses = con.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
 			// get the Queue object
-			Queue t = (Queue) ctx.lookup("jms/deliveryQueue");
+			Queue t = (Queue) ctx.lookup("jms/invoiceQueue");
 			// create QueueReceiver
 			QueueReceiver receiver = ses.createReceiver(t);
 			// register the listener object with receiver
 			receiver.setMessageListener(listener);
+			receiver.receive();
 
 		} catch (Exception e) {
 			e.printStackTrace();

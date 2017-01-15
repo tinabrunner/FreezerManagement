@@ -28,7 +28,7 @@ import model.InventoryProduct;
 public class DB_FridgeInventory {
 
 	@EJB
-	private MongoProvider mongoProvider;
+	private MongoProvider mongoProvider = new MongoProvider();
 
 	private static final String _fridge = "fridge";
 	private static final String _inventoryProducts = "inventoryProducts";
@@ -71,18 +71,17 @@ public class DB_FridgeInventory {
 	 * METHODS TO COMMUNICATE WITH DB
 	 */
 
-	// Method to Insert a Product
+	// INSERT a Product
 	public void insertProductToDBInventory(InventoryProduct product) {
 		MongoCollection<Document> products = getProductsCollection();
 		Document doc = convertInventoryProdToDocument(product);
 		products.insertOne(doc);
 	}
 
-	// Method to Delete a Product
+	// DELETE a Product
 	public boolean deleteProductFromDBInventory(String id) {
 		MongoCollection<Document> products = getProductsCollection();
-
-		if (productExists(id)) {
+		if (productExists(id, products)) {
 			ObjectId objId = new ObjectId(id);
 			Bson filter = Filters.eq(_id, objId);
 			products.deleteOne(filter);
@@ -91,9 +90,8 @@ public class DB_FridgeInventory {
 			return false;
 	}
 
-	// Method to Search for a Product
-	public boolean productExists(String id) {
-		MongoCollection<Document> products = getProductsCollection();
+	// CHECK FOR a Product
+	private boolean productExists(String id, MongoCollection<Document> products) {
 		ObjectId objId = new ObjectId(id);
 		Bson filter = Filters.eq(_id, objId);
 		if (products.count(filter) > 0)
@@ -102,7 +100,7 @@ public class DB_FridgeInventory {
 			return false;
 	}
 
-	// Method to get all Product from Inventory
+	// GET ALL Products from Inventory
 	public Map<String, InventoryProduct> getAllProducts() {
 		MongoCollection<Document> products = getProductsCollection();
 		Map<String, InventoryProduct> allProducts = new HashMap<String, InventoryProduct>();

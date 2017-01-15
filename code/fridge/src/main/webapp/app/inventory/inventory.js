@@ -23,7 +23,6 @@
 		var vm = this;
 		vm.products = {};
 		vm.deleteInventoryProduct = deleteInventoryProduct;
-		vm.init = init;
 		
 		init();
 		
@@ -46,7 +45,7 @@
 						}
 			       }, 
 			       function(response){
-			         alert("Something went wrong - Product could not be deleted");
+			         alert("Something went wrong - Product could not be deleted. "+response.data);
 			       }
 			    );
 		 }

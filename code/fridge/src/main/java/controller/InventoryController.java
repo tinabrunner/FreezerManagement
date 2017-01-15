@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.interceptor.Interceptors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,8 +18,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import db_communication.DB_FridgeInventory;
-import domain.LoginInterceptor;
-import domain.RestService;
 import model.InventoryProduct;
 
 /**
@@ -29,11 +26,12 @@ import model.InventoryProduct;
 
 @Stateless
 @Path("/inventory")
-@Interceptors(LoginInterceptor.class)
-public class InventoryController extends RestService {
+public class InventoryController {
 
 	@EJB
 	private DB_FridgeInventory dbFridgeInventory;
+
+	private static final String _ObjectID = "ObjectID";
 
 	@DELETE
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -42,7 +40,7 @@ public class InventoryController extends RestService {
 	public String deleteInventoryProduct(@PathParam("id") String id) {
 		boolean success = dbFridgeInventory.deleteProductFromDBInventory(id);
 		if (success)
-			return null;
+			return "";
 		else
 			return "Could not delete the product with id: " + id;
 	}
@@ -51,20 +49,18 @@ public class InventoryController extends RestService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public JSONArray getAllProducts() {
 		Map<String, InventoryProduct> inventory = dbFridgeInventory.getAllProducts();
-		JSONArray arr = new JSONArray();
 
+		JSONArray arr = new JSONArray();
 		for (Map.Entry<String, InventoryProduct> entry : inventory.entrySet()) {
 			String key = entry.getKey();
 			InventoryProduct value = entry.getValue();
 
 			JSONObject json = new JSONObject();
-			json.put("ObjectID", key);
+			json.put(_ObjectID, key);
 			json.put(dbFridgeInventory._name, value.getName().toString());
 			json.put(dbFridgeInventory._prodCategoryId, value.getProdCategoryId().toString());
-
 			Date expiryDate = value.getExpiryDate();
 			json.put(dbFridgeInventory._expiryDate, expiryDate.toString());
-
 			arr.add(json);
 		}
 

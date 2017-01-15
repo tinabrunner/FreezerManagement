@@ -17,7 +17,7 @@
 				<td>{{ invoice.orderDate }}</td>
 				<td>{{ invoice.totalPrice }}</td>
 				<td>
-					<a href={{invoice.invoiceURL}}>Download PDF</a>
+					<a href="{{ invoiceCtrl.invoiceUrl(invoice) }}">Download PDF</a>
 				</td>
 			</tr>
 		</tbody>

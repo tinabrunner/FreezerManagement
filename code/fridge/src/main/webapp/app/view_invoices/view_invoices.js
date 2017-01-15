@@ -19,6 +19,7 @@
 		var vm = this;
 		vm.invoices = {};
 		vm.init = init;
+		vm.invoiceUrl = invoiceUrl;
 
 		init();
 
@@ -39,6 +40,10 @@
 //
 //			/* --- --- */
 //		}
+
+		function invoiceUrl(invoice) {
+			return URL_SUPERMARKET + invoice.invoiceURL;
+		}
 	}
 
 })();
